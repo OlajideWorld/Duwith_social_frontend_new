@@ -1,5 +1,6 @@
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_bindings.dart';
 import 'package:duwith_social/routes/routes.dart';
+import 'package:duwith_social/utils/Size-config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        SizeConfig().init(constraints);
         return GetMaterialApp(
           title: 'Duwith Social',
           debugShowCheckedModeBanner: false,

@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainBlack,
+      backgroundColor: backgroundColor,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(

@@ -1,6 +1,8 @@
+import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -8,7 +10,8 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: mainBlack,
+      backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(
@@ -16,9 +19,40 @@ class SplashScreen extends StatelessWidget {
             width: constraints.maxWidth,
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                padding: EdgeInsets.only(top: constraints.maxHeight * 0.4, bottom: heightSize(57)),
                 child: Column(
-                  children: [],
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CText(
+                      text: "DUWITH SOCIAL",
+                      size: 15,
+                      fontFamily: UsedFonts.stalinistOne,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      height: heightSize(50),
+                      width: widthSize(50),
+                      child: LoadingIndicator(
+                          indicatorType: Indicator.ballSpinFadeLoader,
+
+                          /// Required, The loading type of the widget
+                          colors: const [rotateColor],
+
+                          /// Optional, The color collections
+                          strokeWidth: widthSize(29),
+
+                          /// Optional, The stroke of the line, only applicable to widget which contains line
+                          backgroundColor: backgroundColor,
+
+                          /// Optional, Background of the widget
+                          pathBackgroundColor: Colors.black
+
+                          /// Optional, the stroke backgroundColor
+                          ),
+                    )
+                  ],
                 ),
               ),
             ),
