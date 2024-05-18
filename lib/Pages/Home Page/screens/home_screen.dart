@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_appBar.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart';

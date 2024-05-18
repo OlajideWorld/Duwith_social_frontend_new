@@ -58,6 +58,156 @@ class HomeController extends GetxController {
         comment: 1234)
   ].obs;
 
+  RxList<PostsData> postDatasPost = [
+    PostsData(
+        name: "Olasehinde Matthew",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 1,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Jacob Jones",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Jacob Jones",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Jacob Jones",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Jacob Jones",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Jacob Jones",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Olajide Timothy",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 3,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Bustin Tunde",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 1,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Boss Chris",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 3,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234)
+  ].obs;
+
+  RxList<PostsData> searchTrends = [
+    PostsData(
+        name: "Entertainment",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 1,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Workout",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Music",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Education",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Health",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Financial market",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 2,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Investment",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 3,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Power",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 1,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234),
+    PostsData(
+        name: "Movies",
+        image: "assets/images/post2.png",
+        content: "",
+        postType: 3,
+        likes: 12346576,
+        dislikes: 123,
+        comment: 1234)
+  ].obs;
+
   @override
   void onInit() {
     // TODO: implement onInit

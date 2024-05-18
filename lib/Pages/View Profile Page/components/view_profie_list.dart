@@ -1,11 +1,39 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
+import '../../Home Page/controllers/home_controller.dart';
+
+HomeController homeController = HomeController.instance;
+
+viewProfilePostList(BuildContext context, double width) {
+  return Expanded(
+    child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // Number of items per row
+          crossAxisSpacing: heightSize(12), // Spacing between columns
+          mainAxisSpacing: widthSize(9), // Spacing between rows
+          // childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
+        ),
+        itemCount: homeController.postDatasPost.value.length,
+        itemBuilder: (context, index) {
+          return viewProfilePost(
+              homeController.postDatasPost.value[index].image,
+              homeController.engagementShortened(
+                  homeController.postDatasPost.value[index].likes));
+        }),
+  );
+}
+
 viewProfilePost(String image, String value) {
   return Container(
     height: heightSize(112),
+    decoration: BoxDecoration(
+        color: const Color(0xFF383840),
+        borderRadius: BorderRadius.all(Radius.circular(widthSize(10)))),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -17,10 +45,11 @@ viewProfilePost(String image, String value) {
                   topRight: Radius.circular(widthSize(10))),
               image: DecorationImage(image: AssetImage(image))),
         ),
-        SizedBox(height: heightSize(5)),
+        SizedBox(height: heightSize(15)),
         SizedBox(
           height: heightSize(12),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.visibility_outlined,

@@ -2,6 +2,7 @@ import "package:duwith_social/common/button-widget.dart";
 import "package:duwith_social/common/custom-text.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:get/get.dart";
@@ -10,6 +11,7 @@ profileAppBar() {
   return SizedBox(
     height: heightSize(32),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         backbutton(onTap: () => Get.back()),
         const CText(
@@ -53,13 +55,14 @@ profileData(String name, String image, String nickname, String description,
           radius: widthSize(30),
           child: CircleAvatar(
             backgroundImage: AssetImage(image),
-            radius: widthSize(25),
+            radius: widthSize(28),
           ),
         ),
-        SizedBox(width: widthSize(8)),
+        SizedBox(height: heightSize(8)),
         SizedBox(
           height: heightSize(28),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,18 +85,21 @@ profileData(String name, String image, String nickname, String description,
                 ],
               ),
               SizedBox(width: widthSize(3)),
-              SizedBox(
-                height: heightSize(16),
-                width: widthSize(16),
-                child: Image.asset(
-                  "assets/images/verified.png",
-                  fit: BoxFit.contain,
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: heightSize(16),
+                  width: widthSize(16),
+                  child: Image.asset(
+                    "assets/images/verified.png",
+                    fit: BoxFit.contain,
+                  ),
                 ),
               )
             ],
           ),
         ),
-        SizedBox(width: widthSize(8)),
+        SizedBox(height: heightSize(15)),
         CText(
           text: description,
           fontFamily: UsedFonts.poppins,
@@ -101,7 +107,7 @@ profileData(String name, String image, String nickname, String description,
           size: 12,
           color: const Color(0xFFC2DDFD),
         ),
-        SizedBox(width: widthSize(20)),
+        SizedBox(height: heightSize(20)),
         SizedBox(
           height: heightSize(49),
           child: Row(
@@ -112,14 +118,14 @@ profileData(String name, String image, String nickname, String description,
               SizedBox(width: widthSize(20)),
               VerticalDivider(
                 width: widthSize(2),
-                color: const Color(0xFF171717),
+                color: const Color(0xFF317ACF),
               ),
               SizedBox(width: widthSize(20)),
               numbersWidget(following, "Following"),
               SizedBox(width: widthSize(20)),
               VerticalDivider(
                 width: widthSize(2),
-                color: const Color(0xFF171717),
+                color: const Color(0xFF317ACF),
               ),
               SizedBox(width: widthSize(20)),
               numbersWidget(postNumber, "Posts")

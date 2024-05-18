@@ -5,8 +5,15 @@ import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
 
-buttonsWidget(BuildContext context, double height, double width, String text,
-    Color colorused, double fontsize, VoidCallback onTap) {
+buttonsWidget(
+    BuildContext context,
+    double height,
+    double width,
+    String text,
+    Color colorused,
+    double fontsize,
+    VoidCallback onTap,
+    bool showBorderColor) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
@@ -16,6 +23,9 @@ buttonsWidget(BuildContext context, double height, double width, String text,
       decoration: ShapeDecoration(
         color: colorused,
         shape: RoundedRectangleBorder(
+          side: showBorderColor
+              ? const BorderSide(color: textColor3)
+              : BorderSide(color: colorused),
           borderRadius: BorderRadius.circular(10),
         ),
       ),

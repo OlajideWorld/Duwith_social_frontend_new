@@ -10,3 +10,4 @@ const buttonColor2 = Color(0xFF3A3A3C);
 const switchoff = Color(0xFF222020);
 const rotateColor = Color(0xFF1CB1D1);
 const timeColor = Color(0xFF858585);
+const faintColor = Color(0xFF28282C);

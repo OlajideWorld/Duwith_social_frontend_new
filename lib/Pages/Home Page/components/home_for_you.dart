@@ -1,11 +1,13 @@
 // ignore_for_file: file_names, invalid_use_of_protected_member
 
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
+import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -218,9 +220,19 @@ postBarTitle(double width, String name, String image, BuildContext context,
           height: heightSize(38),
           child: Row(
             children: [
-              CircleAvatar(
-                backgroundImage: AssetImage(image),
-                radius: widthSize(15),
+              GestureDetector(
+                onTap: () => Get.to(() => ViewProfileScreen(
+                    name: name,
+                    image: image,
+                    nickname: "@${name.toLowerCase()}",
+                    description: "Dance like nobody’s watching! 💃",
+                    followers: homeController.engagementShortened(12537689),
+                    following: homeController.engagementShortened(12334),
+                    postNumber: homeController.engagementShortened(123))),
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(image),
+                  radius: widthSize(15),
+                ),
               ),
               SizedBox(width: widthSize(5)),
               Column(
@@ -255,7 +267,7 @@ postBarTitle(double width, String name, String image, BuildContext context,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     buttonsWidget(context, heightSize(25), widthSize(52),
-                        "Follow", mainColor, 8, () {}),
+                        "Follow", mainColor, 8, () {}, false),
                     Icon(
                       Icons.more_vert,
                       size: heightSize(16),

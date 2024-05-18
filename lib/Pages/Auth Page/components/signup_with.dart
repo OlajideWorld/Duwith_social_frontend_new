@@ -102,7 +102,7 @@ class SignUpWithScreen extends StatelessWidget {
                             mainColor,
                             12, () {
                           Get.to(() => VerifyCredentials());
-                        }),
+                        }, false),
                       ),
                       SizedBox(height: heightSize(115)),
                       Row(

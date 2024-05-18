@@ -58,7 +58,7 @@ class VerificationSuccess extends StatelessWidget {
                       child: buttonsWidget(context, heightSize(50),
                           constraints.maxWidth, "Continue", mainColor, 12, () {
                         Get.toNamed(MyRoutes.homeScreen);
-                      }),
+                      }, false),
                     ),
                   ],
                 ),
