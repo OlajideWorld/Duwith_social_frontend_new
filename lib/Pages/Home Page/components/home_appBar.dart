@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';

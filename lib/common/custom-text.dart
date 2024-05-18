@@ -105,10 +105,10 @@ class _PostContentState extends State<PostContent> {
   @override
   Widget build(BuildContext context) {
     String displayText = widget.text;
-    bool showReadMore = widget.text.length > 60;
+    bool showReadMore = widget.text.length > 100;
 
     if (!widget.isExpanded.value && showReadMore) {
-      displayText = widget.text.substring(0, 60) + '... ';
+      displayText = widget.text.substring(0, 100) + '... ';
     }
 
     return GestureDetector(

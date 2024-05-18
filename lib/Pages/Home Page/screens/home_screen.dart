@@ -1,6 +1,8 @@
+import 'package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_appBar.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
+import 'package:duwith_social/Pages/Home%20Page/components/home_news.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
@@ -23,19 +25,23 @@ class HomeScreen extends StatelessWidget {
             width: constraints.maxWidth,
             child: SafeArea(
               child: Obx(() {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                return SizedBox(
                   child: Column(
                     children: [
                       homeAppBar(constraints.maxWidth),
                       SizedBox(height: heightSize(13)),
                       selectHomeView(context, constraints.maxWidth),
                       SizedBox(height: heightSize(5)),
-                      if (homeController.viewNext.value == 0)
+                      if (homeController.viewBarOption.value == 0 ||
+                          homeController.viewBarOption.value == 1)
                         forYouList(
                           context,
                           constraints.maxWidth,
-                        )
+                        ),
+                      if (homeController.viewBarOption.value == 2)
+                        newsList(context, constraints.maxWidth),
+                      if (homeController.viewBarOption.value == 3)
+                        airdropList(context, constraints.maxWidth)
                     ],
                   ),
                 );

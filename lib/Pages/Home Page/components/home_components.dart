@@ -1,11 +1,11 @@
+import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
-import '../../Auth Page/controller/auth_controller.dart';
 
-final AuthController authController = AuthController.instance;
+HomeController homeController = HomeController.instance;
 
 selectHomeView(BuildContext context, double width) {
   return Container(
@@ -24,9 +24,7 @@ selectHomeView(BuildContext context, double width) {
             flex: 1,
             child: GestureDetector(
               onTap: () {
-                authController.isEmail.value = true;
-                authController.loginhint.value = "Email address";
-                authController.loginprefixIcon.value = Icons.email_outlined;
+                homeController.viewBarOption.value = 0;
               },
               child: Container(
                 // width: widthSize(176),
@@ -39,7 +37,7 @@ selectHomeView(BuildContext context, double width) {
                       'For you',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: authController.isEmail.value == true
+                        color: homeController.viewBarOption.value == 0
                             ? const Color(0xFFECECEC)
                             : textColor3,
                         fontSize: fontSize(14),
@@ -51,7 +49,7 @@ selectHomeView(BuildContext context, double width) {
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
-                        color: authController.isEmail.value == true
+                        color: homeController.viewBarOption.value == 0
                             ? const Color(0xFFECECEC)
                             : textColor3),
                   ],
@@ -64,10 +62,7 @@ selectHomeView(BuildContext context, double width) {
             flex: 1,
             child: GestureDetector(
               onTap: () {
-                authController.isEmail.value = false;
-                authController.loginhint.value = "Mobile Number";
-                authController.loginprefixIcon.value =
-                    Icons.phone_iphone_rounded;
+                homeController.viewBarOption.value = 1;
               },
               child: Container(
                 height: heightSize(50),
@@ -79,7 +74,7 @@ selectHomeView(BuildContext context, double width) {
                       'Video',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: authController.isEmail.value == false
+                        color: homeController.viewBarOption.value == 1
                             ? const Color(0xFFECECEC)
                             : textColor3,
                         fontSize: fontSize(14),
@@ -91,7 +86,7 @@ selectHomeView(BuildContext context, double width) {
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
-                        color: authController.isEmail.value == false
+                        color: homeController.viewBarOption.value == 1
                             ? const Color(0xFFECECEC)
                             : textColor3),
                   ],
@@ -104,10 +99,7 @@ selectHomeView(BuildContext context, double width) {
             flex: 1,
             child: GestureDetector(
               onTap: () {
-                authController.isEmail.value = false;
-                authController.loginhint.value = "Mobile Number";
-                authController.loginprefixIcon.value =
-                    Icons.phone_iphone_rounded;
+                homeController.viewBarOption.value = 2;
               },
               child: Container(
                 height: heightSize(50),
@@ -119,7 +111,7 @@ selectHomeView(BuildContext context, double width) {
                       'News',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: authController.isEmail.value == false
+                        color: homeController.viewBarOption.value == 2
                             ? const Color(0xFFECECEC)
                             : textColor3,
                         fontSize: fontSize(14),
@@ -131,7 +123,7 @@ selectHomeView(BuildContext context, double width) {
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
-                        color: authController.isEmail.value == false
+                        color: homeController.viewBarOption.value == 2
                             ? const Color(0xFFECECEC)
                             : textColor3),
                   ],
@@ -144,10 +136,7 @@ selectHomeView(BuildContext context, double width) {
             flex: 1,
             child: GestureDetector(
               onTap: () {
-                authController.isEmail.value = false;
-                authController.loginhint.value = "Mobile Number";
-                authController.loginprefixIcon.value =
-                    Icons.phone_iphone_rounded;
+                homeController.viewBarOption.value = 3;
               },
               child: Container(
                 height: heightSize(50),
@@ -159,7 +148,7 @@ selectHomeView(BuildContext context, double width) {
                       'Airdrops',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: authController.isEmail.value == false
+                        color: homeController.viewBarOption.value == 3
                             ? const Color(0xFFECECEC)
                             : textColor3,
                         fontSize: fontSize(14),
@@ -171,7 +160,7 @@ selectHomeView(BuildContext context, double width) {
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
-                        color: authController.isEmail.value == false
+                        color: homeController.viewBarOption.value == 3
                             ? const Color(0xFFECECEC)
                             : textColor3),
                   ],

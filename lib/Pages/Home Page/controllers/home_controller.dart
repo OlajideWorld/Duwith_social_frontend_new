@@ -7,21 +7,22 @@ import '../../../models/post-data.dart';
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
 
-  RxInt viewNext = 0.obs;
+  RxInt viewBarOption = 0.obs;
+  RxInt viewprofileslide = 0.obs;
 
   RxList<PostsData> postDatas = [
     PostsData(
         name: "Olasehinde Matthew",
-        image: "assets/images/social.png",
+        image: "assets/images/post.png",
         content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
+            "🎉 Airdrop Alert! 🎉We're excited to announce our exclusive airdrop event! 🚀✨🌟 What’s up for grabs? Free tokens for our loyal users! Special rewards for new signups!👥 How to Participate",
         postType: 1,
         likes: 12346576,
         dislikes: 123,
         comment: 1234),
     PostsData(
         name: "Jacob Jones",
-        image: "assets/images/social.png",
+        image: "assets/images/post.png",
         content:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
         postType: 2,
@@ -30,7 +31,7 @@ class HomeController extends GetxController {
         comment: 1234),
     PostsData(
         name: "Olajide Timothy",
-        image: "assets/images/social.png",
+        image: "assets/images/post.png",
         content:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
         postType: 3,
@@ -39,7 +40,7 @@ class HomeController extends GetxController {
         comment: 1234),
     PostsData(
         name: "Bustin Tunde",
-        image: "assets/images/social.png",
+        image: "assets/images/post.png",
         content:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
         postType: 1,
@@ -48,7 +49,7 @@ class HomeController extends GetxController {
         comment: 1234),
     PostsData(
         name: "Boss Chris",
-        image: "assets/images/social.png",
+        image: "assets/images/post.png",
         content:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
         postType: 3,

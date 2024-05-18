@@ -1,8 +1,9 @@
+// ignore_for_file: file_names
+
 import "package:duwith_social/common/custom-text.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
-import "package:font_awesome_flutter/font_awesome_flutter.dart";
 
 buttonsWidget(BuildContext context, double height, double width, String text,
     Color colorused, double fontsize, VoidCallback onTap) {
@@ -83,7 +84,7 @@ backbutton({required VoidCallback onTap}) {
       width: widthSize(36),
       padding: EdgeInsets.only(left: widthSize(2)),
       decoration: BoxDecoration(
-          color: backgroundColor,
+          color: Colors.transparent,
           border: Border.all(color: const Color(0xFF717171)),
           borderRadius: const BorderRadius.all(Radius.circular(5))),
       child: Center(

@@ -1,18 +1,16 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
-import 'package:duwith_social/common/custom-text.dart';
-import 'package:duwith_social/utils/sizes.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter/material.dart';
+import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
+import '../../../utils/sizes.dart';
 import '../controllers/home_controller.dart';
 
 HomeController homeController = HomeController.instance;
 
-newsList(BuildContext context, double width) {
+airdropList(BuildContext context, double width) {
   return Expanded(
     child: ListView.builder(
         itemCount: homeController.postDatas.value.length,
@@ -21,16 +19,15 @@ newsList(BuildContext context, double width) {
             padding: EdgeInsets.only(bottom: heightSize(10)),
             child: Column(
               children: [
-                NewsPostDesign(
-                  width: width,
-                  name: homeController.postDatas.value[index].name,
-                  image: homeController.postDatas.value[index].image,
-                  content: homeController.postDatas.value[index].content,
-                  likes: homeController.postDatas.value[index].likes,
-                  dislike: homeController.postDatas.value[index].dislikes,
-                  comment: homeController.postDatas.value[index].comment,
-                  postType: homeController.postDatas.value[index].postType,
-                ),
+                AirdropDesign(
+                    width: width,
+                    name: homeController.postDatas.value[index].name,
+                    image: homeController.postDatas.value[index].image,
+                    content: homeController.postDatas.value[index].content,
+                    likes: homeController.postDatas.value[index].likes,
+                    dislike: homeController.postDatas.value[index].dislikes,
+                    comment: homeController.postDatas.value[index].comment,
+                    postType: homeController.postDatas.value[index].postType),
               ],
             ),
           );
@@ -38,7 +35,7 @@ newsList(BuildContext context, double width) {
   );
 }
 
-class NewsPostDesign extends StatefulWidget {
+class AirdropDesign extends StatefulWidget {
   final double width;
   final String name;
   final String image;
@@ -47,23 +44,22 @@ class NewsPostDesign extends StatefulWidget {
   final int dislike;
   final int comment;
   final int postType;
-  const NewsPostDesign({
-    super.key,
-    required this.width,
-    required this.name,
-    required this.image,
-    required this.content,
-    required this.likes,
-    required this.dislike,
-    required this.comment,
-    required this.postType,
-  });
+  const AirdropDesign(
+      {super.key,
+      required this.width,
+      required this.name,
+      required this.image,
+      required this.content,
+      required this.likes,
+      required this.dislike,
+      required this.comment,
+      required this.postType});
 
   @override
-  State<NewsPostDesign> createState() => _NewsPostDesignState();
+  State<AirdropDesign> createState() => _AirdropDesignState();
 }
 
-class _NewsPostDesignState extends State<NewsPostDesign> {
+class _AirdropDesignState extends State<AirdropDesign> {
   RxBool isExpanded = false.obs;
 
   @override
@@ -85,7 +81,20 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
           children: [
             postBarTitle(
                 widget.width, widget.name, widget.image, context, false),
-            SizedBox(height: heightSize(10)),
+            SizedBox(height: heightSize(5)),
+            widget.postType == 1 || widget.postType == 2
+                ? Container(
+                    height: heightSize(168),
+                    width: widget.width,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Image.asset(
+                      "assets/images/post.png",
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                : const SizedBox(),
+            SizedBox(height: heightSize(13)),
             Padding(
               padding: EdgeInsets.only(left: widthSize(30)),
               child: PostContent(
@@ -97,22 +106,6 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                   fontWeight: FontWeight.w400),
             ),
             SizedBox(height: heightSize(8)),
-            widget.postType == 1 || widget.postType == 2
-                ? Padding(
-                    padding: EdgeInsets.only(left: widthSize(30)),
-                    child: Container(
-                      height: heightSize(168),
-                      width: widget.width,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      child: Image.asset(
-                        "assets/images/post.png",
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  )
-                : const SizedBox(),
-            SizedBox(height: heightSize(12)),
             Padding(
               padding: EdgeInsets.only(left: widthSize(40)),
               child: SizedBox(

@@ -71,7 +71,7 @@ class _PostWidgetState extends State<PostWidget> {
       return Container(
         height: widget.postType == 1 || widget.postType == 2
             ? isExpanded.value
-                ? heightSize(480)
+                ? heightSize(440)
                 : heightSize(350)
             : isExpanded.value
                 ? heightSize(260)
@@ -79,10 +79,11 @@ class _PostWidgetState extends State<PostWidget> {
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF28282C)),
         padding: EdgeInsets.symmetric(
-            horizontal: widthSize(20), vertical: heightSize(23)),
+            horizontal: widthSize(10), vertical: heightSize(23)),
         child: Column(
           children: [
-            postBarTitle(widget.width, widget.name, widget.image, context),
+            postBarTitle(
+                widget.width, widget.name, widget.image, context, true),
             SizedBox(height: heightSize(8)),
             PostContent(
                 isExpanded: isExpanded,
@@ -99,89 +100,96 @@ class _PostWidgetState extends State<PostWidget> {
                     decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Image.asset(
-                      "assets/images/social.png",
+                      "assets/images/post.png",
                       fit: BoxFit.contain,
                     ),
                   )
                 : const SizedBox(),
             SizedBox(height: heightSize(12)),
-            SizedBox(
-              height: heightSize(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: heightSize(18),
-                    width: widthSize(190),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Likes
-                        SizedBox(
-                          height: heightSize(18),
-                          child: Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.heart,
-                                size: heightSize(16),
-                                color: textColor,
-                              ),
-                              CText(
-                                  text: homeController
-                                      .engagementShortened(widget.likes))
-                            ],
+            Padding(
+              padding:
+                  EdgeInsets.only(left: widthSize(30), right: widthSize(40)),
+              child: SizedBox(
+                height: heightSize(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: heightSize(18),
+                      width: widthSize(190),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Likes
+                          SizedBox(
+                            height: heightSize(18),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.heart,
+                                  size: heightSize(16),
+                                  color: textColor,
+                                ),
+                                SizedBox(width: widthSize(5)),
+                                CText(
+                                    text: homeController
+                                        .engagementShortened(widget.likes))
+                              ],
+                            ),
                           ),
-                        ),
-                        // dislikes
-                        SizedBox(
-                          height: heightSize(18),
-                          child: Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.thumbsDown,
-                                size: heightSize(16),
-                                color: textColor,
-                              ),
-                              CText(
-                                  text: homeController
-                                      .engagementShortened(widget.dislike))
-                            ],
+                          // dislikes
+                          SizedBox(
+                            height: heightSize(18),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.thumbsDown,
+                                  size: heightSize(16),
+                                  color: textColor,
+                                ),
+                                SizedBox(width: widthSize(5)),
+                                CText(
+                                    text: homeController
+                                        .engagementShortened(widget.dislike))
+                              ],
+                            ),
                           ),
-                        ),
-                        // comment
-                        SizedBox(
-                          height: heightSize(18),
-                          child: Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.comment,
-                                size: heightSize(16),
-                                color: textColor,
-                              ),
-                              CText(
-                                  text: homeController
-                                      .engagementShortened(widget.comment))
-                            ],
+                          // comment
+                          SizedBox(
+                            height: heightSize(18),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.comment,
+                                  size: heightSize(16),
+                                  color: textColor,
+                                ),
+                                SizedBox(width: widthSize(5)),
+                                CText(
+                                    text: homeController
+                                        .engagementShortened(widget.comment))
+                              ],
+                            ),
                           ),
-                        ),
-                        // Share
-                        SizedBox(
-                          height: heightSize(18),
-                          child: Icon(
-                            FontAwesomeIcons.share,
-                            size: heightSize(16),
-                            color: textColor,
+                          // Share
+                          SizedBox(
+                            height: heightSize(18),
+                            child: Icon(
+                              FontAwesomeIcons.share,
+                              size: heightSize(16),
+                              color: textColor,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: heightSize(20),
-                    width: widthSize(20),
-                    child: Image.asset("assets/images/gift.png"),
-                  )
-                ],
+                    SizedBox(
+                      height: heightSize(20),
+                      width: widthSize(20),
+                      child: Image.asset("assets/images/gift.png"),
+                    )
+                  ],
+                ),
               ),
             ),
             // Button to toggle expand
@@ -198,7 +206,8 @@ class _PostWidgetState extends State<PostWidget> {
   }
 }
 
-postBarTitle(double width, String name, String image, BuildContext context) {
+postBarTitle(double width, String name, String image, BuildContext context,
+    bool showwidget) {
   return SizedBox(
     width: width,
     height: heightSize(38),
@@ -238,22 +247,24 @@ postBarTitle(double width, String name, String image, BuildContext context) {
             ],
           ),
         ),
-        SizedBox(
-          height: heightSize(25),
-          width: widthSize(80),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buttonsWidget(context, heightSize(25), widthSize(52), "Follow",
-                  mainColor, 8, () {}),
-              Icon(
-                Icons.more_vert,
-                size: heightSize(16),
-                color: textColor,
+        showwidget
+            ? SizedBox(
+                height: heightSize(25),
+                width: widthSize(80),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buttonsWidget(context, heightSize(25), widthSize(52),
+                        "Follow", mainColor, 8, () {}),
+                    Icon(
+                      Icons.more_vert,
+                      size: heightSize(16),
+                      color: textColor,
+                    )
+                  ],
+                ),
               )
-            ],
-          ),
-        )
+            : const SizedBox()
       ],
     ),
   );
