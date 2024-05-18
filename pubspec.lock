@@ -101,10 +101,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: e35129dc44c9118cee2a5603506d823bab99c68393879edb440e0090d07586be
+      sha256: ba631d1c7f7bef6b729a622b7b752645a2d076dba9976925b8f25725a30e1ee6
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.8"
   dio:
     dependency: transitive
     description:
@@ -154,10 +154,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: "2118df84ef0c3ca93f96123a616ae8540879991b8b57af2f81b76a7ada49b2a4"
+      sha256: a25a15ebbdfc33ab1cd26c63a6ee519df92338a9c10f122adda92938253bef04
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -184,6 +184,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      sha256: "275ff26905134bcb59417cf60ad979136f1f8257f2f449914b2c3e05bbb4cd6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.7.0"
   get:
     dependency: "direct main"
     description:
@@ -268,10 +276,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.1"
   loading_indicator:
     dependency: "direct main"
     description:
@@ -316,10 +324,10 @@ packages:
     dependency: "direct main"
     description:
       name: onesignal_flutter
-      sha256: "7e4b32b69518a4a28063549f286783f295d719cad5f7de110d5a52f647f8ca06"
+      sha256: f3940387d6c7033a9c341aa0548f24d98217fce9182f9ad80bf2554b9dd3dc1a
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.6"
+    version: "5.2.0"
   path:
     dependency: transitive
     description:
@@ -392,6 +400,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  pinput:
+    dependency: "direct main"
+    description:
+      name: pinput
+      sha256: "6d571e38a484f7515a52e89024ef416f11fa6171ac6f32303701374ab9890efa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   platform:
     dependency: transitive
     description:
@@ -413,6 +429,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smart_auth:
+    dependency: transitive
+    description:
+      name: smart_auth
+      sha256: "88aa8fe66e951c78a307f26d1c29672dce2e9eb3da2e12e853864d0e615a73ad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   source_span:
     dependency: transitive
     description:
@@ -477,6 +501,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
+  universal_platform:
+    dependency: transitive
+    description:
+      name: universal_platform
+      sha256: d315be0f6641898b280ffa34e2ddb14f3d12b1a37882557869646e0cc363d0cc
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+1"
   vector_graphics:
     dependency: transitive
     description:

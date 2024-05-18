@@ -36,6 +36,7 @@ dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
   flutter_svg: ^2.0.10+1
+  font_awesome_flutter: ^10.7.0
   get: ^4.6.6
   get_storage: ^2.1.1
   http: ^1.2.1
@@ -43,6 +44,7 @@ dependencies:
   loading_indicator: ^3.1.1
   loading_overlay_pro: ^2.1.1
   onesignal_flutter: ^5.1.6
+  pinput: ^4.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -89,24 +91,24 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: assets/fonts/Poppins/Poppins-Black.ttf
-        - asset: assets/fonts/Poppins/Poppins-BlackItalic.ttf
+        # - asset: assets/fonts/Poppins/Poppins-Black.ttf
+        # - asset: assets/fonts/Poppins/Poppins-BlackItalic.ttf
         - asset: assets/fonts/Poppins/Poppins-Bold.ttf
-        - asset: assets/fonts/Poppins/Poppins-BoldItalic.ttf
+        # - asset: assets/fonts/Poppins/Poppins-BoldItalic.ttf
         - asset: assets/fonts/Poppins/Poppins-ExtraBold.ttf
-        - asset: assets/fonts/Poppins/Poppins-ExtraBoldItalic.ttf
-        - asset: assets/fonts/Poppins/Poppins-ExtraLight.ttf
-        - asset: assets/fonts/Poppins/Poppins-ExtraLightItalic.ttf
-        - asset: assets/fonts/Poppins/Poppins-Italic.ttf
-        - asset: assets/fonts/Poppins/Poppins-Light.ttf
-        - asset: assets/fonts/Poppins/Poppins-LightItalic.ttf
-        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
-        - asset: assets/fonts/Poppins/Poppins-MediumItalic.ttf
-        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
-        - asset: assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf
-        - asset: assets/fonts/Poppins/Poppins-Thin.ttf
-        - asset: assets/fonts/Poppins/Poppins-ThinItalic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-ExtraBoldItalic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-ExtraLight.ttf
+          # - asset: assets/fonts/Poppins/Poppins-ExtraLightItalic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-Italic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-Light.ttf
+          # - asset: assets/fonts/Poppins/Poppins-LightItalic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+          # - asset: assets/fonts/Poppins/Poppins-MediumItalic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+          # - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          # - asset: assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf
+          # - asset: assets/fonts/Poppins/Poppins-Thin.ttf
+          # - asset: assets/fonts/Poppins/Poppins-ThinItalic.ttf
           weight: 700
     - family: StalinistOne
       fonts:

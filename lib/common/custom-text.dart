@@ -1,6 +1,10 @@
 // ignore_for_file: file_names
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import '../utils/sizes.dart';
 
@@ -73,4 +77,72 @@ class CText extends StatelessWidget {
 class UsedFonts {
   static const poppins = "Poppins";
   static const stalinistOne = "StalinistOne";
+}
+
+class PostContent extends StatefulWidget {
+  final RxBool isExpanded;
+  final String text;
+  final double size;
+  final String fontFamily;
+  final FontWeight fontWeight;
+  final Color color;
+
+  const PostContent({
+    super.key,
+    required this.text,
+    required this.size,
+    required this.fontFamily,
+    required this.fontWeight,
+    this.color = Colors.white,
+    required this.isExpanded,
+  });
+
+  @override
+  _PostContentState createState() => _PostContentState();
+}
+
+class _PostContentState extends State<PostContent> {
+  @override
+  Widget build(BuildContext context) {
+    String displayText = widget.text;
+    bool showReadMore = widget.text.length > 60;
+
+    if (!widget.isExpanded.value && showReadMore) {
+      displayText = widget.text.substring(0, 60) + '... ';
+    }
+
+    return GestureDetector(
+      onTap: () {
+        if (showReadMore) {
+          setState(() {
+            widget.isExpanded.value = !widget.isExpanded.value;
+          });
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            displayText,
+            style: TextStyle(
+              fontSize: widget.size,
+              fontFamily: widget.fontFamily,
+              fontWeight: widget.fontWeight,
+              color: widget.color,
+            ),
+          ),
+          if (showReadMore)
+            Text(
+              widget.isExpanded.value ? "Read less" : "Read more",
+              style: TextStyle(
+                fontSize: widget.size,
+                fontFamily: widget.fontFamily,
+                fontWeight: widget.fontWeight,
+                color: Colors.blue,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

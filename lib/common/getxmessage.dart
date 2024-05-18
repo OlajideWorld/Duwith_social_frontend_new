@@ -7,7 +7,7 @@ getSuccessSnackBar(String message) {
     "Success",
     message,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: textColor,
+    backgroundColor: mainColor,
     colorText: Colors.white,
     borderRadius: 10,
     margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
