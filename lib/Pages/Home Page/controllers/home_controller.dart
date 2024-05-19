@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:intl/intl.dart';
 
 import '../../../models/post-data.dart';
 
@@ -230,5 +231,10 @@ class HomeController extends GetxController {
     } else {
       return number.toString();
     }
+  }
+
+  String formatNumberWithCommasWithDouble(double number) {
+    String formattedNumber = NumberFormat.decimalPattern().format(number);
+    return formattedNumber;
   }
 }

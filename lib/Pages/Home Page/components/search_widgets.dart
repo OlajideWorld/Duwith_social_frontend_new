@@ -12,6 +12,7 @@ searchTrends(String image, String name, Color colorUsed) {
   return Expanded(
     child: Container(
       height: heightSize(36),
+      padding: EdgeInsets.only(left: widthSize(12)),
       decoration: BoxDecoration(
           color: colorUsed,
           borderRadius: const BorderRadius.all(Radius.circular(10))),
@@ -39,22 +40,19 @@ searchTrends(String image, String name, Color colorUsed) {
 searchTrendsList(BuildContext context, double width) {
   return Expanded(
     child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, // Number of items per row
-          crossAxisSpacing: 10.0, // Spacing between columns
-          mainAxisSpacing: 10.0, // Spacing between rows
+          crossAxisSpacing: heightSize(12), // Spacing between columns
+          mainAxisSpacing: widthSize(9), // Spacing between rows
           childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
         ),
         itemCount: homeController.postDatasPost.value.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: heightSize(20)),
-            child: Column(
-              children: [
-                popularTrends(homeController.searchTrends.value[index].image,
-                    homeController.searchTrends.value[index].name)
-              ],
-            ),
+          return Column(
+            children: [
+              popularTrends(homeController.searchTrends.value[index].image,
+                  homeController.searchTrends.value[index].name)
+            ],
           );
         }),
   );

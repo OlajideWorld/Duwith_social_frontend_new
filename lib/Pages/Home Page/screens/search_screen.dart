@@ -22,6 +22,7 @@ class SearchScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
                 child: Column(
                   children: [
+                    SizedBox(height: heightSize(30)),
                     const InputTextField(
                         prefixIcon: Icons.search,
                         obscureText: false,
@@ -34,19 +35,19 @@ class SearchScreen extends StatelessWidget {
                       children: [
                         searchTrends("assets/images/Trends/firetrend.png",
                             "Trending", const Color(0xFF5E5EB2)),
-                        SizedBox(height: heightSize(10)),
+                        SizedBox(width: widthSize(10)),
                         searchTrends("assets/images/Trends/locationtrend.png",
-                            "Local", const Color(0xFF5E5EB2))
+                            "Local", const Color(0xFF9176D0))
                       ],
                     ),
                     SizedBox(height: heightSize(12)),
                     Row(
                       children: [
                         searchTrends("assets/images/Trends/friendstrend.png",
-                            "Friends", const Color(0xFF5E5EB2)),
-                        SizedBox(height: heightSize(10)),
+                            "Friends", const Color(0xFFCE59B7)),
+                        SizedBox(width: widthSize(10)),
                         searchTrends("assets/images/Trends/recentTrend.png",
-                            "Recent", const Color(0xFF5E5EB2))
+                            "Recent", const Color(0xFFC259CE))
                       ],
                     ),
                     SizedBox(height: heightSize(30)),

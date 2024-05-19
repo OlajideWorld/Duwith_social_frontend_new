@@ -45,8 +45,16 @@ buttonsWidget(
   );
 }
 
-buttonsWidget2(BuildContext context, double height, double width, String text,
-    IconData icon, Color color, VoidCallback onTap) {
+buttonsWidget2(
+    BuildContext context,
+    double height,
+    double width,
+    String text,
+    IconData icon,
+    Color color,
+    Color textColorused,
+    VoidCallback onTap,
+    bool showBorderColor) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
@@ -56,6 +64,9 @@ buttonsWidget2(BuildContext context, double height, double width, String text,
       decoration: ShapeDecoration(
         color: color,
         shape: RoundedRectangleBorder(
+          side: showBorderColor
+              ? const BorderSide(color: textColor3)
+              : BorderSide(color: color),
           borderRadius: BorderRadius.circular(20),
         ),
       ),
@@ -66,13 +77,13 @@ buttonsWidget2(BuildContext context, double height, double width, String text,
             Icon(
               icon,
               size: heightSize(16),
-              color: textColor,
+              color: textColorused,
             ),
             SizedBox(width: widthSize(3)),
             Text(
               text,
               style: TextStyle(
-                color: Colors.white,
+                color: textColorused,
                 fontSize: fontSize(12),
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w500,

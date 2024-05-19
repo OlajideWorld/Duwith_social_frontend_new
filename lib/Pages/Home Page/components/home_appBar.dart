@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:duwith_social/Pages/Home%20Page/screens/search_screen.dart';
+import 'package:duwith_social/Pages/Wallet%20Page/screens/wallet_screen.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -17,38 +19,41 @@ homeAppBar(double width) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: heightSize(44),
-            width: widthSize(100),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: heightSize(44),
-                  width: widthSize(44),
-                  child: Image.asset(
-                    "assets/images/points.png",
-                    fit: BoxFit.fitHeight,
+          GestureDetector(
+            onTap: () => Get.to(() => WalletScreen()),
+            child: SizedBox(
+              height: heightSize(44),
+              width: widthSize(100),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: heightSize(44),
+                    width: widthSize(44),
+                    child: Image.asset(
+                      "assets/images/points.png",
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
-                ),
-                const Row(
-                  children: [
-                    CText(
-                      text: "1000",
-                      size: 11,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                    CText(
-                      text: "points",
-                      color: textColor3,
-                      size: 9,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
-                )
-              ],
+                  const Row(
+                    children: [
+                      CText(
+                        text: "1000",
+                        size: 11,
+                        fontFamily: UsedFonts.poppins,
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                      ),
+                      CText(
+                        text: "points",
+                        color: textColor3,
+                        size: 9,
+                        fontFamily: UsedFonts.poppins,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           SizedBox(

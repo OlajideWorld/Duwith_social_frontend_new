@@ -111,9 +111,10 @@ class LoginScreen extends StatelessWidget {
                         constraints.maxWidth,
                         "Sign in with Email and phone",
                         Icons.email_rounded,
-                        mainColor, () {
+                        mainColor,
+                        Colors.white, () {
                       Get.to(() => const LoginWithScreen());
-                    }),
+                    }, false),
                     SizedBox(height: heightSize(16)),
                     buttonsWidget2(
                         context,
@@ -122,7 +123,9 @@ class LoginScreen extends StatelessWidget {
                         "Sign up with wallet",
                         Icons.wallet_outlined,
                         buttonColor2,
-                        () {}),
+                        textColor,
+                        () {},
+                        false),
                     SizedBox(height: heightSize(20)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

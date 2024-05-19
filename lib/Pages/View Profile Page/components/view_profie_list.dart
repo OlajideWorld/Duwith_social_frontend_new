@@ -16,7 +16,7 @@ viewProfilePostList(BuildContext context, double width) {
           crossAxisCount: 3, // Number of items per row
           crossAxisSpacing: heightSize(12), // Spacing between columns
           mainAxisSpacing: widthSize(9), // Spacing between rows
-          // childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
+          childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
         ),
         itemCount: homeController.postDatasPost.value.length,
         itemBuilder: (context, index) {

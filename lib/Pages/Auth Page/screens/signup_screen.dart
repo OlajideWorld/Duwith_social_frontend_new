@@ -118,12 +118,13 @@ class SignUpScreen extends StatelessWidget {
                         constraints.maxWidth,
                         "Sign up with Email",
                         Icons.email_rounded,
-                        mainColor, () {
+                        mainColor,
+                        textColor, () {
                       authController.hintText.value = "Email address";
                       authController.optionUsed.value = 1;
                       authController.hintIcon.value = Icons.email_outlined;
                       Get.to(() => SignUpWithScreen());
-                    }),
+                    }, false),
                     SizedBox(height: heightSize(16)),
                     buttonsWidget2(
                         context,
@@ -131,9 +132,10 @@ class SignUpScreen extends StatelessWidget {
                         constraints.maxWidth,
                         "Sign up with wallet",
                         Icons.wallet_outlined,
-                        buttonColor2, () {
+                        buttonColor2,
+                        textColor, () {
                       getSuccessSnackBar("coming soon");
-                    }),
+                    }, false),
                     SizedBox(height: heightSize(16)),
                     buttonsWidget2(
                         context,
@@ -141,13 +143,14 @@ class SignUpScreen extends StatelessWidget {
                         constraints.maxWidth,
                         "Sign up with number",
                         Icons.wallet_outlined,
-                        buttonColor2, () {
+                        buttonColor2,
+                        textColor, () {
                       authController.hintText.value = "Mobile number";
                       authController.optionUsed.value = 3;
                       authController.hintIcon.value =
                           Icons.phone_iphone_rounded;
                       Get.to(() => SignUpWithScreen());
-                    }),
+                    }, false),
                     SizedBox(height: heightSize(20)),
                     ////
                     SizedBox(
