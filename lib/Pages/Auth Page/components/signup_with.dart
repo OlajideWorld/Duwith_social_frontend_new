@@ -50,6 +50,7 @@ class SignUpWithScreen extends StatelessWidget {
                         child: InputTextField(
                             prefixIcon: authController.hintIcon.value,
                             obscureText: false,
+                            showPrefixIcon: true,
                             innerColor: buttonColor2,
                             hintText: authController.hintText.value,
                             textColor: textColor,

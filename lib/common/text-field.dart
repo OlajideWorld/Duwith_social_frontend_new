@@ -10,8 +10,9 @@ class InputTextField extends StatefulWidget {
   final bool obscureText;
   final int differentiate;
   final Color innerColor;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final Color textColor;
+  final bool showPrefixIcon;
   final bool password;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
@@ -29,9 +30,10 @@ class InputTextField extends StatefulWidget {
     this.password = false,
     this.validator,
     this.hintText,
+    required this.showPrefixIcon,
     this.keyboardType,
     this.maxlines,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.onChanged,
     required this.innerColor,
     required this.textColor,
@@ -80,17 +82,21 @@ class _InputTextFieldState extends State<InputTextField> {
         decoration: InputDecoration(
           filled: true,
           fillColor: widget.innerColor,
-          hintText: widget.hintText,
+          hintText: widget.showPrefixIcon
+              ? widget.hintText
+              : "      ${widget.hintText}",
           hintStyle: TextStyle(
               fontSize: fontSize(13),
               fontWeight: FontWeight.w400,
               fontFamily: UsedFonts.poppins,
               color: textColor3),
-          prefixIcon: Icon(
-            widget.prefixIcon,
-            color: textColor,
-            size: heightSize(16),
-          ),
+          prefixIcon: widget.showPrefixIcon
+              ? Icon(
+                  widget.prefixIcon,
+                  color: textColor,
+                  size: heightSize(16),
+                )
+              : null,
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: widget.innerColor),
               borderRadius: BorderRadius.circular(16)),

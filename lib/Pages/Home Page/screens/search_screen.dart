@@ -24,6 +24,7 @@ class SearchScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: heightSize(30)),
                     const InputTextField(
+                        showPrefixIcon: true,
                         prefixIcon: Icons.search,
                         obscureText: false,
                         innerColor: buttonColor2,

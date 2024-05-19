@@ -49,6 +49,7 @@ class LoginWithScreen extends StatelessWidget {
                         child: InputTextField(
                             prefixIcon: authController.loginprefixIcon.value,
                             obscureText: false,
+                            showPrefixIcon: true,
                             innerColor: buttonColor2,
                             hintText: authController.loginhint.value,
                             textColor: textColor,

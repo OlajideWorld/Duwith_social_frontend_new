@@ -1,3 +1,5 @@
+import 'package:duwith_social/models/transaction_history.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -10,6 +12,13 @@ class HomeController extends GetxController {
 
   RxInt viewBarOption = 0.obs;
   RxInt viewprofileslide = 0.obs;
+  RxInt selectedWithdrawal = 0.obs;
+
+  // WIthdrawal Values
+  TextEditingController email = TextEditingController();
+  TextEditingController amount = TextEditingController();
+  TextEditingController bankName = TextEditingController();
+  TextEditingController accountnumber = TextEditingController();
 
   RxList<PostsData> postDatas = [
     PostsData(
@@ -207,6 +216,33 @@ class HomeController extends GetxController {
         likes: 12346576,
         dislikes: 123,
         comment: 1234)
+  ].obs;
+
+  RxList<TransactionHistory> transactiondata = [
+    TransactionHistory(
+        name: "Solana ",
+        amount: "\$20,304",
+        time: "08:48 am",
+        date: "15-03-2023",
+        status: false),
+    TransactionHistory(
+        name: "Athens ",
+        amount: "\$20,304",
+        time: "08:48 am",
+        date: "15-03-2023",
+        status: false),
+    TransactionHistory(
+        name: "Athens ",
+        amount: "\$20,304",
+        time: "08:48 am",
+        date: "15-03-2023",
+        status: true),
+    TransactionHistory(
+        name: "Wen ",
+        amount: "\$20,304",
+        time: "08:48 am",
+        date: "15-03-2023",
+        status: true),
   ].obs;
 
   @override

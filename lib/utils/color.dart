@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const backgroundColor = Color(0xFF303030);
+const backgroundColor = Color.fromARGB(255, 23, 23, 23);
 const mainColor = Color(0xFF0062D6);
 const highlightColor = Color(0xFF1380FF);
 const textColor = Color(0xFFFFFFFF);

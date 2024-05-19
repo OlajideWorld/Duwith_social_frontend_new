@@ -14,8 +14,9 @@ walletCoinList() {
     height: heightSize(375),
     padding: EdgeInsets.symmetric(
         horizontal: widthSize(20), vertical: heightSize(28)),
-    decoration: BoxDecoration(color: faintColor),
+    decoration: const BoxDecoration(color: faintColor),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const CText(
           text: "Assets",
