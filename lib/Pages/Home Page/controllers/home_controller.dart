@@ -1,10 +1,9 @@
 import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/comments_model.dart';
 import '../../../models/post-data.dart';
 
 class HomeController extends GetxController {
@@ -19,6 +18,9 @@ class HomeController extends GetxController {
   TextEditingController amount = TextEditingController();
   TextEditingController bankName = TextEditingController();
   TextEditingController accountnumber = TextEditingController();
+
+  // Comments
+  RxList<Comment> comments = <Comment>[].obs;
 
   RxList<PostsData> postDatas = [
     PostsData(
@@ -244,6 +246,29 @@ class HomeController extends GetxController {
         date: "15-03-2023",
         status: true),
   ].obs;
+
+  final List<String> allInterests = [
+    'Technology',
+    'Sports',
+    'Music',
+    'Movies',
+    "Nature",
+    "Travels",
+    "Pest & Animals",
+    "Events",
+    "Quotes",
+    "Books",
+    "Music",
+    "Tech",
+    "Gadgets",
+    "Fitness",
+    "Adventures",
+    "Food",
+    "Fashion",
+    "Lifestyles",
+    "Arts"
+    // Add more interests
+  ];
 
   @override
   void onInit() {

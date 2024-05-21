@@ -7,9 +7,12 @@ import "package:get/get.dart";
 
 import "../../../common/button-widget.dart";
 import "../../../common/custom-text.dart";
+import "../controller/auth_controller.dart";
 
 class VerificationSuccess extends StatelessWidget {
-  const VerificationSuccess({super.key});
+  VerificationSuccess({super.key});
+
+  AuthController authController = AuthController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,8 @@ class VerificationSuccess extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: widthSize(40)),
                       child: buttonsWidget(context, heightSize(50),
                           constraints.maxWidth, "Continue", mainColor, 12, () {
+                        authController
+                            .saveCounter(authController.isFirstTime!.value);
                         Get.toNamed(MyRoutes.homeScreen);
                       }, false),
                     ),

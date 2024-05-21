@@ -141,7 +141,7 @@ class VerifyCredentials extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: widthSize(40)),
                       child: buttonsWidget(context, heightSize(50),
                           constraints.maxWidth, "Continue", mainColor, 12, () {
-                        Get.to(() => const VerificationSuccess());
+                        Get.to(() => VerificationSuccess());
                       }, false),
                     ),
                     const Spacer(),
