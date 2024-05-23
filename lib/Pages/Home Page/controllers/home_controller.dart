@@ -1,13 +1,17 @@
+import 'package:duwith_social/models/main_post_model.dart';
 import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:intl/intl.dart';
 
-import '../../../models/comments_model.dart';
 import '../../../models/post-data.dart';
 
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
+
+  RxBool homeloading = true.obs;
+  RxBool continueLoading = false.obs;
 
   RxInt viewBarOption = 0.obs;
   RxInt viewprofileslide = 0.obs;
@@ -21,6 +25,12 @@ class HomeController extends GetxController {
 
   // Comments
   RxList<Comment> comments = <Comment>[].obs;
+
+  // Posts
+  RxList<Post> postList = <Post>[].obs;
+  Rx<QueryParams> queryParams =
+      QueryParams(userId: "", following: [], interests: [], sortby: "CreatedAt")
+          .obs;
 
   RxList<PostsData> postDatas = [
     PostsData(

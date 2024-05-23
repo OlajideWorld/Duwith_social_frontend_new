@@ -1,10 +1,13 @@
 import 'package:duwith_social/Pages/Auth%20Page/screens/login_screen.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -27,6 +30,8 @@ class AuthController extends GetxController {
       socialMediaLinks: SocialMediaLinks(facebook: "", youtube: ""),
       blockedUsers: []).obs;
 
+  RxBool isloading = false.obs;
+
   RxBool? isFirstTime = false.obs;
   RxString firstKey = 'Duwith Key'.obs;
   RxString userEmail = "".obs;
@@ -41,12 +46,22 @@ class AuthController extends GetxController {
   RxString loginhint = "Email address".obs;
   Rx<IconData> loginprefixIcon = Icons.email_outlined.obs;
 
+  IO.Socket? socket;
+
   final box = GetStorage();
 
   @override
-  void onInit() async {
+  void onInit() {
     // TODO: implement onInit
     super.onInit();
+    socket ??= IO.io(
+        'http://localhost:3000',
+        IO.OptionBuilder()
+            .setTransports(["websocket"])
+            .disableAutoConnect()
+            .build());
+
+    socket!.connect();
   }
 
   @override
@@ -60,7 +75,7 @@ class AuthController extends GetxController {
   checkStatus() {
     loadValueBool();
     if (isFirstTime!.value == true) {
-      Get.to(() => const LoginScreen());
+      Get.to(() => LoginScreen());
     } else {
       Get.to(() => SignUpScreen());
       // Get.toNamed(MyRoutes.homeScreen);

@@ -18,3 +18,16 @@ class PostsData {
       required this.dislikes,
       required this.comment});
 }
+
+class QueryParams {
+  final String userId;
+  final List<String> following;
+  final List<String> interests;
+  final String sortby;
+
+  QueryParams(
+      {required this.userId,
+      required this.following,
+      required this.interests,
+      required this.sortby});
+}

@@ -1,4 +1,5 @@
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_bindings.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/routes/routes.dart';
 import 'package:duwith_social/utils/Size-config.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,9 @@ void main() async {
   await GetStorage.init();
 
 // Onesignal settings
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  OneSignal.initialize("c4535f03-7e38-4685-b096-ba5302f40d58");
-  OneSignal.Notifications.requestPermission(true);
+  // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  // OneSignal.initialize("c4535f03-7e38-4685-b096-ba5302f40d58");
+  // OneSignal.Notifications.requestPermission(true);
   runApp(const MyApp());
 }
 

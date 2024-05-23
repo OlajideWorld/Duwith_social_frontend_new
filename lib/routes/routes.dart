@@ -20,7 +20,7 @@ class Pages {
   static const splashscreen = MyRoutes.splashScreen;
   static final routes = [
     GetPage(name: MyRoutes.splashScreen, page: () => const SplashScreen()),
-    GetPage(name: MyRoutes.loginScreen, page: () => const LoginScreen()),
+    GetPage(name: MyRoutes.loginScreen, page: () => LoginScreen()),
     GetPage(
         name: MyRoutes.homeScreen,
         page: () => HomeScreen(),

@@ -117,7 +117,7 @@ class SignUpWithScreen extends StatelessWidget {
                             color: textColor,
                           ),
                           CText(
-                            onClick: () => Get.to(() => const LoginScreen()),
+                            onClick: () => Get.to(() => LoginScreen()),
                             text: "Sign in",
                             fontFamily: UsedFonts.poppins,
                             fontWeight: FontWeight.w600,

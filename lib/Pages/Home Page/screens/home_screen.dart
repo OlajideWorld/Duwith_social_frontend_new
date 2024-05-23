@@ -6,6 +6,7 @@ import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart'
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_news.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
+import 'package:duwith_social/common/shimmer_loading_widget.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -36,14 +37,20 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(height: heightSize(5)),
                       if (homeController.viewBarOption.value == 0 ||
                           homeController.viewBarOption.value == 1)
-                        forYouList(
-                          context,
-                          constraints.maxWidth,
-                        ),
+                        homeController.homeloading.value
+                            ? ShimmerLoadingWidget(width: constraints.maxWidth)
+                            : forYouList(
+                                context,
+                                constraints.maxWidth,
+                              ),
                       if (homeController.viewBarOption.value == 2)
-                        newsList(context, constraints.maxWidth),
+                        homeController.homeloading.value
+                            ? ShimmerLoadingWidget(width: constraints.maxWidth)
+                            : newsList(context, constraints.maxWidth),
                       if (homeController.viewBarOption.value == 3)
-                        airdropList(context, constraints.maxWidth)
+                        homeController.homeloading.value
+                            ? ShimmerLoadingWidget(width: constraints.maxWidth)
+                            : airdropList(context, constraints.maxWidth)
                     ],
                   ),
                 );

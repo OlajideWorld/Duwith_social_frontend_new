@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, invalid_use_of_protected_member
+// ignore_for_file: file_names, invalid_use_of_protected_member, library_private_types_in_public_api
 
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
