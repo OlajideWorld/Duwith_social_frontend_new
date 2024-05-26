@@ -77,6 +77,7 @@ class CText extends StatelessWidget {
 class UsedFonts {
   static const poppins = "Poppins";
   static const stalinistOne = "StalinistOne";
+  static const rammetto = "RammettoOne";
 }
 
 class PostContent extends StatefulWidget {

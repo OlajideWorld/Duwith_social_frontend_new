@@ -2,6 +2,7 @@ import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 mainprofileAppBar(double width) {
   return Container(
@@ -22,7 +23,7 @@ mainprofileAppBar(double width) {
   );
 }
 
-profileWidget(String image, String name, VoidCallback onTap) {
+profileWidget(String image, String name, VoidCallback onTap, bool showLine) {
   return GestureDetector(
     onTap: onTap,
     child: SizedBox(
@@ -32,12 +33,14 @@ profileWidget(String image, String name, VoidCallback onTap) {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: heightSize(35),
                 width: widthSize(179),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
                       height: heightSize(35),
@@ -72,10 +75,12 @@ profileWidget(String image, String name, VoidCallback onTap) {
               )
             ],
           ),
-          Divider(
-              height: heightSize(3),
-              thickness: 1,
-              color: const Color(0xFF3C3C3C)),
+          showLine
+              ? Divider(
+                  height: heightSize(3),
+                  thickness: 1,
+                  color: const Color(0xFF3C3C3C))
+              : const SizedBox()
         ],
       ),
     ),

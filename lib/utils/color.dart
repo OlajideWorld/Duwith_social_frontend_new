@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const backgroundColor = Color(0xFF131827);
 const mainColor = Color(0xFF0062D6);
+const navbarColor2 = Color(0xFF21293F);
 const highlightColor = Color(0xFF1380FF);
 const textColor = Color(0xFFFFFFFF);
 const textColor2 = Color(0xFF92E9E6);
@@ -11,3 +12,4 @@ const switchoff = Color(0xFF222020);
 const rotateColor = Color(0xFF1CB1D1);
 const timeColor = Color(0xFF858585);
 const faintColor = Color(0xFF28282C);
+const navbarColor = Color(0xFF9291A4);

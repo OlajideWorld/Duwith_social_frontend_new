@@ -6,10 +6,14 @@ import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart'
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_news.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
+import 'package:duwith_social/Pages/Post%20page/screens/post_page.dart';
+import 'package:duwith_social/common/custom-nav-bar.dart';
+import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/common/shimmer_loading_widget.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -21,6 +25,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+      bottomNavigationBar: const CustomNavBarWidget(),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(

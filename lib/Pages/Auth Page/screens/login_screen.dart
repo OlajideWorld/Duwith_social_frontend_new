@@ -3,6 +3,7 @@
 import 'package:duwith_social/Pages/Auth%20Page/components/login_with.dart';
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_connection2.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/utils/color.dart';
@@ -128,21 +129,14 @@ class LoginScreen extends StatelessWidget {
                                 Icons.email_rounded,
                                 mainColor,
                                 Colors.white, () async {
-                              // Get.to(() => const LoginWithScreen());
-                              authController.isloading.value = true;
-                              authController.socket = IO.io(
-                                  'http://localhost:3000',
-                                  IO.OptionBuilder()
-                                      .setTransports(["websocket"])
-                                      .disableAutoConnect()
-                                      .build());
+                              Get.to(() => const LoginWithScreen());
+                              // authController.isloading.value = true;
 
-                              authController.socket!.connect();
-
-                              final data = {"email": "olajideoken@gmail.com"};
-                              await Future.delayed(
-                                  const Duration(seconds: 5), () {});
-                              authController.isloading.value = false;
+                              // final data = {"email": "wallaceian007@gmail.com"};
+                              // await Future.delayed(
+                              //     const Duration(seconds: 5), () {});
+                              // SocketService().createUser(data);
+                              // authController.isloading.value = false;
                             }, false),
                             SizedBox(height: heightSize(16)),
                             buttonsWidget2(

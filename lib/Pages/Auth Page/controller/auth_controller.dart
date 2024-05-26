@@ -1,5 +1,6 @@
 import 'package:duwith_social/Pages/Auth%20Page/screens/login_screen.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_connection2.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/models/user_data.dart';
 import 'package:flutter/material.dart';
@@ -54,14 +55,6 @@ class AuthController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    socket ??= IO.io(
-        'http://localhost:3000',
-        IO.OptionBuilder()
-            .setTransports(["websocket"])
-            .disableAutoConnect()
-            .build());
-
-    socket!.connect();
   }
 
   @override
@@ -69,6 +62,8 @@ class AuthController extends GetxController {
     // TODO: implement onReady
     super.onReady();
     await Future.delayed(const Duration(seconds: 5), () {});
+    SocketService().connectAndListen();
+    // SocketResources().connectFlutterSocket();
     checkStatus();
   }
 
