@@ -1,10 +1,8 @@
+import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_money_component.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/utils/color.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import '../../../common/custom-text.dart';
 import '../../../utils/sizes.dart';
 
 class EarnMorePage extends StatelessWidget {
@@ -19,42 +17,86 @@ class EarnMorePage extends StatelessWidget {
           return SizedBox(
             height: constraints.maxHeight,
             width: constraints.maxWidth,
-            child: SafeArea(
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: SizedBox(
-                      child: Column(
-                        children: [
-                          Positioned(
-                            bottom: heightSize(270),
-                            child: Opacity(
-                              opacity: 0.3,
-                              child: SizedBox(
-                                height: heightSize(710),
-                                width: constraints.maxWidth,
-                                child: Image.asset("assets/images/album5.png"),
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth,
+                  child: Opacity(
+                    opacity: 0.8,
+                    child: Image.asset(
+                      "assets/images/Earn/earn_more.png",
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                SafeArea(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: widthSize(20),
+                          right: widthSize(20),
+                          top: heightSize(73),
+                          bottom: heightSize(30)),
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            earnBalanceWidget(),
+                            SizedBox(height: heightSize(200)),
+                            SizedBox(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  earnLuckySpin(constraints.maxWidth),
+                                  earnSocialMediaWidget(
+                                      context, constraints.maxWidth)
+                                ],
                               ),
                             ),
-                          ),
-                          CText(
-                            text: "Account",
-                            size: 13,
-                            color: Color(0xFFA3A2A2),
-                            fontFamily: UsedFonts.poppins,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ],
+                            SizedBox(
+                              height: heightSize(350),
+                              width: constraints.maxWidth,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  earnTap(constraints.maxWidth),
+                                  Row(
+                                    children: [
+                                      earnMoreExtraWidget(
+                                          const Color(0xFFEB7F15),
+                                          "Enjoy 25,000 points daily",
+                                          "Offer walls",
+                                          "Do more offer to earn cash",
+                                          "assets/images/Earn/earn_more2.png",
+                                          "Offer"),
+                                      SizedBox(width: widthSize(10)),
+                                      earnMoreExtraWidget(
+                                          const Color(0xFF07A9B4),
+                                          "Earn 50x higher",
+                                          "Play games",
+                                          "Play games and earn golds",
+                                          "assets/images/Earn/game2.png",
+                                          "Games")
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: CustomNavBarWidget(),
-                  )
-                ],
-              ),
+                ),
+                const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CustomNavBarWidget(),
+                )
+              ],
             ),
           );
         },

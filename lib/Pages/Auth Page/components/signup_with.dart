@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/verify_details.dart';
 import 'package:duwith_social/common/button-widget.dart';
@@ -103,7 +105,7 @@ class SignUpWithScreen extends StatelessWidget {
                             mainColor,
                             12, () {
                           Get.to(() => VerifyCredentials());
-                        }, false),
+                        }, false, Colors.white),
                       ),
                       SizedBox(height: heightSize(115)),
                       Row(

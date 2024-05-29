@@ -1,15 +1,17 @@
+import 'package:duwith_social/models/games_model.dart';
 import 'package:duwith_social/models/main_post_model.dart';
 import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
 import 'package:intl/intl.dart';
 
 import '../../../models/post-data.dart';
 
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
+
+  //
 
   RxBool homeloading = false.obs;
   RxBool continueLoading = false.obs;
@@ -18,6 +20,7 @@ class HomeController extends GetxController {
   RxInt viewprofileslide = 0.obs;
   RxInt selectedWithdrawal = 0.obs;
   RxInt selectedIndex = 0.obs;
+  RxInt shoptype = 0.obs;
 
   // WIthdrawal Values
   TextEditingController email = TextEditingController();
@@ -27,6 +30,137 @@ class HomeController extends GetxController {
 
   // Comments
   RxList<Comment> comments = <Comment>[].obs;
+
+  // Games Model
+  RxList<GamesModel> gameslist = [
+    GamesModel(
+        image: "assets/images/Earn/games.png",
+        description: "Complete the task to earn more gold"),
+    GamesModel(
+        image: "assets/images/Earn/games5.png",
+        description: "Complete the task to earn more gold"),
+    GamesModel(
+        image: "assets/images/Earn/games3.png",
+        description: "Complete the task to earn more gold"),
+    GamesModel(
+        image: "assets/images/Earn/games4.png",
+        description: "Spin and earn amazing rewards")
+  ].obs;
+
+  // Shopping models
+  RxList<ShopModels> dogsList = [
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog2.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog3.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog4.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog5.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog6.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/dog7.png",
+        amount: "120",
+        isBig: true)
+  ].obs;
+
+  RxList<ShopModels> jarList = [
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar2.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar3.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar3.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar2.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/jar2.png",
+        amount: "120",
+        isBig: false)
+  ].obs;
+
+  RxList<ShopModels> boxList = [
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest2.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest3.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest4.png",
+        amount: "120",
+        isBig: false),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest2.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest.png",
+        amount: "120",
+        isBig: true),
+    ShopModels(
+        name: "GrandMaster",
+        image: "assets/images/Shop/chest2.png",
+        amount: "120",
+        isBig: false)
+  ].obs;
 
   // Posts
   RxList<Post> postList = <Post>[].obs;

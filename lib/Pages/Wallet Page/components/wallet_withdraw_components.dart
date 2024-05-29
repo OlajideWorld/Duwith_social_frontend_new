@@ -217,7 +217,7 @@ widthdrawFormDetails(BuildContext context, double width) {
         ),
         SizedBox(height: heightSize(20)),
         buttonsWidget(context, heightSize(50), width, "Continue", mainColor, 10,
-            () {}, false)
+            () {}, false, Colors.white)
       ],
     ),
   );

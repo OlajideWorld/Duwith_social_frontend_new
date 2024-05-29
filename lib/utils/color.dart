@@ -13,3 +13,4 @@ const rotateColor = Color(0xFF1CB1D1);
 const timeColor = Color(0xFF858585);
 const faintColor = Color(0xFF28282C);
 const navbarColor = Color(0xFF9291A4);
+const shopbackground = Color(0xFF9A0FAB);

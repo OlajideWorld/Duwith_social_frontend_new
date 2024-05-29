@@ -78,6 +78,8 @@ class UsedFonts {
   static const poppins = "Poppins";
   static const stalinistOne = "StalinistOne";
   static const rammetto = "RammettoOne";
+  static const archivo = "ArchivoBlack";
+  static const blackhan = "BlackHanSans";
 }
 
 class PostContent extends StatefulWidget {

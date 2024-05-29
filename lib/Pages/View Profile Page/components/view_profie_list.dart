@@ -13,7 +13,7 @@ viewProfilePostList(BuildContext context, double width) {
   return Expanded(
     child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // Number of items per row
+          crossAxisCount: 2, // Number of items per row
           crossAxisSpacing: heightSize(12), // Spacing between columns
           mainAxisSpacing: widthSize(9), // Spacing between rows
           childAspectRatio: 1.0, // Aspect ratio of each item (width / height)

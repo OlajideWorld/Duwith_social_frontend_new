@@ -102,7 +102,7 @@ class LoginWithScreen extends StatelessWidget {
                             mainColor,
                             12, () {
                           Get.to(() => VerifyCredentials());
-                        }, false),
+                        }, false, Colors.white),
                       ),
                       SizedBox(height: heightSize(115)),
                       Row(

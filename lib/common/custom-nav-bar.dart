@@ -30,7 +30,7 @@ class _CustomNavBarWidgetState extends State<CustomNavBarWidget> {
         Get.to(() => const EarnMorePage());
         break;
       case 3:
-        Get.to(() => const ShoppingMainScreen());
+        Get.to(() => ShoppingMainScreen());
         break;
       case 4:
         Get.to(() => const ProfileScreen());

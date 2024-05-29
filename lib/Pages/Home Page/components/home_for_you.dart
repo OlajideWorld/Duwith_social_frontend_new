@@ -267,7 +267,7 @@ postBarTitle(double width, String name, String image, BuildContext context,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     buttonsWidget(context, heightSize(25), widthSize(52),
-                        "Follow", mainColor, 8, () {}, false),
+                        "Follow", mainColor, 8, () {}, false, Colors.white),
                     Icon(
                       Icons.more_vert,
                       size: heightSize(16),

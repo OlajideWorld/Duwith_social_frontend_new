@@ -13,7 +13,8 @@ buttonsWidget(
     Color colorused,
     double fontsize,
     VoidCallback onTap,
-    bool showBorderColor) {
+    bool showBorderColor,
+    Color fontColor) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
@@ -33,7 +34,7 @@ buttonsWidget(
         child: Text(
           text,
           style: TextStyle(
-            color: Colors.white,
+            color: fontColor,
             fontSize: fontSize(fontsize),
             fontFamily: UsedFonts.poppins,
             fontWeight: FontWeight.w600,

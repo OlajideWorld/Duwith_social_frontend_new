@@ -3,6 +3,7 @@ import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/routes/routes.dart';
 import 'package:duwith_social/utils/Size-config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         SizeConfig().init(constraints);
         return GetMaterialApp(
+          builder: FlutterSmartDialog.init(),
           title: 'Duwith Social',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(useMaterial3: true),

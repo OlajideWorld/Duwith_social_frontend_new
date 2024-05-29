@@ -63,7 +63,7 @@ class VerificationSuccess extends StatelessWidget {
                         authController
                             .saveCounter(authController.isFirstTime!.value);
                         Get.toNamed(MyRoutes.homeScreen);
-                      }, false),
+                      }, false, Colors.white),
                     ),
                   ],
                 ),
