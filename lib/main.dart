@@ -12,12 +12,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Ge Storage
   await GetStorage.init();
-
+  await Get.putAsync<SocketService>(() => SocketService().init());
 // Onesignal settings
   // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   // OneSignal.initialize("c4535f03-7e38-4685-b096-ba5302f40d58");
   // OneSignal.Notifications.requestPermission(true);
   runApp(const MyApp());
+}
+
+Future<void> initServices() async {
+  debugPrint("Initializing Socket Service");
 }
 
 class MyApp extends StatelessWidget {

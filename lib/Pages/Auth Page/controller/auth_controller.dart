@@ -3,12 +3,15 @@ import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_connection2.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/models/user_data.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import '../../../utils/get_user_key.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -34,7 +37,7 @@ class AuthController extends GetxController {
   RxBool isloading = false.obs;
 
   RxBool? isFirstTime = false.obs;
-  RxString firstKey = 'Duwith Key'.obs;
+
   RxString userEmail = "".obs;
 
   // Sign Up values
@@ -42,12 +45,15 @@ class AuthController extends GetxController {
   Rx<IconData> hintIcon = Icons.account_balance.obs;
   RxInt optionUsed = 1.obs;
 
+  // Text Controllers
+  TextEditingController email = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController signupOption = TextEditingController();
+
 // Login Values
   RxBool isEmail = true.obs;
   RxString loginhint = "Email address".obs;
   Rx<IconData> loginprefixIcon = Icons.email_outlined.obs;
-
-  IO.Socket? socket;
 
   final box = GetStorage();
 
@@ -62,8 +68,6 @@ class AuthController extends GetxController {
     // TODO: implement onReady
     super.onReady();
     await Future.delayed(const Duration(seconds: 5), () {});
-    SocketService().connectAndListen();
-    // SocketResources().connectFlutterSocket();
     checkStatus();
   }
 
@@ -78,14 +82,14 @@ class AuthController extends GetxController {
   }
 
   Future loadValueBool() async {
-    isFirstTime!.value = box.read(firstKey.value) ?? true;
+    isFirstTime!.value = box.read(firstKey) ?? true;
   }
 
   Future loadEmail() async {
-    userEmail.value = box.read(firstKey.value) ?? "";
+    userEmail.value = box.read(firstKey) ?? "";
   }
 
   Future<void> saveCounter(var value) async {
-    await GetStorage().write(firstKey.value, value);
+    await GetStorage().write(firstKey, value);
   }
 }
