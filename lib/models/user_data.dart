@@ -4,6 +4,7 @@ class User {
   final String id;
   final String username;
   final String email;
+  final String otp;
   final String profileImage;
   final String bio;
   final String gender;
@@ -11,6 +12,8 @@ class User {
   final bool linked;
   final String phoneNumber;
   final double mainBalance;
+  final double dailyPoints;
+  final double gemspoint;
   final Jar jar;
   final List<String> following;
   final List<String> followers;
@@ -22,6 +25,7 @@ class User {
     required this.id,
     required this.username,
     required this.email,
+    required this.otp,
     required this.profileImage,
     required this.bio,
     required this.gender,
@@ -29,6 +33,8 @@ class User {
     required this.linked,
     required this.phoneNumber,
     required this.mainBalance,
+    required this.dailyPoints,
+    required this.gemspoint,
     required this.jar,
     required this.following,
     required this.followers,
@@ -42,6 +48,7 @@ class User {
       id: json['_id'],
       username: json['username'],
       email: json['email'],
+      otp: json["otp"],
       profileImage: json['profile_image'],
       bio: json['bio'],
       gender: json['gender'],
@@ -49,6 +56,8 @@ class User {
       linked: json['linked'],
       phoneNumber: json['phoneNumber'],
       mainBalance: json['mainBalance'].toDouble(),
+      gemspoint: json["gemspoint"].toDouble(),
+      dailyPoints: json["dailyPoints"].toDouble(),
       jar: Jar.fromJson(json['jar']),
       following: List<String>.from(json['following']),
       followers: List<String>.from(json['followers']),

@@ -5,6 +5,7 @@ import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart'
 import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/common/button-widget.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(
@@ -78,43 +80,43 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: heightSize(46)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            socialMedia(FontAwesomeIcons.google),
-                            SizedBox(width: widthSize(9.5)),
-                            socialMedia(FontAwesomeIcons.facebookF),
-                          ],
-                        ),
-                        SizedBox(height: heightSize(46)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: widthSize(120),
-                              child: Divider(
-                                height: heightSize(3),
-                                thickness: 1,
-                                color: Color(0xFF3C3C3C),
-                              ),
-                            ),
-                            SizedBox(width: widthSize(10)),
-                            const CText(
-                              text: "Or",
-                              fontFamily: UsedFonts.poppins,
-                              fontWeight: FontWeight.w400,
-                              color: textColor,
-                            ),
-                            SizedBox(width: widthSize(10)),
-                            SizedBox(
-                              width: widthSize(120),
-                              child: Divider(
-                                  height: heightSize(3),
-                                  thickness: 1,
-                                  color: Color(0xFF3C3C3C)),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     socialMedia(FontAwesomeIcons.google),
+                        //     SizedBox(width: widthSize(9.5)),
+                        //     socialMedia(FontAwesomeIcons.facebookF),
+                        //   ],
+                        // ),
+                        // SizedBox(height: heightSize(46)),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     SizedBox(
+                        //       width: widthSize(120),
+                        //       child: Divider(
+                        //         height: heightSize(3),
+                        //         thickness: 1,
+                        //         color: Color(0xFF3C3C3C),
+                        //       ),
+                        //     ),
+                        //     SizedBox(width: widthSize(10)),
+                        //     const CText(
+                        //       text: "Or",
+                        //       fontFamily: UsedFonts.poppins,
+                        //       fontWeight: FontWeight.w400,
+                        //       color: textColor,
+                        //     ),
+                        //     SizedBox(width: widthSize(10)),
+                        //     SizedBox(
+                        //       width: widthSize(120),
+                        //       child: Divider(
+                        //           height: heightSize(3),
+                        //           thickness: 1,
+                        //           color: Color(0xFF3C3C3C)),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(height: heightSize(24)),
                         buttonsWidget2(
                             context,
@@ -125,11 +127,6 @@ class LoginScreen extends StatelessWidget {
                             mainColor,
                             Colors.white, () async {
                           Get.to(() => LoginWithScreen());
-                          // socket.isloading.value = true;
-
-                          // socket.getUserData("wallaceian007@gmail.com");
-                          // socket.createUser(data);
-                          // socket.isloading.value = false;
                         }, false),
                         SizedBox(height: heightSize(16)),
                         buttonsWidget2(
@@ -140,7 +137,8 @@ class LoginScreen extends StatelessWidget {
                             Icons.wallet_outlined,
                             buttonColor2,
                             textColor,
-                            () {},
+                            () => getSuccessSnackBarEdit(
+                                "Notification", "commig soon"),
                             false),
                         SizedBox(height: heightSize(20)),
                         Row(

@@ -59,6 +59,7 @@ class SignUpWithScreen extends StatelessWidget {
                           child: InputTextField(
                               prefixIcon: authController.hintIcon.value,
                               obscureText: false,
+                              textInputAction: true,
                               showPrefixIcon: true,
                               controller: authController.signupOption,
                               innerColor: buttonColor2,
@@ -114,13 +115,20 @@ class SignUpWithScreen extends StatelessWidget {
                               "Continue",
                               mainColor,
                               12, () async {
+                            bool valid = EmailValidator.validate(
+                                authController.signupOption.text.trim());
+
                             final data = {
-                              "email": authController.signupOption.text.trim()
+                              "email": authController.signupOption.text.trim(),
+                              "otp":
+                                  "${authController.generateRandom6DigitNumber()}"
                             };
 
                             final data2 = {
                               "phoneNumber":
-                                  authController.signupOption.text.trim()
+                                  authController.signupOption.text.trim(),
+                              "otp":
+                                  "${authController.generateRandom6DigitNumber()}"
                             };
 
                             if (authController.signupOption.text.trim() == "") {
@@ -128,18 +136,32 @@ class SignUpWithScreen extends StatelessWidget {
                                   "Please enter the required data");
                             } else {
                               if (authController.optionUsed.value == 1) {
-                                if (EmailValidator.validate(
-                                    authController.signupOption.text.trim())) {
+                                if (valid == true) {
                                   socket.isloading.value = true;
-                                  socket.createUser(data);
-                                  socket.isloading.value = false;
-                                  Get.to(() => VerifyCredentials());
+                                  var done = await socket.createUser(data);
+                                  if (done == false) {
+                                    socket.isloading.value = false;
+                                    getErrorSnackBar(
+                                        "User Account not created, Try again later maybe invalid email");
+                                  } else {
+                                    socket.isloading.value = false;
+                                    Get.to(() => VerifyCredentials());
+                                  }
+                                } else {
+                                  getErrorSnackBar(
+                                      "The email you entered is not valid");
                                 }
                               } else if (authController.optionUsed.value == 3) {
                                 socket.isloading.value = true;
-                                socket.createUser(data2);
-                                socket.isloading.value = false;
-                                Get.to(() => VerifyCredentials());
+                                var done = await socket.createUser(data2);
+                                if (done == false) {
+                                  socket.isloading.value = false;
+                                  getErrorSnackBar(
+                                      "User Account not created, Try again later");
+                                } else {
+                                  socket.isloading.value = false;
+                                  Get.to(() => VerifyCredentials());
+                                }
                               }
                             }
                           }, false, Colors.white),

@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/sizes.dart';
@@ -98,7 +99,28 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
             ),
             SizedBox(height: heightSize(8)),
             widget.postType == 1 || widget.postType == 2
-                ? Padding(
+                ?
+
+                // CachedNetworkImage(
+                //     imageUrl: widget.image,
+                //     placeholder: (context, url) =>
+                //         const CircularProgressIndicator(),
+                //     imageBuilder: (context, imageprovider) {
+                //       return Padding(
+                //      padding: EdgeInsets.only(left: widthSize(30)),
+                //         child: Container(
+                //           height: heightSize(168),
+                //           width: widget.width,
+                //           decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.all(Radius.circular(10)),
+                //               image: DecorationImage(
+                //                   image: imageprovider, fit: BoxFit.fill)),
+                //         ),
+                //       );
+                //     },
+                //   )
+
+                Padding(
                     padding: EdgeInsets.only(left: widthSize(30)),
                     child: Container(
                       height: heightSize(168),

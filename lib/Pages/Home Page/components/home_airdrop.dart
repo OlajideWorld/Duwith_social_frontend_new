@@ -1,4 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -83,7 +84,24 @@ class _AirdropDesignState extends State<AirdropDesign> {
                 widget.width, widget.name, widget.image, context, false),
             SizedBox(height: heightSize(5)),
             widget.postType == 1 || widget.postType == 2
-                ? Container(
+                ?
+                // CachedNetworkImage(
+                //     imageUrl: widget.image,
+                //     placeholder: (context, url) =>
+                //         const CircularProgressIndicator(),
+                //     imageBuilder: (context, imageprovider) {
+                //       return Container(
+                //         height: heightSize(168),
+                //         width: widget.width,
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.all(Radius.circular(10)),
+                //             image: DecorationImage(
+                //                 image: imageprovider, fit: BoxFit.fill)),
+                //       );
+                //     },
+                //   )
+
+                Container(
                     height: heightSize(168),
                     width: widget.width,
                     decoration: const BoxDecoration(

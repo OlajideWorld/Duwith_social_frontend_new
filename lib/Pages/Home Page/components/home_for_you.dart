@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, invalid_use_of_protected_member, library_private_types_in_public_api
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
 import 'package:duwith_social/common/button-widget.dart';
@@ -96,14 +97,30 @@ class _PostWidgetState extends State<PostWidget> {
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
             widget.postType == 1 || widget.postType == 2
-                ? Container(
+                ?
+                // CachedNetworkImage(
+                //     imageUrl: widget.image,
+                //     placeholder: (context, url) =>
+                //         const CircularProgressIndicator(),
+                //     imageBuilder: (context, imageprovider) {
+                //       return Container(
+                //         height: heightSize(168),
+                //         width: widget.width,
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.all(Radius.circular(10)),
+                //             image: DecorationImage(
+                //                 image: imageprovider, fit: BoxFit.fill)),
+                //       );
+                //     },
+                //   )
+                Container(
                     height: heightSize(168),
                     width: widget.width,
                     decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Image.asset(
                       "assets/images/post.png",
-                      fit: BoxFit.contain,
+                      fit: BoxFit.fill,
                     ),
                   )
                 : const SizedBox(),

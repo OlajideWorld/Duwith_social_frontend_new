@@ -6,7 +6,7 @@ getSuccessSnackBar(String message) {
   Get.snackbar(
     "Success",
     message,
-    snackPosition: SnackPosition.BOTTOM,
+    snackPosition: SnackPosition.TOP,
     backgroundColor: mainColor,
     colorText: Colors.white,
     borderRadius: 10,
@@ -20,6 +20,18 @@ getErrorSnackBar(String message) {
     message,
     snackPosition: SnackPosition.BOTTOM,
     backgroundColor: Colors.red,
+    colorText: Colors.white,
+    borderRadius: 10,
+    margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+  );
+}
+
+getSuccessSnackBarEdit(String headline, String message) {
+  Get.snackbar(
+    headline,
+    message,
+    snackPosition: SnackPosition.TOP,
+    backgroundColor: mainColor,
     colorText: Colors.white,
     borderRadius: 10,
     margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),

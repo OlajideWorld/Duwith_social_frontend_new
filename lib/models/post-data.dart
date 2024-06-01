@@ -31,3 +31,10 @@ class QueryParams {
       required this.interests,
       required this.sortby});
 }
+
+class MediaStorage {
+  final String type;
+  final String url;
+
+  MediaStorage({required this.type, required this.url});
+}

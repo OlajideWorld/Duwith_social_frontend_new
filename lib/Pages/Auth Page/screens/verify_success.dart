@@ -60,8 +60,7 @@ class VerificationSuccess extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: widthSize(40)),
                       child: buttonsWidget(context, heightSize(50),
                           constraints.maxWidth, "Continue", mainColor, 12, () {
-                        authController
-                            .saveCounter(authController.isFirstTime!.value);
+                        authController.saveCounter(false);
                         Get.toNamed(MyRoutes.homeScreen);
                       }, false, Colors.white),
                     ),

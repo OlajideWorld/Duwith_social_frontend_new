@@ -1,8 +1,11 @@
+import 'package:cloudinary/cloudinary.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/models/games_model.dart';
 import 'package:duwith_social/models/main_post_model.dart';
 import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:intl/intl.dart';
 
@@ -30,6 +33,17 @@ class HomeController extends GetxController {
 
   // Comments
   RxList<Comment> comments = <Comment>[].obs;
+
+  // Posts objects
+  // List<XFile>? _imageFileList;
+  RxList<String> postcategories = <String>[].obs;
+  TextEditingController postCaption = TextEditingController();
+  final commentingOpton = ValueNotifier<bool>(true);
+  final showCaption = ValueNotifier<bool>(false);
+  final hideLike = ValueNotifier<bool>(false);
+  RxString mediaType = "image".obs;
+
+  RxList<Map> uploadedImageUrl = <Map>[].obs;
 
   // Games Model
   RxList<GamesModel> gameslist = [
@@ -428,6 +442,14 @@ class HomeController extends GetxController {
     super.onReady();
   }
 
+  void toggleCategorySelection(String item) {
+    if (postcategories.contains(item)) {
+      postcategories.remove(item);
+    } else {
+      postcategories.add(item);
+    }
+  }
+
   String engagementShortened(int number) {
     if (number >= 1000000000) {
       return '${(number / 1000000000).toStringAsFixed(1)}B';
@@ -440,8 +462,52 @@ class HomeController extends GetxController {
     }
   }
 
+  uploadImages(List<XFile> images) async {
+    try {
+      for (var image in images) {
+        final response = await cloudinary.upload(
+            file: image.path, resourceType: CloudinaryResourceType.image);
+
+        if (response.isSuccessful) {
+          final image = {"type": "image", "url": response.secureUrl};
+          uploadedImageUrl.add(image);
+        } else {
+          getErrorSnackBar("Image upload was unsuccesful");
+        }
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  uploadVideos(List<XFile> images) async {
+    try {
+      for (var image in images) {
+        final response = await cloudinary.upload(
+            file: image.path, resourceType: CloudinaryResourceType.video);
+
+        if (response.isSuccessful) {
+          final image = {"type": "video", "url": response.secureUrl};
+          uploadedImageUrl.add(image);
+        } else {
+          getErrorSnackBar("Video upload was unsuccesful");
+        }
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   String formatNumberWithCommasWithDouble(double number) {
     String formattedNumber = NumberFormat.decimalPattern().format(number);
     return formattedNumber;
   }
+
+  final cloudinary = Cloudinary.signedConfig(
+    apiKey: "835465682576292",
+    apiSecret: "8PE5JLnAugyOstV3EPuE7xrmcbQ",
+    cloudName: "dm4eqhtyx",
+  );
 }

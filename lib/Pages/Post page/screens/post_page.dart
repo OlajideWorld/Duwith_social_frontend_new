@@ -1,4 +1,5 @@
 import 'package:duwith_social/Pages/Post%20page/screens/post_image.dart';
+import 'package:duwith_social/common/functions.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -79,39 +80,7 @@ class PostContentPage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: heightSize(20)),
-                            Row(
-                              children: [
-                                optionsUsed(
-                                    "assets/images/Post/posticon.png",
-                                    const Color(0xFF9176D0),
-                                    "Image opinion", () {
-                                  Get.to(() => PostImageVideosScreen());
-                                }),
-                                SizedBox(width: widthSize(12)),
-                                optionsUsed(
-                                    "assets/images/Post/posticon2.png",
-                                    const Color(0xFF5E5EB2),
-                                    "Videos opinion", () {
-                                  Get.to(() => PostImageVideosScreen());
-                                })
-                              ],
-                            ),
-                            SizedBox(height: heightSize(11)),
-                            Row(
-                              children: [
-                                optionsUsed(
-                                    "assets/images/Post/posticon3.png",
-                                    const Color(0xFFD444E4),
-                                    "Texts opinion",
-                                    () {}),
-                                SizedBox(width: widthSize(12)),
-                                optionsUsed(
-                                    "assets/images/Post/posticon4.png",
-                                    const Color(0xFF8D59CE),
-                                    "Article opinion",
-                                    () {})
-                              ],
-                            )
+                            const PickImageScreen()
                           ],
                         ),
                       ),
@@ -126,43 +95,6 @@ class PostContentPage extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-
-  optionsUsed(
-      String image, Color background, String textused, VoidCallback onTap) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: heightSize(135),
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(
-              vertical: heightSize(33), horizontal: widthSize(28)),
-          decoration: BoxDecoration(
-              color: background,
-              borderRadius: BorderRadius.all(Radius.circular(widthSize(10)))),
-          child: SizedBox(
-            height: heightSize(68),
-            width: widthSize(109),
-            child: Column(
-              children: [
-                SizedBox(
-                    height: heightSize(50),
-                    width: widthSize(50),
-                    child: Image.asset(image)),
-                CText(
-                  text: textused,
-                  size: 14,
-                  color: textColor,
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w500,
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

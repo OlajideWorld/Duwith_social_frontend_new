@@ -1,11 +1,16 @@
 import "dart:io";
 
+import "package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart";
+import "package:duwith_social/Pages/Post%20page/screens/post_image.dart";
+import "package:duwith_social/common/custom-text.dart";
 import "package:duwith_social/common/getxmessage.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:get/get.dart";
 import "package:image_picker/image_picker.dart";
+
+import "../utils/sizes.dart";
 
 class PickImageScreen extends StatefulWidget {
   const PickImageScreen({super.key});
@@ -15,81 +20,163 @@ class PickImageScreen extends StatefulWidget {
 }
 
 class _PickImageScreenState extends State<PickImageScreen> {
-  File? picture;
+  List<XFile>? _imageFileList;
+  HomeController homeController = HomeController.instance;
+  // Future pickImage(ImageSource source) async {
+  //   try {
+  //     final picture = await ImagePicker().pickImage(source: source);
+  //     if (picture == null) return;
+  //     File? newpicture = File(picture.path);
+  //     setState(() {
+  //       // announcecontroller.announcementImage = newpicture;
+  //       Get.back();
+  //     });
+  //     // return announcecontroller.announcementImage;
+  //   } on PlatformException catch (e) {
+  //     return getErrorSnackBar("Failed to pick an Image, $e");
+  //   }
+  // }
 
-  final List<File> multipleimage = [];
-
-  Future pickImage(ImageSource source) async {
-    try {
-      final picture = await ImagePicker().pickImage(source: source);
-      if (picture == null) return;
-      File? newpicture = File(picture.path);
-      setState(() {
-        // announcecontroller.announcementImage = newpicture;
-        Get.back();
-      });
-      // return announcecontroller.announcementImage;
-    } on PlatformException catch (e) {
-      return getErrorSnackBar("Failed to pick an Image, $e");
-    }
-  }
-
-  Future pickVideo() async {
-    try {
-      final XFile? galleryVideo =
-          await ImagePicker().pickVideo(source: ImageSource.gallery);
-    } catch (e) {
-      return getErrorSnackBar("Failed to pick a video, $e");
-    }
-  }
+  // Future pickVideo() async {
+  //   try {
+  //     final XFile? galleryVideo =
+  //         await ImagePicker().pickVideo(source: ImageSource.gallery);
+  //   } catch (e) {
+  //     return getErrorSnackBar("Failed to pick a video, $e");
+  //   }
+  // }
 
   pickMultipleImages() async {
     try {
       final List<XFile> images = await ImagePicker().pickMultiImage();
-    } catch (e) {}
+      if (images != null) {
+        setState(() {
+          _imageFileList = images;
+        });
+        Get.to(() => PostImageVideosScreen(
+              files: _imageFileList,
+              type: "image",
+            ));
+      } else {
+        Get.back();
+      }
+    } catch (e) {
+      print("Error picking images: $e");
+    }
   }
 
   pickMultipleVideos() async {
     try {
       final List<XFile> multiplevideo = await ImagePicker().pickMultipleMedia();
+      if (multiplevideo != null) {
+        setState(() {
+          _imageFileList = multiplevideo;
+        });
+        Get.to(() => PostImageVideosScreen(
+              files: _imageFileList,
+              type: "video",
+            ));
+      } else {
+        Get.back();
+      }
     } catch (e) {}
   }
 
-  showSheet(BuildContext context) {
-    return showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text(
-                  "Camera",
-                  style: TextStyle(color: mainColor),
-                ),
-                onTap: () => pickImage(ImageSource.camera),
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text(
-                  "Gallery",
-                  style: TextStyle(color: mainColor),
-                ),
-                onTap: () => pickImage(ImageSource.gallery),
-              )
-            ],
-          );
-        });
-  }
+  // showSheet(BuildContext context) {
+  //   return showModalBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             ListTile(
+  //               leading: const Icon(Icons.camera_alt),
+  //               title: const Text(
+  //                 "Camera",
+  //                 style: TextStyle(color: mainColor),
+  //               ),
+  //               onTap: () => pickImage(ImageSource.camera),
+  //             ),
+  //             ListTile(
+  //               leading: const Icon(Icons.image),
+  //               title: const Text(
+  //                 "Gallery",
+  //                 style: TextStyle(color: mainColor),
+  //               ),
+  //               onTap: () => pickImage(ImageSource.gallery),
+  //             )
+  //           ],
+  //         );
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Image.file(
-        picture!,
-        // announcecontroller.announcementImage!,
-        fit: BoxFit.fitHeight,
+    return SizedBox(
+        child: Column(
+      children: [
+        Row(
+          children: [
+            optionsUsed(
+                "assets/images/Post/posticon.png",
+                const Color(0xFF9176D0),
+                "Image opinion",
+                () => pickMultipleImages()),
+            SizedBox(width: widthSize(12)),
+            optionsUsed(
+                "assets/images/Post/posticon2.png",
+                const Color(0xFF5E5EB2),
+                "Videos opinion",
+                () => pickMultipleVideos())
+          ],
+        ),
+        SizedBox(height: heightSize(11)),
+        Row(
+          children: [
+            optionsUsed("assets/images/Post/posticon3.png",
+                const Color(0xFFD444E4), "Texts opinion", () {}),
+            SizedBox(width: widthSize(12)),
+            optionsUsed("assets/images/Post/posticon4.png",
+                const Color(0xFF8D59CE), "Article opinion", () {})
+          ],
+        ),
+      ],
+    ));
+  }
+
+  optionsUsed(
+      String image, Color background, String textused, VoidCallback onTap) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: heightSize(135),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(
+              vertical: heightSize(33), horizontal: widthSize(28)),
+          decoration: BoxDecoration(
+              color: background,
+              borderRadius: BorderRadius.all(Radius.circular(widthSize(10)))),
+          child: SizedBox(
+            height: heightSize(68),
+            width: widthSize(109),
+            child: Column(
+              children: [
+                SizedBox(
+                    height: heightSize(50),
+                    width: widthSize(50),
+                    child: Image.asset(image)),
+                CText(
+                  text: textused,
+                  size: 14,
+                  color: textColor,
+                  fontFamily: UsedFonts.poppins,
+                  fontWeight: FontWeight.w500,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

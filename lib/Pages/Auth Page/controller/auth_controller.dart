@@ -1,16 +1,13 @@
+import 'dart:math';
+
 import 'package:duwith_social/Pages/Auth%20Page/screens/login_screen.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
-import 'package:duwith_social/Pages/Auth%20Page/services/socket_connection2.dart';
-import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/models/user_data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../../routes/routes.dart';
 import '../../../utils/get_user_key.dart';
 
 class AuthController extends GetxController {
@@ -20,6 +17,7 @@ class AuthController extends GetxController {
       id: "",
       username: "",
       email: "",
+      otp: "",
       profileImage: "",
       bio: "",
       gender: "",
@@ -27,6 +25,8 @@ class AuthController extends GetxController {
       linked: false,
       phoneNumber: "",
       mainBalance: 0.0,
+      gemspoint: 0.0,
+      dailyPoints: 0.0,
       jar: Jar(points: 0, purchased: false, limit: 0, totalEarned: 0),
       following: [],
       followers: [],
@@ -76,9 +76,15 @@ class AuthController extends GetxController {
     if (isFirstTime!.value == true) {
       Get.to(() => LoginScreen());
     } else {
-      Get.to(() => SignUpScreen());
-      // Get.toNamed(MyRoutes.homeScreen);
+      // Get.to(() => SignUpScreen());
+      Get.toNamed(MyRoutes.homeScreen);
     }
+  }
+
+  int generateRandom6DigitNumber() {
+    final random = Random();
+    return 100000 +
+        random.nextInt(900000); // Generates a number between 100000 and 999999
   }
 
   Future loadValueBool() async {

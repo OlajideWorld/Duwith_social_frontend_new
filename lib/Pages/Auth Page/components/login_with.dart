@@ -130,13 +130,14 @@ class LoginWithScreen extends StatelessWidget {
                                   socket.isloading.value = true;
                                   socket.getUserData(
                                       authController.email.text.trim());
-                                  // if (authController.userdata.value.isNull) {
-                                  //   socket.isloading.value = false;
-                                  //   getErrorSnackBar("NO user found");
-                                  // } else {
-                                  //   socket.isloading.value = false;
-                                  //   Get.to(() => VerifyCredentials());
-                                  // }
+
+                                  await Future.delayed(
+                                      const Duration(seconds: 5), () {});
+
+                                  if (authController.userdata.value.email ==
+                                      "") {
+                                    getErrorSnackBar("NO user found");
+                                  }
                                 } else {
                                   getErrorSnackBar("Invalid email entered");
                                 }
@@ -144,13 +145,18 @@ class LoginWithScreen extends StatelessWidget {
                                 socket.isloading.value = true;
                                 socket.getUserDataNumber(
                                     authController.phoneNumber.text.trim());
-                                // if (authController.userdata.value.isNull) {
-                                //   socket.isloading.value = false;
-                                //   getErrorSnackBar("NO user found");
-                                // } else {
-                                //   socket.isloading.value = false;
-                                //   Get.to(() => VerifyCredentials());
-                                // }
+                                if (authController.userdata.value.email == "") {
+                                  getErrorSnackBar("NO user found");
+                                } else {
+                                  final map = {
+                                    "email":
+                                        authController.userdata.value.email,
+                                    "username":
+                                        authController.userdata.value.username,
+                                    "otp": authController.userdata.value.otp
+                                  };
+                                  socket.sendEmailOtp(map);
+                                }
                               }
                             }
                           }, false, Colors.white),

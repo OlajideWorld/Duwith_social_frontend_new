@@ -1,4 +1,6 @@
-import "dart:convert";
+// ignore_for_file: prefer_typing_uninitialized_variables
+
+import "dart:async";
 
 import "package:duwith_social/Pages/Auth%20Page/components/login_select.dart";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
@@ -11,6 +13,7 @@ import "package:socket_io_client/socket_io_client.dart" as IO;
 
 import "../../../models/main_post_model.dart";
 import "../../../models/user_data.dart";
+import "../screens/verify_details.dart";
 
 AuthController authController = AuthController.instance;
 
@@ -88,51 +91,70 @@ class SocketService extends GetxService {
 
   RxBool isloading = false.obs;
 
+  sendEmailOtp(Map<String, dynamic> userData) {
+    _socket.emit('otp-email-request', userData);
+
+    _socket.on("otp-email-done", (data) => {getSuccessSnackBar(data)});
+  }
+
   // Authentication Functions
-  void createUser(Map<String, dynamic> userData) {
+  createUser(Map<String, dynamic> userData) async {
     _socket.emit('createUser', userData);
-    //
+
     _socket.on('userCreated', (data) {
-      authController.userdata.value = User.fromJson(data);
+      if (data != null && data["email"] != null) {
+        authController.userdata.value = User.fromJson(data);
+        isloading.value = false;
+        Get.to(() => VerifyCredentials());
+      } else {
+        isloading.value = false;
+      }
     });
-    if (authController.userdata.value == null) {
-      isloading.value = false;
-      getErrorSnackBar("No user Found");
-    }
   }
 
-  void getUserData(String userData) {
+  getUserData(String userData) async {
     _socket.emit('get-user-email', userData);
-//
-    _socket.on('user-gotten', (data) {
-      authController.userdata.value = User.fromJson(data);
-    });
 
-    if (authController.userdata.value == null) {
-      isloading.value = false;
-      getErrorSnackBar("No user Found");
-    }
+    _socket.on('user-gotten', (data) {
+      if (data != null && data["email"] != null) {
+        authController.userdata.value = User.fromJson(data);
+        sendEmailOtp({
+          "email": authController.userdata.value.email,
+          "username": authController.userdata.value.username,
+          "otp": authController.userdata.value.otp
+        });
+        isloading.value = false;
+        Get.to(() => VerifyCredentials());
+      } else {
+        isloading.value = false;
+      }
+    });
   }
 
-  void getUserDataNumber(String userData) {
+  getUserDataNumber(String userData) {
     _socket.emit('get-user-number', userData);
     //
-    _socket.on('user-gotten', (data) {
-      authController.userdata.value = User.fromJson(data);
+    _socket.on('user-gotten-number', (data) {
+      if (data != null && data["email"] != null) {
+        authController.userdata.value = User.fromJson(data);
+        isloading.value = false;
+        Get.to(() => VerifyCredentials());
+      } else {
+        isloading.value = false;
+      }
     });
-
-    if (authController.userdata.value == null) {
-      isloading.value = false;
-      getErrorSnackBar("No user Found");
-    }
   }
 
-  void updateUser(String userId, Map<String, dynamic> updateData) {
+  updateUser(String userId, Map<String, dynamic> updateData) {
     _socket.emit('update-user', {'userId': userId, 'updateData': updateData});
 //
     _socket.on('user-updated', (data) {
-      // var jsondata = jsonDecode(data);
-      authController.userdata.value = User.fromJson(data);
+      if (data != null && data["email"] != null) {
+        authController.userdata.value = User.fromJson(data);
+        isloading.value = false;
+      } else {
+        isloading.value = false;
+      }
     });
   }
 

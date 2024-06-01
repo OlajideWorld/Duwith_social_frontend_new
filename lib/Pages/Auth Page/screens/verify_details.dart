@@ -1,4 +1,6 @@
+import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/verify_success.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ class VerifyCredentials extends StatelessWidget {
   VerifyCredentials({super.key});
 
   TextEditingController otp = TextEditingController();
+
+  AuthController authController = AuthController.instance;
 
   final focusNode = FocusNode();
 
@@ -141,7 +145,12 @@ class VerifyCredentials extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: widthSize(40)),
                       child: buttonsWidget(context, heightSize(50),
                           constraints.maxWidth, "Continue", mainColor, 12, () {
-                        Get.to(() => VerificationSuccess());
+                        if (int.parse(otp.text.trim()) ==
+                            int.parse(authController.userdata.value.otp)) {
+                          Get.to(() => VerificationSuccess());
+                        } else {
+                          getErrorSnackBar("Invalid OTP");
+                        }
                       }, false, Colors.white),
                     ),
                     const Spacer(),
