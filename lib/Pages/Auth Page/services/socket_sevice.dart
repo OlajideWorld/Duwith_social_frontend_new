@@ -38,7 +38,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          testUrl,
+          productionUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
