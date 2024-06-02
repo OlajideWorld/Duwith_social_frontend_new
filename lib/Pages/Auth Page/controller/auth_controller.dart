@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:duwith_social/Pages/Auth%20Page/screens/login_screen.dart';
-import 'package:duwith_social/Pages/Auth%20Page/screens/signup_screen.dart';
+import 'package:duwith_social/Pages/Splash%20Screen/screens/onboard_main.dart';
 import 'package:duwith_social/models/user_data.dart';
+import 'package:duwith_social/utils/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -39,6 +39,7 @@ class AuthController extends GetxController {
   RxBool? isFirstTime = false.obs;
 
   RxString userEmail = "".obs;
+  RxString userId = "".obs;
 
   // Sign Up values
   RxString hintText = "".obs;
@@ -71,12 +72,13 @@ class AuthController extends GetxController {
     checkStatus();
   }
 
-  checkStatus() {
+  checkStatus() async {
     loadValueBool();
     if (isFirstTime!.value == true) {
-      Get.to(() => LoginScreen());
+      Get.to(() => const OnboardScreen());
     } else {
       // Get.to(() => SignUpScreen());
+
       Get.toNamed(MyRoutes.homeScreen);
     }
   }
@@ -89,6 +91,8 @@ class AuthController extends GetxController {
 
   Future loadValueBool() async {
     isFirstTime!.value = box.read(firstKey) ?? true;
+    userEmail.value = box.read(userdataEmail);
+    userId.value = box.read(userdataid);
   }
 
   Future loadEmail() async {

@@ -147,16 +147,17 @@ class LoginWithScreen extends StatelessWidget {
                                     authController.phoneNumber.text.trim());
                                 if (authController.userdata.value.email == "") {
                                   getErrorSnackBar("NO user found");
-                                } else {
-                                  final map = {
-                                    "email":
-                                        authController.userdata.value.email,
-                                    "username":
-                                        authController.userdata.value.username,
-                                    "otp": authController.userdata.value.otp
-                                  };
-                                  socket.sendEmailOtp(map);
                                 }
+                                // else {
+                                //   final map = {
+                                //     "email":
+                                //         authController.userdata.value.email,
+                                //     "username":
+                                //         authController.userdata.value.username,
+                                //     "otp": authController.userdata.value.otp
+                                //   };
+                                //   socket.sendEmailOtp(map);
+                                // }
                               }
                             }
                           }, false, Colors.white),

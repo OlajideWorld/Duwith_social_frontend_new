@@ -2,11 +2,9 @@
 
 import "dart:async";
 
-import "package:duwith_social/Pages/Auth%20Page/components/login_select.dart";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
 import "package:duwith_social/common/getxmessage.dart";
-import "package:flutter/material.dart";
 
 import "package:get/get.dart";
 import "package:socket_io_client/socket_io_client.dart" as IO;
@@ -34,10 +32,13 @@ class SocketService extends GetxService {
     super.onReady();
   }
 
+  String productionUrl = 'https://duwith-social-backend.onrender.com';
+  String testUrl = "http://192.168.1.123:3000";
+
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          'http://192.168.1.123:3000',
+          testUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -199,7 +200,7 @@ class SocketService extends GetxService {
     });
   }
 
-  void createPost(Map<String, dynamic> data) {
+  createPost(Map<String, dynamic> data) async {
     _socket.emit("createPost", data);
 
     _socket.on("postCreated", (data) {

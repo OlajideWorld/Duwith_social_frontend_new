@@ -23,46 +23,54 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      bottomNavigationBar: const CustomNavBarWidget(),
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return SizedBox(
-            height: constraints.maxHeight,
-            width: constraints.maxWidth,
-            child: SafeArea(
-              child: Obx(() {
-                return SizedBox(
-                  child: Column(
-                    children: [
-                      homeAppBar(constraints.maxWidth),
-                      SizedBox(height: heightSize(13)),
-                      selectHomeView(context, constraints.maxWidth),
-                      SizedBox(height: heightSize(5)),
-                      if (homeController.viewBarOption.value == 0 ||
-                          homeController.viewBarOption.value == 1)
-                        homeController.homeloading.value
-                            ? ShimmerLoadingWidget(width: constraints.maxWidth)
-                            : forYouList(
-                                context,
-                                constraints.maxWidth,
-                              ),
-                      if (homeController.viewBarOption.value == 2)
-                        homeController.homeloading.value
-                            ? ShimmerLoadingWidget(width: constraints.maxWidth)
-                            : newsList(context, constraints.maxWidth),
-                      if (homeController.viewBarOption.value == 3)
-                        homeController.homeloading.value
-                            ? ShimmerLoadingWidget(width: constraints.maxWidth)
-                            : airdropList(context, constraints.maxWidth)
-                    ],
-                  ),
-                );
-              }),
-            ),
-          );
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        bottomNavigationBar: const CustomNavBarWidget(),
+        body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return SizedBox(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: SafeArea(
+                child: Obx(() {
+                  return SizedBox(
+                    child: Column(
+                      children: [
+                        homeAppBar(constraints.maxWidth),
+                        SizedBox(height: heightSize(13)),
+                        selectHomeView(context, constraints.maxWidth),
+                        SizedBox(height: heightSize(5)),
+                        if (homeController.viewBarOption.value == 0 ||
+                            homeController.viewBarOption.value == 1)
+                          homeController.homeloading.value
+                              ? ShimmerLoadingWidget(
+                                  width: constraints.maxWidth)
+                              : forYouList(
+                                  context,
+                                  constraints.maxWidth,
+                                ),
+                        if (homeController.viewBarOption.value == 2)
+                          homeController.homeloading.value
+                              ? ShimmerLoadingWidget(
+                                  width: constraints.maxWidth)
+                              : newsList(context, constraints.maxWidth),
+                        if (homeController.viewBarOption.value == 3)
+                          homeController.homeloading.value
+                              ? ShimmerLoadingWidget(
+                                  width: constraints.maxWidth)
+                              : airdropList(context, constraints.maxWidth)
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

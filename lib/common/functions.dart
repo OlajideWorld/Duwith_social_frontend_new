@@ -1,5 +1,6 @@
 import "dart:io";
 
+import "package:duwith_social/Pages/Auth%20Page/components/login_select.dart";
 import "package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart";
 import "package:duwith_social/Pages/Post%20page/screens/post_image.dart";
 import "package:duwith_social/common/custom-text.dart";
@@ -10,6 +11,7 @@ import "package:flutter/services.dart";
 import "package:get/get.dart";
 import "package:image_picker/image_picker.dart";
 
+import "../Pages/Auth Page/controller/auth_controller.dart";
 import "../utils/sizes.dart";
 
 class PickImageScreen extends StatefulWidget {
@@ -20,8 +22,9 @@ class PickImageScreen extends StatefulWidget {
 }
 
 class _PickImageScreenState extends State<PickImageScreen> {
-  List<XFile>? _imageFileList;
+  List<XFile> _imageFileList = [];
   HomeController homeController = HomeController.instance;
+  AuthController authController = AuthController.instance;
   // Future pickImage(ImageSource source) async {
   //   try {
   //     final picture = await ImagePicker().pickImage(source: source);
@@ -49,14 +52,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
   pickMultipleImages() async {
     try {
       final List<XFile> images = await ImagePicker().pickMultiImage();
-      if (images != null) {
+      if (images != []) {
         setState(() {
           _imageFileList = images;
         });
-        Get.to(() => PostImageVideosScreen(
-              files: _imageFileList,
-              type: "image",
-            ));
       } else {
         Get.back();
       }
@@ -68,18 +67,16 @@ class _PickImageScreenState extends State<PickImageScreen> {
   pickMultipleVideos() async {
     try {
       final List<XFile> multiplevideo = await ImagePicker().pickMultipleMedia();
-      if (multiplevideo != null) {
+      if (multiplevideo != []) {
         setState(() {
           _imageFileList = multiplevideo;
         });
-        Get.to(() => PostImageVideosScreen(
-              files: _imageFileList,
-              type: "video",
-            ));
       } else {
         Get.back();
       }
-    } catch (e) {}
+    } catch (e) {
+      print("Error picking images: $e");
+    }
   }
 
   // showSheet(BuildContext context) {
@@ -117,27 +114,49 @@ class _PickImageScreenState extends State<PickImageScreen> {
       children: [
         Row(
           children: [
-            optionsUsed(
-                "assets/images/Post/posticon.png",
-                const Color(0xFF9176D0),
-                "Image opinion",
-                () => pickMultipleImages()),
+            optionsUsed("assets/images/Post/posticon.png",
+                const Color(0xFF9176D0), "Image opinion", () async {
+              await pickMultipleImages();
+              if (_imageFileList == []) {
+                getSuccessSnackBarEdit("Images picked", "No Images picked");
+              } else {
+                Get.to(() => PostImageVideosScreen(
+                      files: _imageFileList,
+                      type: "image",
+                    ));
+              }
+            }),
             SizedBox(width: widthSize(12)),
-            optionsUsed(
-                "assets/images/Post/posticon2.png",
-                const Color(0xFF5E5EB2),
-                "Videos opinion",
-                () => pickMultipleVideos())
+            optionsUsed("assets/images/Post/posticon2.png",
+                const Color(0xFF5E5EB2), "Videos opinion", () async {
+              await pickMultipleVideos();
+              if (_imageFileList == []) {
+                getSuccessSnackBarEdit("Videos picked", "No Videos picked");
+              } else {
+                Get.to(() => PostImageVideosScreen(
+                      files: _imageFileList,
+                      type: "video",
+                    ));
+              }
+            })
           ],
         ),
         SizedBox(height: heightSize(11)),
         Row(
           children: [
             optionsUsed("assets/images/Post/posticon3.png",
-                const Color(0xFFD444E4), "Texts opinion", () {}),
+                const Color(0xFFD444E4), "Texts opinion", () {
+              debugPrint(authController.userId.value);
+            }
+                // () => getSuccessSnackBarEdit("Notification", "Coming Soon"),
+                ),
             SizedBox(width: widthSize(12)),
-            optionsUsed("assets/images/Post/posticon4.png",
-                const Color(0xFF8D59CE), "Article opinion", () {})
+            optionsUsed(
+              "assets/images/Post/posticon4.png",
+              const Color(0xFF8D59CE),
+              "Article opinion",
+              () => getSuccessSnackBarEdit("Notification", "Coming Soon"),
+            )
           ],
         ),
       ],

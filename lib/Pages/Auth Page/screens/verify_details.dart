@@ -2,6 +2,8 @@ import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart'
 import 'package:duwith_social/Pages/Auth%20Page/screens/verify_success.dart';
 import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/utils/color.dart';
+import 'package:duwith_social/utils/get_storage.dart';
+import 'package:duwith_social/utils/get_user_key.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -143,10 +145,22 @@ class VerifyCredentials extends StatelessWidget {
                     SizedBox(height: heightSize(35)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: widthSize(40)),
-                      child: buttonsWidget(context, heightSize(50),
-                          constraints.maxWidth, "Continue", mainColor, 12, () {
+                      child: buttonsWidget(
+                          context,
+                          heightSize(50),
+                          constraints.maxWidth,
+                          "Continue",
+                          mainColor,
+                          12, () async {
                         if (int.parse(otp.text.trim()) ==
                             int.parse(authController.userdata.value.otp)) {
+                          await GetStorageClass().saveString(
+                              userdataid, authController.userdata.value.id);
+                          await GetStorageClass().saveString(userdataEmail,
+                              authController.userdata.value.email);
+
+                          authController.userId.value =
+                              GetStorageClass().getString(userdataid)!;
                           Get.to(() => VerificationSuccess());
                         } else {
                           getErrorSnackBar("Invalid OTP");

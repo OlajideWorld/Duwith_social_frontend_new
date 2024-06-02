@@ -80,43 +80,6 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: heightSize(46)),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     socialMedia(FontAwesomeIcons.google),
-                        //     SizedBox(width: widthSize(9.5)),
-                        //     socialMedia(FontAwesomeIcons.facebookF),
-                        //   ],
-                        // ),
-                        // SizedBox(height: heightSize(46)),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     SizedBox(
-                        //       width: widthSize(120),
-                        //       child: Divider(
-                        //         height: heightSize(3),
-                        //         thickness: 1,
-                        //         color: Color(0xFF3C3C3C),
-                        //       ),
-                        //     ),
-                        //     SizedBox(width: widthSize(10)),
-                        //     const CText(
-                        //       text: "Or",
-                        //       fontFamily: UsedFonts.poppins,
-                        //       fontWeight: FontWeight.w400,
-                        //       color: textColor,
-                        //     ),
-                        //     SizedBox(width: widthSize(10)),
-                        //     SizedBox(
-                        //       width: widthSize(120),
-                        //       child: Divider(
-                        //           height: heightSize(3),
-                        //           thickness: 1,
-                        //           color: Color(0xFF3C3C3C)),
-                        //     ),
-                        //   ],
-                        // ),
                         SizedBox(height: heightSize(24)),
                         buttonsWidget2(
                             context,

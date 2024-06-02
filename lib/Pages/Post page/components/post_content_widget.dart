@@ -1,7 +1,8 @@
-// ignore_for_file: must_be_immutable, invalid_use_of_protected_member
+// ignore_for_file: must_be_immutable, invalid_use_of_protected_member, prefer_const_constructors_in_immutables
 
-import 'package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
+import 'package:duwith_social/Pages/Home%20Page/screens/home_screen.dart';
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
@@ -9,11 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 
 import '../../../common/custom-text.dart';
+import '../../Auth Page/controller/auth_controller.dart';
 import '../../Shop Page/components/box_list.dart';
 
 HomeController homeController = HomeController.instance;
+AuthController authController = AuthController.instance;
+SocketService socket = SocketService.instance;
 
 writeOpinions(double width) {
   return Container(
@@ -29,6 +34,7 @@ writeOpinions(double width) {
           color: const Color(0xFFB4B4B4),
           fontSize: fontSize(14)),
       maxLines: 5,
+      controller: homeController.postCaption,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         hintText: "Write your opinion",
@@ -243,65 +249,97 @@ postContentSettings(double width) {
   );
 }
 
-uploadComplete(BuildContext context, double width) {
-  return SmartDialog.show(
-      onDismiss: () => false,
-      backDismiss: false,
+uploadComplete(BuildContext context, double width, String headline, String body,
+    bool isSuccess) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
       builder: (context) {
-        return Container(
-          height: heightSize(456),
-          width: width,
-          padding: EdgeInsets.only(
-              top: heightSize(34),
-              left: widthSize(18),
-              right: widthSize(20),
-              bottom: heightSize(34)),
-          decoration: ShapeDecoration(
-            color: const Color(0xFF0E1528),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: heightSize(44),
-                width: widthSize(179),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return Obx(() {
+          return LoadingOverlayPro(
+            isLoading: homeController.homeloading.value,
+            child: Padding(
+              padding: EdgeInsets.only(top: heightSize(120)),
+              child: Container(
+                height: heightSize(200),
+                width: width,
+                padding: EdgeInsets.only(
+                    top: heightSize(34),
+                    left: widthSize(18),
+                    right: widthSize(20),
+                    bottom: heightSize(34)),
+                decoration: ShapeDecoration(
+                  color: const Color(0xFF0E1528),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CText(
-                      text: "Upload Complete",
-                      color: Colors.white,
-                      size: 20,
-                      textAlign: TextAlign.center,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w600,
+                    SizedBox(
+                      height: heightSize(60),
+                      width: widthSize(179),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CText(
+                            text: headline,
+                            color: Colors.white,
+                            size: 20,
+                            textAlign: TextAlign.center,
+                            fontFamily: UsedFonts.poppins,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          CText(
+                            text: body,
+                            color: Colors.white,
+                            size: 12,
+                            textAlign: TextAlign.center,
+                            fontFamily: UsedFonts.poppins,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ],
+                      ),
                     ),
-                    CText(
-                      text: "Click the continue button to continue exploring",
-                      color: Colors.white,
-                      size: 12,
-                      textAlign: TextAlign.center,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    isSuccess
+                        ? buttonsWidget(context, heightSize(50), width,
+                            "Continue", mainColor, 14, () async {
+                            homeController.homeloading.value = true;
+                            // debugPrint(
+                            //     homeController.uploadedImageUrl.value.toString());
+                            final postMap = {
+                              "user": authController.userId.value,
+                              "categories": homeController.postcategories.value,
+                              "commentsEnabled":
+                                  homeController.commentingOpton.value,
+                              "showCaption": homeController.showCaption.value,
+                              "showLikes": homeController.hideLike.value,
+                              "media": homeController.uploadedImageUrl.value,
+                              "caption": homeController.postCaption.text.trim()
+                            };
+                            debugPrint(postMap.toString());
+                            await socket.createPost(postMap);
+                            homeController.homeloading.value = false;
+                            Get.to(() => HomeScreen());
+                          }, false, textColor)
+                        : buttonsWidget(
+                            context,
+                            heightSize(50),
+                            width,
+                            "Failed Try Again",
+                            Colors.red,
+                            14,
+                            () {},
+                            false,
+                            Colors.white)
                   ],
                 ),
               ),
-              buttonsWidget(
-                  context, heightSize(50), width, "Continue", mainColor, 14,
-                  () {
-                debugPrint(homeController.uploadedImageUrl.value.toString());
-                final map = {
-                  "user" : 
-                };
-              }, false, textColor)
-            ],
-          ),
-        );
+            ),
+          );
+        });
       });
 }

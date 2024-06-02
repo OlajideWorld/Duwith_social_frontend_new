@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import "package:flutter/material.dart";
 import 'package:video_player/video_player.dart';
@@ -38,7 +39,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(title: Text('Video Player')),
+      appBar: AppBar(
+        title: const CText(
+          text: "Video Preview",
+          color: Colors.white,
+          size: 18,
+          textAlign: TextAlign.center,
+          fontFamily: UsedFonts.poppins,
+          fontWeight: FontWeight.w600,
+        ),
+        backgroundColor: backgroundColor,
+      ),
       body: Center(
         child: _controller.value.isInitialized
             ? AspectRatio(

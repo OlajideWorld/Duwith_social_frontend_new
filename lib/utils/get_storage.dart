@@ -4,8 +4,8 @@ class GetStorageClass {
   final box = GetStorage();
 
 // Save a string value
-  void saveString(String key, String value) {
-    box.write(key, value);
+  Future<void> saveString(String key, String value) async {
+    await box.write(key, value);
   }
 
   // Get a string value
@@ -14,8 +14,8 @@ class GetStorageClass {
   }
 
   // Save an integer value
-  void saveInt(String key, int value) {
-    box.write(key, value);
+  Future<void> saveInt(String key, int value) async {
+    await box.write(key, value);
   }
 
   // Get an integer value
@@ -24,8 +24,8 @@ class GetStorageClass {
   }
 
   // Save a double value
-  void saveDouble(String key, double value) {
-    box.write(key, value);
+  Future<void> saveDouble(String key, double value) async {
+    await box.write(key, value);
   }
 
   // Get a double value
@@ -34,8 +34,8 @@ class GetStorageClass {
   }
 
   // Save a boolean value
-  void saveBool(String key, bool value) {
-    box.write(key, value);
+  Future<void> saveBool(String key, bool value) async {
+    await box.write(key, value);
   }
 
   // Get a boolean value
@@ -44,8 +44,8 @@ class GetStorageClass {
   }
 
   // Save a map
-  void saveMap(String key, Map<String, dynamic> value) {
-    box.write(key, value);
+  Future<void> saveMap(String key, Map<String, dynamic> value) async {
+    await box.write(key, value);
   }
 
   // Get a map
@@ -54,8 +54,8 @@ class GetStorageClass {
   }
 
   // Remove a value
-  void removeValue(String key) {
-    box.remove(key);
+  Future<void> removeValue(String key) async {
+    await box.remove(key);
   }
 
   // Clear all stored values

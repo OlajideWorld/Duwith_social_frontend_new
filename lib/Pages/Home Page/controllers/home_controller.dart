@@ -14,6 +14,17 @@ import '../../../models/post-data.dart';
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
 
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    email.dispose();
+    amount.dispose();
+    bankName.dispose();
+    accountnumber.dispose();
+    postCaption.dispose();
+  }
+
   //
 
   RxBool homeloading = false.obs;
@@ -39,8 +50,8 @@ class HomeController extends GetxController {
   RxList<String> postcategories = <String>[].obs;
   TextEditingController postCaption = TextEditingController();
   final commentingOpton = ValueNotifier<bool>(true);
-  final showCaption = ValueNotifier<bool>(false);
-  final hideLike = ValueNotifier<bool>(false);
+  final showCaption = ValueNotifier<bool>(true);
+  final hideLike = ValueNotifier<bool>(true);
   RxString mediaType = "image".obs;
 
   RxList<Map> uploadedImageUrl = <Map>[].obs;
@@ -473,6 +484,7 @@ class HomeController extends GetxController {
           uploadedImageUrl.add(image);
         } else {
           getErrorSnackBar("Image upload was unsuccesful");
+          return false;
         }
       }
       return true;
@@ -492,6 +504,7 @@ class HomeController extends GetxController {
           uploadedImageUrl.add(image);
         } else {
           getErrorSnackBar("Video upload was unsuccesful");
+          return false;
         }
       }
       return true;

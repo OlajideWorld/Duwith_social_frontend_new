@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Pages/Post%20page/components/post_content_widget.dart';
 import 'package:duwith_social/common/button-widget.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/common/play_video.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
@@ -68,11 +69,62 @@ class PostImageVideosScreen extends StatelessWidget {
                                       "Publish",
                                       mainColor,
                                       12, () async {
-                                    homeController.homeloading.value = true;
-                                    await homeController.uploadImages(files!);
-                                    homeController.homeloading.value = false;
-                                    uploadComplete(
-                                        context, constraints.maxWidth);
+                                    if (homeController.postCaption.text
+                                                .trim() ==
+                                            "" ||
+                                        homeController.postcategories.value ==
+                                            [] ||
+                                        files == []) {
+                                      getSuccessSnackBarEdit("Post hint",
+                                          "you need to add a caption, a category and an Image to post");
+                                    } else {
+                                      homeController.homeloading.value = true;
+                                      if (type == "image") {
+                                        var done = await homeController
+                                            .uploadImages(files!);
+                                        if (done) {
+                                          homeController.homeloading.value =
+                                              false;
+                                          uploadComplete(
+                                              context,
+                                              constraints.maxWidth,
+                                              "Upload Successful",
+                                              "Click on the button below to continue exploring",
+                                              true);
+                                        } else {
+                                          homeController.homeloading.value =
+                                              false;
+                                          uploadComplete(
+                                              context,
+                                              constraints.maxWidth,
+                                              "Upload Failed",
+                                              "Click on the button below to try again",
+                                              false);
+                                        }
+                                      } else if (type == "video") {
+                                        var done = await homeController
+                                            .uploadVideos(files!);
+                                        if (done) {
+                                          homeController.homeloading.value =
+                                              false;
+                                          uploadComplete(
+                                              context,
+                                              constraints.maxWidth,
+                                              "Upload Successful",
+                                              "Click on the button below to continue exploring",
+                                              true);
+                                        } else {
+                                          homeController.homeloading.value =
+                                              false;
+                                          uploadComplete(
+                                              context,
+                                              constraints.maxWidth,
+                                              "Upload Failed",
+                                              "Click on the button below to try again",
+                                              false);
+                                        }
+                                      }
+                                    }
                                   }, false, Colors.white),
                                 ],
                               ),
@@ -136,7 +188,7 @@ class PostImageVideosScreen extends StatelessWidget {
                                           );
                                   }),
                             ),
-                            SizedBox(height: heightSize(16)),
+                            SizedBox(height: heightSize(20)),
                             Padding(
                               padding: EdgeInsets.only(right: widthSize(15)),
                               child: SizedBox(
