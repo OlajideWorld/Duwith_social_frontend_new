@@ -1,5 +1,3 @@
-
-
 import 'package:duwith_social/utils/Size-config.dart';
 
 double widthSize(double value) {
@@ -15,6 +13,12 @@ double heightSize(double value) {
 double fontSize(double value) {
   double size = value / 8.96;
   return size * SizeConfig.textMultiplier;
+}
+
+// Admob Ads Banner
+int bannerHeight(int height) {
+  double size = height / 8.96;
+  return size.toInt() * SizeConfig.heightMultiplier.toInt();
 }
 
 // This below is to cut down the length of Text characters

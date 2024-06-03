@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Ge Storage
+  MobileAds.instance.initialize();
+  // Get Storage
   await GetStorage.init();
   await Get.putAsync<SocketService>(() => SocketService().init());
 // Onesignal settings

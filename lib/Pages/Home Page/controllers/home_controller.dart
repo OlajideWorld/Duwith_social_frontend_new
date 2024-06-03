@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:cloudinary/cloudinary.dart';
 import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/models/games_model.dart';
@@ -5,14 +7,39 @@ import 'package:duwith_social/models/main_post_model.dart';
 import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:intl/intl.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
+import '../../../Services/Ads Service/unity_ads_manager.dart';
 import '../../../models/post-data.dart';
 
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    UnityAds.init(
+      gameId: AdManager.gameId,
+      testMode: true,
+      onComplete: () {
+        debugPrint('Initialization Complete');
+        _loadAds();
+      },
+      onFailed: (error, message) =>
+          debugPrint('Initialization Failed: $error $message'),
+    );
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+  }
 
   @override
   void onClose() {
@@ -25,8 +52,20 @@ class HomeController extends GetxController {
     postCaption.dispose();
   }
 
-  //
+// Admob
+  BannerAd? bannerAd;
+  InterstitialAd? interstitialAd;
+  RewardedAd? rewardedAd;
+  RewardedInterstitialAd? rewardedInterstitialAd;
 
+// Unity Ads
+  RxMap<String, bool> placements = {
+    AdManager.interstitialVideoAdPlacementId: false,
+    AdManager.rewardedVideoAdPlacementId: false,
+    AdManager.bannerAdPlacementId: false
+  }.obs;
+
+  //
   RxBool homeloading = false.obs;
   RxBool continueLoading = false.obs;
 
@@ -46,7 +85,6 @@ class HomeController extends GetxController {
   RxList<Comment> comments = <Comment>[].obs;
 
   // Posts objects
-  // List<XFile>? _imageFileList;
   RxList<String> postcategories = <String>[].obs;
   TextEditingController postCaption = TextEditingController();
   final commentingOpton = ValueNotifier<bool>(true);
@@ -441,16 +479,55 @@ class HomeController extends GetxController {
     // Add more interests
   ];
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
+  void _loadAds() {
+    for (var placementId in placements.keys) {
+      _loadAd(placementId);
+    }
   }
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
+  void _loadAd(String placementId) {
+    UnityAds.load(
+      placementId: placementId,
+      onComplete: (placementId) {
+        debugPrint('Load Complete $placementId');
+
+        placements.value[placementId] = true;
+      },
+      onFailed: (placementId, error, message) =>
+          debugPrint('Load Failed $placementId: $error $message'),
+    );
+  }
+
+  // showBannerAds
+  //  UnityBannerAd(
+  //             placementId: AdManager.bannerAdPlacementId,
+  //             onLoad: (placementId) => print('Banner loaded: $placementId'),
+  //             onClick: (placementId) => print('Banner clicked: $placementId'),
+  //             onShown: (placementId) => print('Banner shown: $placementId'),
+  //             onFailed: (placementId, error, message) =>
+  //                 print('Banner Ad $placementId failed: $error $message'),
+  //           )
+
+  void showAd(String placementId) {
+    placements.value[placementId] = false;
+
+    UnityAds.showVideoAd(
+      placementId: placementId,
+      onComplete: (placementId) {
+        debugPrint('Video Ad $placementId completed');
+        _loadAd(placementId);
+      },
+      onFailed: (placementId, error, message) {
+        debugPrint('Video Ad $placementId failed: $error $message');
+        _loadAd(placementId);
+      },
+      onStart: (placementId) => debugPrint('Video Ad $placementId started'),
+      onClick: (placementId) => debugPrint('Video Ad $placementId click'),
+      onSkipped: (placementId) {
+        debugPrint('Video Ad $placementId skipped');
+        _loadAd(placementId);
+      },
+    );
   }
 
   void toggleCategorySelection(String item) {
