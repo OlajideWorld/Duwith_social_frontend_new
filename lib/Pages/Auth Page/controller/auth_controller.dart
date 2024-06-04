@@ -78,7 +78,8 @@ class AuthController extends GetxController {
       Get.to(() => const OnboardScreen());
     } else {
       // Get.to(() => SignUpScreen());
-
+      userEmail.value = box.read(userdataEmail);
+      userId.value = box.read(userdataid);
       Get.toNamed(MyRoutes.homeScreen);
     }
   }
@@ -91,8 +92,6 @@ class AuthController extends GetxController {
 
   Future loadValueBool() async {
     isFirstTime!.value = box.read(firstKey) ?? true;
-    userEmail.value = box.read(userdataEmail);
-    userId.value = box.read(userdataid);
   }
 
   Future loadEmail() async {

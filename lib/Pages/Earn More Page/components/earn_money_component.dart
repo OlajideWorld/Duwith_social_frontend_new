@@ -1,5 +1,7 @@
 import "package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/social_bottom_sheet.dart";
+import "package:duwith_social/Services/Ads%20Service/admob_manager.dart";
+import "package:duwith_social/Services/Ads%20Service/start_app_manager.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
@@ -88,7 +90,11 @@ earnLuckySpin(double width) {
 
 earnSocialMediaWidget(BuildContext context, double width) {
   return GestureDetector(
-    onTap: () => showsocialMediaActivity(context, width),
+    onTap: () {
+      AdmobAdsClass().loadBannerAd(width.toInt(), 100);
+      // StartAppAdsClass().loadBannerAds();
+      showsocialMediaActivity(context, width);
+    },
     child: SizedBox(
       height: heightSize(75),
       child: Column(

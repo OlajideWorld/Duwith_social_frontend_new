@@ -1,9 +1,14 @@
+import "package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart";
 import "package:duwith_social/common/button-widget.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
+import "package:google_mobile_ads/google_mobile_ads.dart";
+import "package:startapp_sdk/startapp.dart";
 
 import "../../../common/custom-text.dart";
+
+HomeController homeController = HomeController.instance;
 
 showsocialMediaActivity(BuildContext context, double width) {
   return showModalBottomSheet(
@@ -36,12 +41,12 @@ showsocialMediaActivity(BuildContext context, double width) {
                         borderRadius:
                             BorderRadius.all(Radius.circular(widthSize(5)))),
                   ),
-                  SizedBox(height: heightSize(29)),
-                  SizedBox(
-                    height: heightSize(75),
-                    width: widthSize(93),
-                    child: Image.asset("assets/images/Earn/socialmedia.png"),
-                  ),
+                  SizedBox(height: heightSize(10)),
+                  // SizedBox(
+                  //   height: heightSize(75),
+                  //   width: widthSize(93),
+                  //   child: Image.asset("assets/images/Earn/socialmedia.png"),
+                  // ),
                   SizedBox(height: heightSize(16)),
                   SizedBox(
                     height: heightSize(44),
@@ -65,6 +70,14 @@ showsocialMediaActivity(BuildContext context, double width) {
                       ],
                     ),
                   ),
+                  SizedBox(height: heightSize(21)),
+                  // SizedBox(
+                  //     height: heightSize(100),
+                  //     width: width,
+                  //     child: AdWidget(ad: homeController.bannerAd!)),
+
+                  // SizedBox(height: heightSize(21)),
+                  StartAppBanner(homeController.startBannerAd!),
                   SizedBox(height: heightSize(21)),
                   socialWidget(
                       context,

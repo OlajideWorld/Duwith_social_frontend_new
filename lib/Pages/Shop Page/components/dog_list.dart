@@ -4,6 +4,8 @@ import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart
 import 'package:duwith_social/Pages/Shop%20Page/components/shop_components.dart';
 import 'package:duwith_social/Pages/Shop%20Page/screens/dog_preview.dart';
 import 'package:duwith_social/Pages/Shop%20Page/screens/upgrade_screen.dart';
+import 'package:duwith_social/Services/Ads%20Service/admob_manager.dart';
+import 'package:duwith_social/Services/Ads%20Service/unity_ads_manager.dart';
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -48,6 +50,9 @@ showDogList(BuildContext context) {
                       homeController.dogsList.value[index].amount,
                       context,
                       homeController.dogsList.value[index].isBig, () {
+                    // AdmobAdsClass().loadRewardedAd(
+                    //     adUnitId: AdmobAdsClass().rewardedAdsId);
+                    homeController.loadAd(AdManager.rewardedVideoAdPlacementId);
                     Get.to(() => DogPreviewScreen());
                   });
                 }),

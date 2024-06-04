@@ -11,7 +11,9 @@ class AdmobAdsClass {
       ? 'ca-app-pub-3940256099942544/9214589741'
       : 'ca-app-pub-3940256099942544/2934735716';
 
-  final intertstitialId = Platform.isAndroid
+  final fixedBanner = "ca-app-pub-3940256099942544/6300978111";
+
+  final interstitialId = Platform.isAndroid
       ? 'ca-app-pub-3940256099942544/1033173712'
       : 'ca-app-pub-3940256099942544/4411468910';
 
@@ -33,11 +35,12 @@ class AdmobAdsClass {
 // }
 
   /// Loads a banner ad.
-  void loadBannerAd(int width, int height) {
+  loadBannerAd(int width, int height) {
     homeController.bannerAd = BannerAd(
-      adUnitId: bannerId,
+      adUnitId: fixedBanner,
       request: const AdRequest(),
-      size: AdSize(width: width, height: bannerHeight(height)),
+      // size: AdSize(width: width, height: bannerHeight(height)),
+      size: AdSize.banner,
       listener: BannerAdListener(
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {

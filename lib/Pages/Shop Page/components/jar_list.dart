@@ -3,6 +3,7 @@
 import 'package:duwith_social/Pages/Shop%20Page/components/dog_list.dart';
 import 'package:duwith_social/Pages/Shop%20Page/components/shop_components.dart';
 import 'package:duwith_social/Pages/Shop%20Page/screens/jar_preview.dart';
+import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -43,6 +44,8 @@ showJarList(BuildContext context) {
                     homeController.jarList.value[index].amount,
                     context,
                     homeController.jarList.value[index].isBig, () {
+                  // StartAppAdsClass().loadInterstitialAd();
+                  StartAppAdsClass().loadRewardedVideoAd();
                   Get.to(() => JarPreviewScreen());
                 });
               }),

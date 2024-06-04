@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cloudinary/cloudinary.dart';
+import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
 import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/models/games_model.dart';
 import 'package:duwith_social/models/main_post_model.dart';
@@ -11,18 +12,22 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:intl/intl.dart';
+import 'package:startapp_sdk/startapp.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
+import '../../../Services/Ads Service/admob_manager.dart';
 import '../../../Services/Ads Service/unity_ads_manager.dart';
 import '../../../models/post-data.dart';
 
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
+  var startAppSdk = StartAppSdk();
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    startAppSdk.setTestAdsEnabled(true);
     UnityAds.init(
       gameId: AdManager.gameId,
       testMode: true,
@@ -36,9 +41,10 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     // TODO: implement onReady
     super.onReady();
+    await StartAppAdsClass().loadBannerAds();
   }
 
   @override
@@ -51,6 +57,13 @@ class HomeController extends GetxController {
     accountnumber.dispose();
     postCaption.dispose();
   }
+
+  Future loadAllAds() async {}
+
+  // start App Ads
+  StartAppBannerAd? startBannerAd;
+  StartAppInterstitialAd? startInterstitialAd;
+  StartAppRewardedVideoAd? startRewardedVideoAd;
 
 // Admob
   BannerAd? bannerAd;
@@ -479,13 +492,13 @@ class HomeController extends GetxController {
     // Add more interests
   ];
 
-  void _loadAds() {
+  _loadAds() {
     for (var placementId in placements.keys) {
-      _loadAd(placementId);
+      loadAd(placementId);
     }
   }
 
-  void _loadAd(String placementId) {
+  void loadAd(String placementId) {
     UnityAds.load(
       placementId: placementId,
       onComplete: (placementId) {
@@ -515,17 +528,17 @@ class HomeController extends GetxController {
       placementId: placementId,
       onComplete: (placementId) {
         debugPrint('Video Ad $placementId completed');
-        _loadAd(placementId);
+        loadAd(placementId);
       },
       onFailed: (placementId, error, message) {
         debugPrint('Video Ad $placementId failed: $error $message');
-        _loadAd(placementId);
+        loadAd(placementId);
       },
       onStart: (placementId) => debugPrint('Video Ad $placementId started'),
       onClick: (placementId) => debugPrint('Video Ad $placementId click'),
       onSkipped: (placementId) {
         debugPrint('Video Ad $placementId skipped');
-        _loadAd(placementId);
+        loadAd(placementId);
       },
     );
   }
