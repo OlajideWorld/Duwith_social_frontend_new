@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
+import '../../../utils/demo_data.dart';
 
 class GamesScreen extends StatelessWidget {
   final String title;
@@ -58,12 +59,11 @@ class GamesScreen extends StatelessWidget {
                               childAspectRatio:
                                   1.0, // Aspect ratio of each item (width / height)
                             ),
-                            itemCount: homeController.gameslist.value.length,
+                            itemCount: gameslist.value.length,
                             itemBuilder: (context, index) {
                               return gamesWidget(
-                                  homeController
-                                      .gameslist.value[index].description,
-                                  homeController.gameslist.value[index].image);
+                                  gameslist.value[index].description,
+                                  gameslist.value[index].image);
                             }))
                   ],
                 ),

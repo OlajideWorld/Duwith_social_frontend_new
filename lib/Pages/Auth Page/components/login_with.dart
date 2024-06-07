@@ -137,6 +137,7 @@ class LoginWithScreen extends StatelessWidget {
                                   if (authController.userdata.value.email ==
                                       "") {
                                     getErrorSnackBar("NO user found");
+                                    socket.isloading.value = false;
                                   }
                                 } else {
                                   getErrorSnackBar("Invalid email entered");

@@ -5,6 +5,7 @@ import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/demo_data.dart';
 import '../../Home Page/controllers/home_controller.dart';
 
 HomeController homeController = HomeController.instance;
@@ -18,12 +19,12 @@ viewProfilePostList(BuildContext context, double width) {
           mainAxisSpacing: widthSize(9), // Spacing between rows
           childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
         ),
-        itemCount: homeController.postDatasPost.value.length,
+        itemCount: postDatasPost.value.length,
         itemBuilder: (context, index) {
           return viewProfilePost(
-              homeController.postDatasPost.value[index].image,
-              homeController.engagementShortened(
-                  homeController.postDatasPost.value[index].likes));
+              postDatasPost.value[index].image,
+              homeController
+                  .engagementShortened(postDatasPost.value[index].likes));
         }),
   );
 }

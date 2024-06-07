@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
+import '../../../utils/demo_data.dart';
 import '../../../utils/sizes.dart';
 import '../../Home Page/controllers/home_controller.dart';
 
@@ -15,10 +16,10 @@ viewProfileStoriesList(BuildContext context) {
           mainAxisSpacing: widthSize(13), // Spacing between rows
           childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
         ),
-        itemCount: homeController.postDatasPost.value.length,
+        itemCount: postDatasPost.value.length,
         itemBuilder: (context, index) {
           return viewProfileStories(
-            homeController.postDatasPost.value[index].image,
+            postDatasPost.value[index].image,
           );
         }),
   );
@@ -43,14 +44,14 @@ viewProfileVideosList(BuildContext context) {
           mainAxisSpacing: widthSize(13), // Spacing between rows
           childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
         ),
-        itemCount: homeController.postDatasPost.value.length,
+        itemCount: postDatasPost.value.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.only(bottom: heightSize(20)),
             child: Stack(
               children: [
                 viewProfileStories(
-                  homeController.postDatasPost.value[index].image,
+                  postDatasPost.value[index].image,
                 ),
                 Center(
                   child: Image.asset(

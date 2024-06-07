@@ -127,6 +127,7 @@ class _PostContentState extends State<PostContent> {
         children: [
           Text(
             displayText,
+            textAlign: TextAlign.start,
             style: TextStyle(
               fontSize: widget.size,
               fontFamily: widget.fontFamily,

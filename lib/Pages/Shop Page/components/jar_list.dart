@@ -4,6 +4,7 @@ import 'package:duwith_social/Pages/Shop%20Page/components/dog_list.dart';
 import 'package:duwith_social/Pages/Shop%20Page/components/shop_components.dart';
 import 'package:duwith_social/Pages/Shop%20Page/screens/jar_preview.dart';
 import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
+import 'package:duwith_social/utils/demo_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -30,7 +31,7 @@ showJarList(BuildContext context) {
         Expanded(
           child: MasonryGridView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: homeController.dogsList.value.length,
+              itemCount: jarList.value.length,
               gridDelegate:
                   const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Number of items per row
@@ -39,11 +40,11 @@ showJarList(BuildContext context) {
               crossAxisSpacing: heightSize(12),
               itemBuilder: (context, index) {
                 return gridviewWidget(
-                    homeController.jarList.value[index].image,
-                    homeController.jarList.value[index].name,
-                    homeController.jarList.value[index].amount,
+                    jarList.value[index].image,
+                    jarList.value[index].name,
+                    jarList.value[index].amount,
                     context,
-                    homeController.jarList.value[index].isBig, () {
+                    jarList.value[index].isBig, () {
                   // StartAppAdsClass().loadInterstitialAd();
                   StartAppAdsClass().loadRewardedVideoAd();
                   Get.to(() => JarPreviewScreen());

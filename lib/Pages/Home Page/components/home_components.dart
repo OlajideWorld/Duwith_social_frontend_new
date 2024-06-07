@@ -25,6 +25,7 @@ selectHomeView(BuildContext context, double width) {
             child: GestureDetector(
               onTap: () {
                 homeController.viewBarOption.value = 0;
+                homeController.fetchPosts();
               },
               child: Container(
                 // width: widthSize(176),
@@ -63,6 +64,7 @@ selectHomeView(BuildContext context, double width) {
             child: GestureDetector(
               onTap: () {
                 homeController.viewBarOption.value = 1;
+                homeController.fetchvideos();
               },
               child: Container(
                 height: heightSize(50),
@@ -100,6 +102,7 @@ selectHomeView(BuildContext context, double width) {
             child: GestureDetector(
               onTap: () {
                 homeController.viewBarOption.value = 2;
+                homeController.fetchNews();
               },
               child: Container(
                 height: heightSize(50),
@@ -137,6 +140,7 @@ selectHomeView(BuildContext context, double width) {
             child: GestureDetector(
               onTap: () {
                 homeController.viewBarOption.value = 3;
+                homeController.fetchAirdrops();
               },
               child: Container(
                 height: heightSize(50),

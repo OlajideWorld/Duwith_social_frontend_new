@@ -6,12 +6,13 @@ import "package:flutter/material.dart";
 
 import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";
+import "../../../utils/demo_data.dart";
 
 HomeController homeController = HomeController.instance;
 
 transactionHistoryList(BuildContext contextm, double width) {
   return ListView.builder(
-      itemCount: homeController.transactiondata.value.length,
+      itemCount: transactiondata.value.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: EdgeInsets.only(bottom: heightSize(12)),
@@ -20,11 +21,11 @@ transactionHistoryList(BuildContext contextm, double width) {
               transactonHistoryDesign(
                   width: width,
                   image: "assets/images/social.png",
-                  name: homeController.transactiondata.value[index].name,
-                  amount: homeController.transactiondata.value[index].amount,
-                  time: homeController.transactiondata.value[index].time,
-                  date: homeController.transactiondata.value[index].date,
-                  status: homeController.transactiondata.value[index].status),
+                  name: transactiondata.value[index].name,
+                  amount: transactiondata.value[index].amount,
+                  time: transactiondata.value[index].time,
+                  date: transactiondata.value[index].date,
+                  status: transactiondata.value[index].status),
             ],
           ),
         );

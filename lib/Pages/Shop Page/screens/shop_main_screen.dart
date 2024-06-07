@@ -71,7 +71,7 @@ class ShoppingMainScreen extends StatelessWidget {
                               ),
                               SizedBox(height: heightSize(4)),
                               Container(
-                                height: heightSize(230),
+                                height: heightSize(235),
                                 width: constraints.maxWidth,
                                 padding: EdgeInsets.symmetric(
                                     vertical: heightSize(14),
@@ -101,10 +101,10 @@ class ShoppingMainScreen extends StatelessWidget {
                                             "How do I start streaming live video?",
                                         answer:
                                             "It's important to address common questions and concerns that users may have about the app. Here are some necessary questions to include "),
-                                    SizedBox(height: heightSize(12)),
                                   ],
                                 ),
                               ),
+                              SizedBox(height: heightSize(12)),
                             ],
                           ),
                         ),

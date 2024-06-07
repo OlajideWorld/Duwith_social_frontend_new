@@ -102,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                       SizedBox(height: heightSize(5)),
                       // Support
                       Container(
-                        height: heightSize(163),
+                        height: heightSize(170),
                         width: constraints.maxWidth,
                         padding: EdgeInsets.only(
                             top: heightSize(23),

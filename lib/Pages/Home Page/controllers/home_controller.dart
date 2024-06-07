@@ -1,10 +1,13 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cloudinary/cloudinary.dart';
+import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
+import 'package:duwith_social/Pages/Post%20page/components/post_content_widget.dart';
 import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
 import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/models/games_model.dart';
 import 'package:duwith_social/models/main_post_model.dart';
+import 'package:duwith_social/models/news_models.dart';
 import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +21,10 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import '../../../Services/Ads Service/admob_manager.dart';
 import '../../../Services/Ads Service/unity_ads_manager.dart';
 import '../../../models/post-data.dart';
+import '../../Auth Page/services/socket_sevice.dart';
+
+SocketService socketService = SocketService.instance;
+AuthController authController = AuthController.instance;
 
 class HomeController extends GetxController {
   static HomeController instance = Get.find();
@@ -45,6 +52,7 @@ class HomeController extends GetxController {
     // TODO: implement onReady
     super.onReady();
     await StartAppAdsClass().loadBannerAds();
+    await fetchPosts();
   }
 
   @override
@@ -58,7 +66,9 @@ class HomeController extends GetxController {
     postCaption.dispose();
   }
 
-  Future loadAllAds() async {}
+// Posts Data
+  RxInt limit = 10.obs;
+  RxInt page = 0.obs;
 
   // start App Ads
   StartAppBannerAd? startBannerAd;
@@ -79,7 +89,7 @@ class HomeController extends GetxController {
   }.obs;
 
   //
-  RxBool homeloading = false.obs;
+  RxBool homeloading = true.obs;
   RxBool continueLoading = false.obs;
 
   RxInt viewBarOption = 0.obs;
@@ -107,367 +117,11 @@ class HomeController extends GetxController {
 
   RxList<Map> uploadedImageUrl = <Map>[].obs;
 
-  // Games Model
-  RxList<GamesModel> gameslist = [
-    GamesModel(
-        image: "assets/images/Earn/games.png",
-        description: "Complete the task to earn more gold"),
-    GamesModel(
-        image: "assets/images/Earn/games5.png",
-        description: "Complete the task to earn more gold"),
-    GamesModel(
-        image: "assets/images/Earn/games3.png",
-        description: "Complete the task to earn more gold"),
-    GamesModel(
-        image: "assets/images/Earn/games4.png",
-        description: "Spin and earn amazing rewards")
-  ].obs;
-
-  // Shopping models
-  RxList<ShopModels> dogsList = [
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog2.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog3.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog4.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog5.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog6.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/dog7.png",
-        amount: "120",
-        isBig: true)
-  ].obs;
-
-  RxList<ShopModels> jarList = [
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar2.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar3.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar3.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar2.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/jar2.png",
-        amount: "120",
-        isBig: false)
-  ].obs;
-
-  RxList<ShopModels> boxList = [
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest2.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest3.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest4.png",
-        amount: "120",
-        isBig: false),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest2.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest.png",
-        amount: "120",
-        isBig: true),
-    ShopModels(
-        name: "GrandMaster",
-        image: "assets/images/Shop/chest2.png",
-        amount: "120",
-        isBig: false)
-  ].obs;
-
   // Posts
-  RxList<Post> postList = <Post>[].obs;
-  Rx<QueryParams> queryParams =
-      QueryParams(userId: "", following: [], interests: [], sortby: "CreatedAt")
-          .obs;
-
-  RxList<PostsData> postDatas = [
-    PostsData(
-        name: "Olasehinde Matthew",
-        image: "assets/images/post.png",
-        content:
-            "🎉 Airdrop Alert! 🎉We're excited to announce our exclusive airdrop event! 🚀✨🌟 What’s up for grabs? Free tokens for our loyal users! Special rewards for new signups!👥 How to Participate",
-        postType: 1,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Jacob Jones",
-        image: "assets/images/post.png",
-        content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Olajide Timothy",
-        image: "assets/images/post.png",
-        content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
-        postType: 3,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Bustin Tunde",
-        image: "assets/images/post.png",
-        content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
-        postType: 1,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Boss Chris",
-        image: "assets/images/post.png",
-        content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
-        postType: 3,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234)
-  ].obs;
-
-  RxList<PostsData> postDatasPost = [
-    PostsData(
-        name: "Olasehinde Matthew",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 1,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Jacob Jones",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Jacob Jones",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Jacob Jones",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Jacob Jones",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Jacob Jones",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Olajide Timothy",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 3,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Bustin Tunde",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 1,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Boss Chris",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 3,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234)
-  ].obs;
-
-  RxList<PostsData> searchTrends = [
-    PostsData(
-        name: "Entertainment",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 1,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Workout",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Music",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Education",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Health",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Financial market",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 2,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Investment",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 3,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Power",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 1,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234),
-    PostsData(
-        name: "Movies",
-        image: "assets/images/post2.png",
-        content: "",
-        postType: 3,
-        likes: 12346576,
-        dislikes: 123,
-        comment: 1234)
-  ].obs;
-
-  RxList<TransactionHistory> transactiondata = [
-    TransactionHistory(
-        name: "Solana ",
-        amount: "\$20,304",
-        time: "08:48 am",
-        date: "15-03-2023",
-        status: false),
-    TransactionHistory(
-        name: "Athens ",
-        amount: "\$20,304",
-        time: "08:48 am",
-        date: "15-03-2023",
-        status: false),
-    TransactionHistory(
-        name: "Athens ",
-        amount: "\$20,304",
-        time: "08:48 am",
-        date: "15-03-2023",
-        status: true),
-    TransactionHistory(
-        name: "Wen ",
-        amount: "\$20,304",
-        time: "08:48 am",
-        date: "15-03-2023",
-        status: true),
-  ].obs;
+  RxList<PostForYou> postList = <PostForYou>[].obs;
+  RxList<PostForYou> postListVideo = <PostForYou>[].obs;
+  RxList<NewsUpdate> newsUpdateList = <NewsUpdate>[].obs;
+  RxList<NewsUpdate> airdropList = <NewsUpdate>[].obs;
 
   final List<String> allInterests = [
     'Technology',
@@ -491,6 +145,130 @@ class HomeController extends GetxController {
     "Arts"
     // Add more interests
   ];
+
+  fetchPosts() async {
+    homeloading.value = true;
+    await socket.getUserData2(authController.userEmail.value);
+    if (authController.userdata.value.email == "") {
+      getErrorSnackBar("Unable to get your details, check internet Connection");
+    } else {
+      var data = {
+        'userId': authController.userId.value,
+        'following':
+            authController.userdata.value.following, // Add relevant data
+        'interests': [
+          'Technology',
+          'Sports',
+          'Music',
+          'Movies',
+          "Nature",
+          "Travels",
+          "Pest & Animals",
+          "Events",
+          "Quotes",
+          "Books",
+          "Music",
+          "Tech",
+          "Gadgets",
+          "Fitness",
+          "Adventures",
+          "Food",
+          "Fashion",
+          "Lifestyles",
+          "Arts"
+        ], // Add relevant data
+        // 'interests': authController.userdata.value.interests,
+        'sortBy': 'createdAt',
+        'skip': page.value * limit.value,
+        'limit': limit.value,
+      };
+      await socket.getPost(data);
+      await Future.delayed(const Duration(seconds: 2), () {});
+      if (postList.value == []) {
+        getErrorSnackBar("No post Available now");
+      } else {
+        homeloading.value = false;
+      }
+    }
+  }
+
+  fetchvideos() async {
+    homeloading.value = true;
+    await socket.getUserData2(authController.userEmail.value);
+    await Future.delayed(const Duration(seconds: 2), () {});
+    if (authController.userdata.value.email == "") {
+      getErrorSnackBar("Unable to get your details, check internet Connection");
+    } else {
+      var data = {
+        'userId': authController.userId.value,
+        'following':
+            authController.userdata.value.following, // Add relevant data
+        'interests': [
+          'Technology',
+          'Sports',
+          'Music',
+          'Movies',
+          "Nature",
+          "Travels",
+          "Pest & Animals",
+          "Events",
+          "Quotes",
+          "Books",
+          "Music",
+          "Tech",
+          "Gadgets",
+          "Fitness",
+          "Adventures",
+          "Food",
+          "Fashion",
+          "Lifestyles",
+          "Arts"
+        ], // Add relevant data
+        // 'interests': authController.userdata.value.interests,
+        'sortBy': 'createdAt',
+        'skip': page.value * limit.value,
+        'limit': limit.value,
+      };
+      await socket.getVideos(data);
+      await Future.delayed(const Duration(seconds: 2), () {});
+      if (postList.value == []) {
+        getErrorSnackBar("No post Available now");
+      } else {
+        homeloading.value = false;
+      }
+    }
+  }
+
+  fetchNews() async {
+    homeloading.value = true;
+    var data = {
+      'sortBy': 'createdAt',
+      'skip': page.value * limit.value,
+      'limit': limit.value,
+    };
+    await socket.getNewsList(data);
+    if (newsUpdateList.value == []) {
+      getErrorSnackBar("No post Available now");
+    } else {
+      homeloading.value = false;
+    }
+  }
+
+  fetchAirdrops() async {
+    homeloading.value = true;
+    var data = {
+      'sortBy': 'createdAt',
+      'skip': page.value * limit.value,
+      'limit': limit.value,
+    };
+    await socket.getAirdropList(data);
+    await Future.delayed(const Duration(seconds: 5), () {});
+    if (newsUpdateList.value == []) {
+      getErrorSnackBar("No post Available now");
+    } else {
+      homeloading.value = false;
+    }
+  }
 
   _loadAds() {
     for (var placementId in placements.keys) {

@@ -1,41 +1,56 @@
-// ignore_for_file: file_names, invalid_use_of_protected_member, library_private_types_in_public_api
+// ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
-import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
-import 'package:duwith_social/common/button-widget.dart';
-import 'package:duwith_social/common/custom-text.dart';
-import 'package:duwith_social/common/stream_video.dart';
+import 'package:duwith_social/models/post-data.dart';
 import 'package:duwith_social/utils/color.dart';
-import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:get/get.dart';
+
+import '../../../common/button-widget.dart';
+import '../../../common/custom-text.dart';
+import '../../../common/stream_video.dart';
+import '../../../utils/sizes.dart';
+import '../../View Profile Page/screens/view_profile_screen.dart';
+import '../controllers/home_controller.dart';
 
 HomeController homeController = HomeController.instance;
 
-forYouList(BuildContext context, double width) {
+videosHome(BuildContext context, double width) {
   return Expanded(
     child: ListView.builder(
-        itemCount: homeController.postList.value.length,
+        itemCount: homeController.postListVideo.value.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.only(bottom: heightSize(10)),
             child: Column(
               children: [
-                PostWidget(
-                    width: width,
-                    name: homeController.postList.value[index].user.username,
-                    image:
-                        homeController.postList.value[index].user.profileImage,
-                    content: homeController.postList.value[index].caption,
-                    likes: homeController.postList.value[index].likes,
-                    dislike: homeController.postList.value[index].dislikes,
-                    comment: homeController.postList.value[index].commentsCount,
-                    media: homeController.postList.value[index].media.first.url,
-                    postType:
-                        homeController.postList.value[index].media.first.type),
+                homeController.postListVideo.value != []
+                    ? VideosPostWidget(
+                        width: width,
+                        name: homeController
+                            .postListVideo.value[index].user.username,
+                        image: homeController
+                            .postListVideo.value[index].user.profileImage,
+                        content:
+                            homeController.postListVideo.value[index].caption,
+                        likes: homeController.postListVideo.value[index].likes,
+                        dislike:
+                            homeController.postListVideo.value[index].dislikes,
+                        comment: homeController
+                            .postListVideo.value[index].commentsCount,
+                        media: homeController.postListVideo.value[index].media,
+                      )
+                    : const Center(
+                        child: CText(
+                          text: "No videos found",
+                          size: 12,
+                          color: timeColor,
+                          fontFamily: UsedFonts.poppins,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
               ],
             ),
           );
@@ -43,18 +58,17 @@ forYouList(BuildContext context, double width) {
   );
 }
 
-class PostWidget extends StatefulWidget {
+class VideosPostWidget extends StatefulWidget {
   final double width;
   final String name;
   final String image;
-  final String media;
+  final List<Media> media;
   final String content;
   final int likes;
   final int dislike;
   final int comment;
-  final String postType;
 
-  const PostWidget({
+  const VideosPostWidget({
     Key? key,
     required this.width,
     required this.name,
@@ -64,31 +78,24 @@ class PostWidget extends StatefulWidget {
     required this.likes,
     required this.dislike,
     required this.comment,
-    required this.postType,
   }) : super(key: key);
 
   @override
-  _PostWidgetState createState() => _PostWidgetState();
+  _VideosPostWidgetState createState() => _VideosPostWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _VideosPostWidgetState extends State<VideosPostWidget> {
   RxBool isExpanded = false.obs;
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return Container(
-        height: widget.postType == "image" || widget.postType == "video"
-            ? isExpanded.value
-                ? heightSize(640)
-                : heightSize(540)
-            : isExpanded.value
-                ? heightSize(260)
-                : heightSize(200),
+        height: isExpanded.value ? heightSize(440) : heightSize(360),
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF28282C)),
         padding: EdgeInsets.symmetric(
-            horizontal: widthSize(10), vertical: heightSize(5)),
+            horizontal: widthSize(10), vertical: heightSize(23)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -103,59 +110,39 @@ class _PostWidgetState extends State<PostWidget> {
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
-            widget.postType == "image" || widget.postType == "video"
-                ? widget.postType == "image"
-                    ? CachedNetworkImage(
-                        imageUrl: widget.media,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        imageBuilder: (context, imageprovider) {
-                          return Container(
-                            height: heightSize(400),
-                            width: widget.width,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                image: DecorationImage(
-                                    image: imageprovider, fit: BoxFit.fill)),
-                          );
-                        },
-                      )
-                    : FutureBuilder<VideoPlayerController>(
-                        future: _initializeVideoPlayer(widget.media),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            final controller = snapshot.data!;
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(() => VideoStreamPage(
-                                      url: widget.media,
-                                    ));
-                              },
-                              child: AspectRatio(
-                                aspectRatio: controller.value.aspectRatio,
-                                child: VideoPlayer(controller),
-                              ),
-                            );
-                          } else {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                        },
-                      )
+            FutureBuilder<VideoPlayerController>(
+              future: _initializeVideoPlayer(widget.media.single.url),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  final controller = snapshot.data!;
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(() => VideoStreamPage(
+                            url: widget.media.single.url,
+                          ));
+                    },
+                    child: AspectRatio(
+                      aspectRatio: controller.value.aspectRatio,
+                      child: VideoPlayer(controller),
+                    ),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
 
-                // Container(
-                //     height: heightSize(168),
-                //     width: widget.width,
-                //     decoration: const BoxDecoration(
-                //         borderRadius: BorderRadius.all(Radius.circular(10))),
-                //     child: Image.asset(
-                //       "assets/images/post.png",
-                //       fit: BoxFit.fill,
-                //     ),
-                //   )
-                : const SizedBox(),
+            // Container(
+            //     height: heightSize(168),
+            //     width: widget.width,
+            //     decoration: const BoxDecoration(
+            //         borderRadius: BorderRadius.all(Radius.circular(10))),
+            //     child: Image.asset(
+            //       "assets/images/post.png",
+            //       fit: BoxFit.fill,
+            //     ),
+            //   )
+
             SizedBox(height: heightSize(12)),
             Padding(
               padding:

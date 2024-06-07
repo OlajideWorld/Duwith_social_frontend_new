@@ -324,6 +324,7 @@ uploadComplete(BuildContext context, double width, String headline, String body,
                             await socket.createPost(postMap);
                             homeController.homeloading.value = false;
                             Get.to(() => HomeScreen());
+                            homeController.uploadedImageUrl.value = [];
                           }, false, textColor)
                         : buttonsWidget(
                             context,

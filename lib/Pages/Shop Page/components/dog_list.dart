@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
+import '../../../utils/demo_data.dart';
 import '../../../utils/sizes.dart';
 
 HomeController homeController = HomeController.instance;
@@ -22,7 +23,7 @@ showDogList(BuildContext context) {
   return Padding(
     padding: EdgeInsets.only(left: widthSize(20), right: widthSize(20)),
     child: SizedBox(
-      height: heightSize(1070),
+      height: heightSize(1300),
       child: Column(
         children: [
           shoptypeAdvert(
@@ -35,7 +36,7 @@ showDogList(BuildContext context) {
           SizedBox(height: heightSize(13)),
           Expanded(
             child: MasonryGridView.builder(
-                itemCount: homeController.dogsList.value.length,
+                itemCount: dogsList.value.length,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate:
                     const SliverSimpleGridDelegateWithFixedCrossAxisCount(
@@ -45,11 +46,11 @@ showDogList(BuildContext context) {
                 crossAxisSpacing: heightSize(12),
                 itemBuilder: (context, index) {
                   return gridviewWidget(
-                      homeController.dogsList.value[index].image,
-                      homeController.dogsList.value[index].name,
-                      homeController.dogsList.value[index].amount,
+                      dogsList.value[index].image,
+                      dogsList.value[index].name,
+                      dogsList.value[index].amount,
                       context,
-                      homeController.dogsList.value[index].isBig, () {
+                      dogsList.value[index].isBig, () {
                     // AdmobAdsClass().loadRewardedAd(
                     //     adUnitId: AdmobAdsClass().rewardedAdsId);
                     homeController.loadAd(AdManager.rewardedVideoAdPlacementId);
@@ -69,7 +70,7 @@ gridviewWidget(String image, String name, String amount, BuildContext context,
     onTap: onTap,
     child: Container(
       alignment: Alignment.center,
-      height: isBig ? heightSize(250) : heightSize(200),
+      height: isBig ? heightSize(300) : heightSize(250),
       padding: EdgeInsets.symmetric(vertical: heightSize(15)),
       decoration: const BoxDecoration(
           color: Color(0xFF151B2E),
@@ -83,13 +84,13 @@ gridviewWidget(String image, String name, String amount, BuildContext context,
             ),
             const Spacer(),
             SizedBox(
-              height: heightSize(65),
+              height: heightSize(100),
               width: widthSize(87),
               child: Column(
                 children: [
                   SizedBox(
                     height: heightSize(40),
-                    width: widthSize(74),
+                    width: widthSize(90),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,7 +125,7 @@ gridviewWidget(String image, String name, String amount, BuildContext context,
                       ],
                     ),
                   ),
-                  buttonsWidget(context, heightSize(21), widthSize(87), "Buy",
+                  buttonsWidget(context, heightSize(30), widthSize(87), "Buy",
                       mainColor, 12, () {}, false, textColor)
                 ],
               ),

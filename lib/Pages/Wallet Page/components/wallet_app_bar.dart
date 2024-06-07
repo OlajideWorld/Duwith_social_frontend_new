@@ -129,7 +129,7 @@ class _WalletFaqWidgetState extends State<WalletFaqWidget> {
           }
         },
         child: SizedBox(
-          height: isExpanded.value ? heightSize(65) : heightSize(40),
+          height: isExpanded.value ? heightSize(100) : heightSize(40),
           width: widget.width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

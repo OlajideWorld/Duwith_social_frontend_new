@@ -43,7 +43,7 @@ class OnboardScreen extends StatelessWidget {
                               SizedBox(height: heightSize(38)),
                               const CText(
                                 text: "Start Your Journey with Us!",
-                                fontFamily: UsedFonts.rammetto,
+                                fontFamily: UsedFonts.poppins,
                                 fontWeight: FontWeight.w400,
                                 size: 20,
                                 color: textColor,

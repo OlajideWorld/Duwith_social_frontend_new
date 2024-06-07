@@ -155,7 +155,9 @@ class _PickImageScreenState extends State<PickImageScreen> {
               "assets/images/Post/posticon4.png",
               const Color(0xFF8D59CE),
               "Article opinion",
-              () => getSuccessSnackBarEdit("Notification", "Coming Soon"),
+              () {
+                homeController.fetchPosts();
+              },
             )
           ],
         ),

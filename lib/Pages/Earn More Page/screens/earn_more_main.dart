@@ -35,8 +35,8 @@ class EarnMorePage extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     child: Padding(
                       padding: EdgeInsets.only(
-                          left: widthSize(20),
-                          right: widthSize(20),
+                          left: widthSize(10),
+                          right: widthSize(10),
                           top: heightSize(73),
                           bottom: heightSize(30)),
                       child: SizedBox(
@@ -73,7 +73,6 @@ class EarnMorePage extends StatelessWidget {
                                           "Do more offer to earn cash",
                                           "assets/images/Earn/earn_more2.png",
                                           "Offer"),
-                                      SizedBox(width: widthSize(10)),
                                       earnMoreExtraWidget(
                                           const Color(0xFF07A9B4),
                                           "Earn 50x higher",

@@ -3,12 +3,12 @@
 import 'package:duwith_social/Pages/Shop%20Page/components/dog_list.dart';
 import 'package:duwith_social/Pages/Shop%20Page/components/shop_components.dart';
 import 'package:duwith_social/Pages/Shop%20Page/screens/chest_preview.dart';
-import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
+import '../../../utils/demo_data.dart';
 import '../../../utils/sizes.dart';
 import '../../Home Page/controllers/home_controller.dart';
 
@@ -30,7 +30,7 @@ showBoxList(BuildContext context) {
         Expanded(
           child: MasonryGridView.builder(
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: homeController.dogsList.value.length,
+              itemCount: boxList.value.length,
               gridDelegate:
                   const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Number of items per row
@@ -39,12 +39,12 @@ showBoxList(BuildContext context) {
               crossAxisSpacing: heightSize(12),
               itemBuilder: (context, index) {
                 return gridviewWidget(
-                    homeController.boxList.value[index].image,
-                    homeController.boxList.value[index].name,
-                    homeController.boxList.value[index].amount,
+                    boxList.value[index].image,
+                    boxList.value[index].name,
+                    boxList.value[index].amount,
                     context,
-                    homeController.boxList.value[index].isBig, () {
-                  Get.to(() => ChestPrevieeScreen());
+                    boxList.value[index].isBig, () {
+                  Get.to(() => const ChestPrevieeScreen());
                 });
               }),
         ),
@@ -91,15 +91,15 @@ upgrade2widget(double width) {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   shopIconwidget("assets/images/Shop/shopicon.png",
-                      "Duwith Coin(15%)", 20, 18, 12, Color(0xFFEDDAF9)),
+                      "Duwith Coin(15%)", 20, 18, 12, const Color(0xFFEDDAF9)),
                   shopIconwidget("assets/images/Shop/shopicon2.png",
-                      "Duwith Gold(5%)", 20, 18, 12, Color(0xFFEDDAF9))
+                      "Duwith Gold(5%)", 20, 18, 12, const Color(0xFFEDDAF9))
                 ],
               ),
               Align(
                 alignment: Alignment.center,
                 child: shopIconwidget("assets/images/points.png",
-                    "Duwith Saphire", 20, 18, 12, Color(0xFFEDDAF9)),
+                    "Duwith Saphire", 20, 18, 12, const Color(0xFFEDDAF9)),
               )
             ],
           ),
@@ -127,7 +127,7 @@ upgrade2widget(double width) {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   shopIconwidget("assets/images/Shop/shopicon.png",
-                      "Elementary(1.3%)", 20, 18, 12, Color(0xFFEDDAF9)),
+                      "Elementary(1.3%)", 20, 18, 12, const Color(0xFFEDDAF9)),
                   shopIconwidget("assets/images/Shop/shopicon2.png",
                       "Smart(5%)", 20, 18, 12, const Color(0xFFEDDAF9))
                 ],
@@ -136,9 +136,9 @@ upgrade2widget(double width) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   shopIconwidget("assets/images/points.png", "Like 2.7", 20, 18,
-                      12, Color(0xFFEDDAF9)),
+                      12, const Color(0xFFEDDAF9)),
                   shopIconwidget("assets/images/points.png", "Simple (5.5%)",
-                      20, 18, 12, Color(0xFFEDDAF9)),
+                      20, 18, 12, const Color(0xFFEDDAF9)),
                 ],
               )
             ],

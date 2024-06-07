@@ -4,6 +4,7 @@ import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
@@ -170,110 +171,117 @@ selectQuestions() {
   return Padding(
     padding: EdgeInsets.only(left: widthSize(20)),
     child: SizedBox(
-      height: heightSize(21),
+      height: heightSize(40),
+      width: widthSize(100),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () {
-                homeController.viewprofileslide.value = 0;
-              },
-              child: Container(
-                height: heightSize(21),
-                width: widthSize(29),
-                decoration: const BoxDecoration(color: Colors.transparent),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'FAQ',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: homeController.viewprofileslide.value == 0
-                            ? const Color(0xFFECECEC)
-                            : textColor3,
-                        fontSize: fontSize(12),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w600,
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  homeController.viewprofileslide.value = 0;
+                },
+                child: Container(
+                  height: heightSize(40),
+                  width: widthSize(29),
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'FAQ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: homeController.viewprofileslide.value == 0
+                              ? const Color(0xFFECECEC)
+                              : textColor3,
+                          fontSize: fontSize(12),
+                          fontFamily: UsedFonts.poppins,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Divider(
-                        height: heightSize(3),
-                        thickness: 2,
-                        color: homeController.viewprofileslide.value == 0
-                            ? textColor
-                            : backgroundColor),
-                  ],
+                      Divider(
+                          height: heightSize(3),
+                          thickness: 2,
+                          color: homeController.viewprofileslide.value == 0
+                              ? textColor
+                              : backgroundColor),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(width: widthSize(16)),
             //
-            GestureDetector(
-              onTap: () {
-                homeController.viewprofileslide.value = 1;
-              },
-              child: Container(
-                height: heightSize(21),
-                width: widthSize(79),
-                decoration: const BoxDecoration(color: Colors.transparent),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Email support',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: homeController.viewprofileslide.value == 1
-                            ? const Color(0xFFECECEC)
-                            : textColor3,
-                        fontSize: fontSize(12),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w600,
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  homeController.viewprofileslide.value = 1;
+                },
+                child: Container(
+                  height: heightSize(40),
+                  width: widthSize(79),
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Email support',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: homeController.viewprofileslide.value == 1
+                              ? const Color(0xFFECECEC)
+                              : textColor3,
+                          fontSize: fontSize(12),
+                          fontFamily: UsedFonts.poppins,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Divider(
-                        height: heightSize(3),
-                        thickness: 2,
-                        color: homeController.viewprofileslide.value == 1
-                            ? const Color(0xFFECECEC)
-                            : backgroundColor),
-                  ],
+                      Divider(
+                          height: heightSize(3),
+                          thickness: 2,
+                          color: homeController.viewprofileslide.value == 1
+                              ? const Color(0xFFECECEC)
+                              : backgroundColor),
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(width: widthSize(16)),
-            GestureDetector(
-              onTap: () {
-                homeController.viewprofileslide.value = 2;
-              },
-              child: Container(
-                height: heightSize(21),
-                width: widthSize(60),
-                decoration: const BoxDecoration(color: Colors.transparent),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Whatsapp',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: homeController.viewprofileslide.value == 2
-                            ? const Color(0xFFECECEC)
-                            : textColor3,
-                        fontSize: fontSize(12),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w600,
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  homeController.viewprofileslide.value = 2;
+                },
+                child: Container(
+                  height: heightSize(40),
+                  width: widthSize(60),
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Whatsapp',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: homeController.viewprofileslide.value == 2
+                              ? const Color(0xFFECECEC)
+                              : textColor3,
+                          fontSize: fontSize(12),
+                          fontFamily: UsedFonts.poppins,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Divider(
-                        height: heightSize(3),
-                        thickness: 2,
-                        color: homeController.viewprofileslide.value == 2
-                            ? const Color(0xFFECECEC)
-                            : backgroundColor),
-                  ],
+                      Divider(
+                          height: heightSize(3),
+                          thickness: 2,
+                          color: homeController.viewprofileslide.value == 2
+                              ? const Color(0xFFECECEC)
+                              : backgroundColor),
+                    ],
+                  ),
                 ),
               ),
             ),

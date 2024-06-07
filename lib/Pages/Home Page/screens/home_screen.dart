@@ -5,6 +5,7 @@ import 'package:duwith_social/Pages/Home%20Page/components/home_appBar.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_news.dart';
+import 'package:duwith_social/Pages/Home%20Page/components/home_videos.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/common/shimmer_loading_widget.dart';
@@ -55,12 +56,19 @@ class HomeScreen extends StatelessWidget {
                               'Banner Ad $placementId failed: $error $message'),
                         ),
                         SizedBox(height: heightSize(13)),
-                        if (homeController.viewBarOption.value == 0 ||
-                            homeController.viewBarOption.value == 1)
+                        if (homeController.viewBarOption.value == 0)
                           homeController.homeloading.value
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
                               : forYouList(
+                                  context,
+                                  constraints.maxWidth,
+                                ),
+                        if (homeController.viewBarOption.value == 1)
+                          homeController.homeloading.value
+                              ? ShimmerLoadingWidget(
+                                  width: constraints.maxWidth)
+                              : videosHome(
                                   context,
                                   constraints.maxWidth,
                                 ),

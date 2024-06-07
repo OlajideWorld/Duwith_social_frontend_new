@@ -6,6 +6,8 @@ import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/demo_data.dart';
+
 HomeController homeController = HomeController.instance;
 
 searchTrends(String image, String name, Color colorUsed) {
@@ -46,12 +48,12 @@ searchTrendsList(BuildContext context, double width) {
           mainAxisSpacing: widthSize(9), // Spacing between rows
           childAspectRatio: 1.0, // Aspect ratio of each item (width / height)
         ),
-        itemCount: homeController.postDatasPost.value.length,
+        itemCount: searchgridList.value.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
-              popularTrends(homeController.searchTrends.value[index].image,
-                  homeController.searchTrends.value[index].name)
+              popularTrends(searchgridList.value[index].image,
+                  searchgridList.value[index].name)
             ],
           );
         }),

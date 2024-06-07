@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, invalid_use_of_protected_member
 
 import "dart:async";
 
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
 import "package:duwith_social/common/getxmessage.dart";
+import "package:duwith_social/models/news_models.dart";
+import "package:duwith_social/models/post-data.dart";
 
 import "package:get/get.dart";
 import "package:socket_io_client/socket_io_client.dart" as IO;
@@ -34,11 +36,12 @@ class SocketService extends GetxService {
 
   String productionUrl = 'https://duwith-social-backend.onrender.com';
   String testUrl = "http://192.168.1.123:3000";
+  String testurl2 = "http://192.168.28.56:3000";
 
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          productionUrl,
+          testUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -132,6 +135,24 @@ class SocketService extends GetxService {
     });
   }
 
+  getUserData2(String userData) async {
+    _socket.emit('get-user-email', userData);
+
+    _socket.on('user-gotten', (data) {
+      if (data != null && data["email"] != null) {
+        authController.userdata.value = User.fromJson(data);
+        sendEmailOtp({
+          "email": authController.userdata.value.email,
+          "username": authController.userdata.value.username,
+          "otp": authController.userdata.value.otp
+        });
+        isloading.value = false;
+      } else {
+        isloading.value = false;
+      }
+    });
+  }
+
   getUserDataNumber(String userData) {
     _socket.emit('get-user-number', userData);
     //
@@ -190,13 +211,33 @@ class SocketService extends GetxService {
 
 // Posts Functions
 
-  void getPost(Map<String, dynamic> queryParams) {
-    _socket.emit('getPosts', queryParams);
+  getPost(Map<String, dynamic> queryParams) {
+    _socket.emit('get-paginated-post', queryParams);
 
-    _socket.on("postsFetched", (data) {
-      // var jsondata = jsonDecode(data);
-      homeController.postList.value =
-          data.map((dynamic item) => Post.fromJson(item)).toList();
+    _socket.on("post-fetched-paginated", (data) {
+      List<PostForYou> postList = (data as List)
+          .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
+          .toList();
+      homeController.postList.value = postList;
+    });
+  }
+
+  getVideos(Map<String, dynamic> queryParams) {
+    _socket.emit('get-video-post', queryParams);
+    //
+    _socket.on("post-video-paginated", (data) {
+      List<PostForYou> postList = (data as List)
+          .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
+          .toList();
+      homeController.postListVideo.value = postList;
+      if (homeController.postListVideo.value == [] ||
+          homeController.postListVideo.value == null) {
+        homeController.homeloading.value = true;
+        getErrorSnackBar("Not able to videos");
+      } else {
+        homeController.homeloading.value = false;
+        getErrorSnackBar("success");
+      }
     });
   }
 
@@ -263,5 +304,47 @@ class SocketService extends GetxService {
 //
     _socket.on("commentsFetched",
         (data) => {getSuccessSnackBar("Comments Fetched successfully")});
+  }
+
+  // News
+  getNewsList(Map<String, dynamic> data) async {
+    _socket.emit("get-news", data);
+    //
+    _socket.on("news-gotten", (data) {
+      List<NewsUpdate> newsList = (data as List)
+          .map((item) => NewsUpdate.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      homeController.newsUpdateList.value = newsList;
+      if (homeController.newsUpdateList.value == [] ||
+          homeController.newsUpdateList.value == null) {
+        homeController.homeloading.value = true;
+        getErrorSnackBar("Not able to news");
+      } else {
+        homeController.homeloading.value = false;
+        getErrorSnackBar("success");
+      }
+    });
+  }
+
+// Air-drop
+  getAirdropList(Map<String, dynamic> data) async {
+    _socket.emit("get-airdrop", data);
+    //
+    _socket.on("airdrop-gotten", (data) {
+      List<NewsUpdate> airdropList = (data as List)
+          .map((item) => NewsUpdate.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      homeController.airdropList.value = airdropList;
+      if (homeController.airdropList.value == [] ||
+          homeController.airdropList.value == null) {
+        homeController.homeloading.value = true;
+        getErrorSnackBar("Not able to get airdrop");
+      } else {
+        homeController.homeloading.value = false;
+        getErrorSnackBar("success");
+      }
+    });
   }
 }
