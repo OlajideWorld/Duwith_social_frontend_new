@@ -15,7 +15,6 @@ import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 import '../../../common/button-widget.dart';
 import '../../../common/custom-text.dart';
 import '../../../common/text-field.dart';
-import '../screens/verify_details.dart';
 
 class LoginWithScreen extends StatelessWidget {
   LoginWithScreen({super.key});

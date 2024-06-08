@@ -71,30 +71,28 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
       return Container(
         height: widget.image[0].type == "image"
             ? isExpanded.value
-                ? heightSize(440)
-                : heightSize(360)
+                ? heightSize(640)
+                : heightSize(540)
             : isExpanded.value
                 ? heightSize(260)
                 : heightSize(200),
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF28282C)),
         padding: EdgeInsets.symmetric(
-            horizontal: widthSize(10), vertical: heightSize(23)),
+            horizontal: widthSize(10), vertical: heightSize(5)),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // postBarTitle(
             //     widget.width, widget.name, widget.image, context, false),
             // SizedBox(height: heightSize(10)),
-            Padding(
-              padding: EdgeInsets.only(left: widthSize(30)),
-              child: PostContent(
-                  isExpanded: isExpanded,
-                  text: widget.content,
-                  size: 10,
-                  color: const Color(0xFFD7D7D7),
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w400),
-            ),
+            PostContent(
+                isExpanded: isExpanded,
+                text: widget.content,
+                size: 10,
+                color: const Color(0xFFD7D7D7),
+                fontFamily: UsedFonts.poppins,
+                fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
             widget.image[0].type == "image"
                 ? CachedNetworkImage(
@@ -102,24 +100,21 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                     placeholder: (context, url) =>
                         const CircularProgressIndicator(),
                     imageBuilder: (context, imageprovider) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: widthSize(30)),
-                        child: Container(
-                          height: heightSize(168),
-                          width: widget.width,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              image: DecorationImage(
-                                  image: imageprovider, fit: BoxFit.fill)),
-                        ),
+                      return Container(
+                        height: heightSize(400),
+                        width: widget.width,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            image: DecorationImage(
+                                image: imageprovider, fit: BoxFit.fill)),
                       );
                     },
                   )
                 : const SizedBox(),
             SizedBox(height: heightSize(12)),
             Padding(
-              padding: EdgeInsets.only(left: widthSize(40)),
+              padding: EdgeInsets.only(left: widthSize(20)),
               child: SizedBox(
                 height: heightSize(20),
                 child: Row(

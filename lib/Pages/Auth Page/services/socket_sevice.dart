@@ -11,7 +11,6 @@ import "package:duwith_social/models/post-data.dart";
 import "package:get/get.dart";
 import "package:socket_io_client/socket_io_client.dart" as IO;
 
-import "../../../models/main_post_model.dart";
 import "../../../models/user_data.dart";
 import "../screens/verify_details.dart";
 
@@ -141,14 +140,11 @@ class SocketService extends GetxService {
     _socket.on('user-gotten', (data) {
       if (data != null && data["email"] != null) {
         authController.userdata.value = User.fromJson(data);
-        sendEmailOtp({
-          "email": authController.userdata.value.email,
-          "username": authController.userdata.value.username,
-          "otp": authController.userdata.value.otp
-        });
         isloading.value = false;
+        getErrorSnackBar(
+            "Unable to get your details, check internet Connection");
       } else {
-        isloading.value = false;
+        homeController.homeloading.value = true;
       }
     });
   }
@@ -219,6 +215,13 @@ class SocketService extends GetxService {
           .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
           .toList();
       homeController.postList.value = postList;
+      if (homeController.postList.value == [] || data == null) {
+        homeController.homeloading.value = true;
+        getErrorSnackBar("Not able to posts");
+      } else {
+        homeController.homeloading.value = false;
+        getSuccessSnackBar("success");
+      }
     });
   }
 
@@ -236,7 +239,7 @@ class SocketService extends GetxService {
         getErrorSnackBar("Not able to videos");
       } else {
         homeController.homeloading.value = false;
-        getErrorSnackBar("success");
+        getSuccessSnackBar("success");
       }
     });
   }
@@ -322,7 +325,7 @@ class SocketService extends GetxService {
         getErrorSnackBar("Not able to news");
       } else {
         homeController.homeloading.value = false;
-        getErrorSnackBar("success");
+        getSuccessSnackBar("success");
       }
     });
   }
@@ -343,7 +346,7 @@ class SocketService extends GetxService {
         getErrorSnackBar("Not able to get airdrop");
       } else {
         homeController.homeloading.value = false;
-        getErrorSnackBar("success");
+        getSuccessSnackBar("success");
       }
     });
   }

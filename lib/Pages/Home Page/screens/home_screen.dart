@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, deprecated_member_use
+// ignore_for_file: must_be_immutable, deprecated_member_use, invalid_use_of_protected_member
 
 import 'package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_appBar.dart';
@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import '../../../Services/Ads Service/unity_ads_manager.dart';
+import '../../../common/custom-text.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -60,28 +61,72 @@ class HomeScreen extends StatelessWidget {
                           homeController.homeloading.value
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : forYouList(
-                                  context,
-                                  constraints.maxWidth,
-                                ),
+                              : homeController.postList.value == []
+                                  ? const Center(
+                                      child: CText(
+                                        text:
+                                            "Unable to get the Posts, check internet connection and try again",
+                                        size: 12,
+                                        color: timeColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : forYouList(
+                                      context,
+                                      constraints.maxWidth,
+                                    ),
                         if (homeController.viewBarOption.value == 1)
                           homeController.homeloading.value
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : videosHome(
-                                  context,
-                                  constraints.maxWidth,
-                                ),
+                              : homeController.postList.value == []
+                                  ? const Center(
+                                      child: CText(
+                                        text:
+                                            "Unable to get the Posts, check internet connection and try again",
+                                        size: 12,
+                                        color: timeColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : videosHome(
+                                      context,
+                                      constraints.maxWidth,
+                                    ),
                         if (homeController.viewBarOption.value == 2)
                           homeController.homeloading.value
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : newsList(context, constraints.maxWidth),
+                              : homeController.postList.value == []
+                                  ? const Center(
+                                      child: CText(
+                                        text:
+                                            "Unable to get the Posts, check internet connection and try again",
+                                        size: 12,
+                                        color: timeColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : newsList(context, constraints.maxWidth),
                         if (homeController.viewBarOption.value == 3)
                           homeController.homeloading.value
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : airdropList(context, constraints.maxWidth)
+                              : homeController.postList.value == []
+                                  ? const Center(
+                                      child: CText(
+                                        text:
+                                            "Unable to get the Posts, check internet connection and try again",
+                                        size: 12,
+                                        color: timeColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : airdropList(context, constraints.maxWidth)
                       ],
                     ),
                   );

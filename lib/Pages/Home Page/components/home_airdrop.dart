@@ -1,12 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:duwith_social/Pages/Home%20Page/screens/airdrop_details.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../common/custom-text.dart';
 import '../../../models/news_models.dart';
-import '../../../utils/color.dart';
+
 import '../../../utils/sizes.dart';
 import '../controllers/home_controller.dart';
 
@@ -65,136 +65,76 @@ class _AirdropDesignState extends State<AirdropDesign> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Container(
-        height: widget.image[0].type == "image"
-            ? isExpanded.value
-                ? heightSize(440)
-                : heightSize(350)
-            : isExpanded.value
-                ? heightSize(260)
-                : heightSize(200),
-        width: widget.width,
-        decoration: const BoxDecoration(color: Color(0xFF28282C)),
-        padding: EdgeInsets.symmetric(
-            horizontal: widthSize(10), vertical: heightSize(23)),
-        child: Column(
-          children: [
-            widget.image[0].type == "image"
-                ? CachedNetworkImage(
-                    imageUrl: widget.image[0].url,
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    imageBuilder: (context, imageprovider) {
-                      return Container(
-                        height: heightSize(168),
-                        width: widget.width,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            image: DecorationImage(
-                                image: imageprovider, fit: BoxFit.fill)),
-                      );
-                    },
-                  )
-                : const SizedBox(),
-            SizedBox(height: heightSize(13)),
-            Padding(
-              padding: EdgeInsets.only(left: widthSize(30)),
-              child: PostContent(
-                  isExpanded: isExpanded,
-                  text: widget.content,
-                  size: 10,
-                  color: const Color(0xFFD7D7D7),
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w400),
-            ),
-            SizedBox(height: heightSize(8)),
-            Padding(
-              padding: EdgeInsets.only(left: widthSize(40)),
-              child: SizedBox(
-                height: heightSize(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      height: heightSize(18),
-                      width: widthSize(190),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Likes
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.heart,
-                                  size: heightSize(16),
-                                  color: textColor,
+      return GestureDetector(
+        onTap: () => Get.to(() => AirdropDetailsScreen(
+            title: "AIrdrop update",
+            body: widget.content,
+            url:
+                "https://developers.applovin.com/en/flutter/overview/integration")),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+          child: Container(
+              alignment: Alignment.center,
+              height: widget.image[0].type == "image"
+                  ? isExpanded.value
+                      ? heightSize(180)
+                      : heightSize(150)
+                  : isExpanded.value
+                      ? heightSize(120)
+                      : heightSize(100),
+              width: widget.width,
+              decoration: const BoxDecoration(color: Color(0xFF28282C)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: widthSize(10), vertical: heightSize(10)),
+              child: widget.image[0].type == "image"
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: widthSize(177),
+                          child: PostContent(
+                              isExpanded: isExpanded,
+                              text: widget.content,
+                              size: 10,
+                              color: const Color(0xFFD7D7D7),
+                              fontFamily: UsedFonts.poppins,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        widget.image[0].type == "image"
+                            ? Expanded(
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.image[0].url,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  imageBuilder: (context, imageprovider) {
+                                    return Container(
+                                      height: heightSize(200),
+                                      // width: widthSize(170),
+                                      decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10)),
+                                          image: DecorationImage(
+                                              image: imageprovider,
+                                              fit: BoxFit.fill)),
+                                    );
+                                  },
                                 ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController
-                                        .engagementShortened(widget.likes))
-                              ],
-                            ),
-                          ),
-                          // dislikes
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.thumbsDown,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController
-                                        .engagementShortened(widget.dislike))
-                              ],
-                            ),
-                          ),
-                          // comment
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.comment,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController
-                                        .engagementShortened(widget.comment))
-                              ],
-                            ),
-                          ),
-                          // Share
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Icon(
-                              FontAwesomeIcons.share,
-                              size: heightSize(16),
-                              color: textColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: heightSize(20),
-                      width: widthSize(20),
-                      child: Image.asset("assets/images/gift.png"),
+                              )
+                            : const SizedBox(),
+                      ],
                     )
-                  ],
-                ),
-              ),
-            ),
-          ],
+                  : Column(
+                      children: [
+                        PostContent(
+                            isExpanded: isExpanded,
+                            text: widget.content,
+                            size: 10,
+                            color: const Color(0xFFD7D7D7),
+                            fontFamily: UsedFonts.poppins,
+                            fontWeight: FontWeight.w400),
+                      ],
+                    )),
         ),
       );
     });

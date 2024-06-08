@@ -61,6 +61,7 @@ dependencies:
   socket_io_client: ^1.0.1
   startapp_sdk: ^1.0.1
   unity_ads_plugin: ^0.3.16
+  url_launcher: ^6.3.0
   video_player: ^2.8.6
 
 dev_dependencies:

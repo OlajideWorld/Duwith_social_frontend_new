@@ -52,6 +52,7 @@ class HomeController extends GetxController {
     // TODO: implement onReady
     super.onReady();
     await StartAppAdsClass().loadBannerAds();
+    await AdmobAdsClass().loadBannerAd(100, 100);
     await fetchPosts();
   }
 
@@ -149,46 +150,42 @@ class HomeController extends GetxController {
   fetchPosts() async {
     homeloading.value = true;
     await socket.getUserData2(authController.userEmail.value);
-    if (authController.userdata.value.email == "") {
-      getErrorSnackBar("Unable to get your details, check internet Connection");
+
+    var data = {
+      'userId': authController.userId.value,
+      'following': authController.userdata.value.following, // Add relevant data
+      'interests': [
+        'Technology',
+        'Sports',
+        'Music',
+        'Movies',
+        "Nature",
+        "Travels",
+        "Pest & Animals",
+        "Events",
+        "Quotes",
+        "Books",
+        "Music",
+        "Tech",
+        "Gadgets",
+        "Fitness",
+        "Adventures",
+        "Food",
+        "Fashion",
+        "Lifestyles",
+        "Arts"
+      ], // Add relevant data
+      // 'interests': authController.userdata.value.interests,
+      'sortBy': 'createdAt',
+      'skip': page.value * limit.value,
+      'limit': limit.value,
+    };
+    await socket.getPost(data);
+    await Future.delayed(const Duration(seconds: 2), () {});
+    if (postList.value == []) {
+      getErrorSnackBar("No post Available now");
     } else {
-      var data = {
-        'userId': authController.userId.value,
-        'following':
-            authController.userdata.value.following, // Add relevant data
-        'interests': [
-          'Technology',
-          'Sports',
-          'Music',
-          'Movies',
-          "Nature",
-          "Travels",
-          "Pest & Animals",
-          "Events",
-          "Quotes",
-          "Books",
-          "Music",
-          "Tech",
-          "Gadgets",
-          "Fitness",
-          "Adventures",
-          "Food",
-          "Fashion",
-          "Lifestyles",
-          "Arts"
-        ], // Add relevant data
-        // 'interests': authController.userdata.value.interests,
-        'sortBy': 'createdAt',
-        'skip': page.value * limit.value,
-        'limit': limit.value,
-      };
-      await socket.getPost(data);
-      await Future.delayed(const Duration(seconds: 2), () {});
-      if (postList.value == []) {
-        getErrorSnackBar("No post Available now");
-      } else {
-        homeloading.value = false;
-      }
+      homeloading.value = false;
     }
   }
 

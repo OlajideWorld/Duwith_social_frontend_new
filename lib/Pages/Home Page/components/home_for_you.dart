@@ -1,19 +1,26 @@
 // ignore_for_file: file_names, invalid_use_of_protected_member, library_private_types_in_public_api
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
+import 'package:duwith_social/Pages/Home%20Page/screens/comments_display.dart';
 import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/common/stream_video.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 HomeController homeController = HomeController.instance;
+SocketService socket = SocketService.instance;
+AuthController authController = AuthController.instance;
 
 forYouList(BuildContext context, double width) {
   return Expanded(
@@ -25,6 +32,7 @@ forYouList(BuildContext context, double width) {
             child: Column(
               children: [
                 PostWidget(
+                    postId: homeController.postList.value[index].id,
                     width: width,
                     name: homeController.postList.value[index].user.username,
                     image:
@@ -44,6 +52,7 @@ forYouList(BuildContext context, double width) {
 }
 
 class PostWidget extends StatefulWidget {
+  final String postId;
   final double width;
   final String name;
   final String image;
@@ -56,6 +65,7 @@ class PostWidget extends StatefulWidget {
 
   const PostWidget({
     Key? key,
+    required this.postId,
     required this.width,
     required this.name,
     required this.media,
@@ -144,17 +154,6 @@ class _PostWidgetState extends State<PostWidget> {
                           }
                         },
                       )
-
-                // Container(
-                //     height: heightSize(168),
-                //     width: widget.width,
-                //     decoration: const BoxDecoration(
-                //         borderRadius: BorderRadius.all(Radius.circular(10))),
-                //     child: Image.asset(
-                //       "assets/images/post.png",
-                //       fit: BoxFit.fill,
-                //     ),
-                //   )
                 : const SizedBox(),
             SizedBox(height: heightSize(12)),
             Padding(
@@ -172,54 +171,66 @@ class _PostWidgetState extends State<PostWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Likes
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.heart,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController
-                                        .engagementShortened(widget.likes))
-                              ],
+                          GestureDetector(
+                            onTap: () => socket.likePost(widget.postId,
+                                authController.userdata.value.id),
+                            child: SizedBox(
+                              height: heightSize(18),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.heart,
+                                    size: heightSize(16),
+                                    color: textColor,
+                                  ),
+                                  SizedBox(width: widthSize(5)),
+                                  CText(
+                                      text: homeController
+                                          .engagementShortened(widget.likes))
+                                ],
+                              ),
                             ),
                           ),
                           // dislikes
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.thumbsDown,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController
-                                        .engagementShortened(widget.dislike))
-                              ],
+                          GestureDetector(
+                            onTap: () => socket.dislikePost(widget.postId,
+                                authController.userdata.value.id),
+                            child: SizedBox(
+                              height: heightSize(18),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.thumbsDown,
+                                    size: heightSize(16),
+                                    color: textColor,
+                                  ),
+                                  SizedBox(width: widthSize(5)),
+                                  CText(
+                                      text: homeController
+                                          .engagementShortened(widget.dislike))
+                                ],
+                              ),
                             ),
                           ),
                           // comment
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.comment,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController
-                                        .engagementShortened(widget.comment))
-                              ],
+                          GestureDetector(
+                            onTap: () =>
+                                showComments(context, widget.width, 16, 9),
+                            child: SizedBox(
+                              height: heightSize(18),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.comment,
+                                    size: heightSize(16),
+                                    color: textColor,
+                                  ),
+                                  SizedBox(width: widthSize(5)),
+                                  CText(
+                                      text: homeController
+                                          .engagementShortened(widget.comment))
+                                ],
+                              ),
                             ),
                           ),
                           // Share
