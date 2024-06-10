@@ -11,6 +11,7 @@ import "package:duwith_social/models/post-data.dart";
 import "package:get/get.dart";
 import "package:socket_io_client/socket_io_client.dart" as IO;
 
+import "../../../models/airdrop_model.dart";
 import "../../../models/user_data.dart";
 import "../screens/verify_details.dart";
 
@@ -215,7 +216,7 @@ class SocketService extends GetxService {
           .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
           .toList();
       homeController.postList.value = postList;
-      if (homeController.postList.value == [] || data == null) {
+      if (homeController.postList.value.isEmpty || data == null) {
         homeController.homeloading.value = true;
         getErrorSnackBar("Not able to posts");
       } else {
@@ -233,7 +234,7 @@ class SocketService extends GetxService {
           .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
           .toList();
       homeController.postListVideo.value = postList;
-      if (homeController.postListVideo.value == [] ||
+      if (homeController.postListVideo.value.isEmpty ||
           homeController.postListVideo.value == null) {
         homeController.homeloading.value = true;
         getErrorSnackBar("Not able to videos");
@@ -263,22 +264,40 @@ class SocketService extends GetxService {
     });
   }
 
-  void likePost(String postId, String userId) {
+  likePost(String postId, String userId) async {
     _socket.emit("likePost", {'postId': postId, 'userId': userId});
 
 //
     _socket.on("postLiked", (data) {
-      getSuccessSnackBar("Post Liked");
+      // getSuccessSnackBar("Post Liked");
+      List<Interaction> likes = List<Interaction>.from(
+          data['likes'].map((like) => Interaction.fromJson(like)));
+      int index =
+          homeController.postList.value.indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.postList.value[index].likes = likes;
+        homeController.postList.refresh();
+      }
     });
   }
 
-  void dislikePost(String postId, String userId) {
+  dislikePost(String postId, String userId) {
     _socket.emit("dislikePost", {
       {'postId': postId, 'userId': userId}
     });
     //
     _socket.on("postDisliked", (data) {
-      getSuccessSnackBar("Post disliked SUccessfuly");
+      getSuccessSnackBar("Post disliked Successfuly");
+      List<Interaction> dislikes = List<Interaction>.from(
+          data['dislikes'].map((dislikes) => Interaction.fromJson(dislikes)));
+      int index =
+          homeController.postList.value.indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.postList.value[index].dislikes = dislikes;
+        homeController.postList.refresh();
+      }
     });
   }
 
@@ -335,8 +354,8 @@ class SocketService extends GetxService {
     _socket.emit("get-airdrop", data);
     //
     _socket.on("airdrop-gotten", (data) {
-      List<NewsUpdate> airdropList = (data as List)
-          .map((item) => NewsUpdate.fromJson(item as Map<String, dynamic>))
+      List<AirdropModel> airdropList = (data as List)
+          .map((item) => AirdropModel.fromJson(item as Map<String, dynamic>))
           .toList();
 
       homeController.airdropList.value = airdropList;

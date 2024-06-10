@@ -9,6 +9,7 @@ import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_s
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/common/stream_video.dart';
+import 'package:duwith_social/models/post-data.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,58 +24,47 @@ SocketService socket = SocketService.instance;
 AuthController authController = AuthController.instance;
 
 forYouList(BuildContext context, double width) {
-  return Expanded(
-    child: ListView.builder(
-        itemCount: homeController.postList.value.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: heightSize(10)),
-            child: Column(
-              children: [
-                PostWidget(
-                    postId: homeController.postList.value[index].id,
-                    width: width,
-                    name: homeController.postList.value[index].user.username,
-                    image:
-                        homeController.postList.value[index].user.profileImage,
-                    content: homeController.postList.value[index].caption,
-                    likes: homeController.postList.value[index].likes,
-                    dislike: homeController.postList.value[index].dislikes,
-                    comment: homeController.postList.value[index].commentsCount,
-                    media: homeController.postList.value[index].media.first.url,
-                    postType:
-                        homeController.postList.value[index].media.first.type),
-              ],
+  return homeController.postList.value.isEmpty ||
+          homeController.postList.value == null
+      ? const Align(
+          alignment: Alignment.center,
+          child: Center(
+            child: CText(
+              text:
+                  "Not able to fetch data, Check internet connection and try again",
+              size: 18,
+              color: textColor,
+              fontFamily: UsedFonts.poppins,
+              fontWeight: FontWeight.w500,
             ),
-          );
-        }),
-  );
+          ),
+        )
+      : Expanded(
+          child: ListView.builder(
+              itemCount: homeController.postList.value.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: heightSize(10)),
+                  child: Column(
+                    children: [
+                      PostWidget(
+                        postsData: homeController.postList.value[index],
+                        width: width,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        );
 }
 
 class PostWidget extends StatefulWidget {
-  final String postId;
+  final PostForYou postsData;
   final double width;
-  final String name;
-  final String image;
-  final String media;
-  final String content;
-  final int likes;
-  final int dislike;
-  final int comment;
-  final String postType;
-
   const PostWidget({
     Key? key,
-    required this.postId,
+    required this.postsData,
     required this.width,
-    required this.name,
-    required this.media,
-    required this.image,
-    required this.content,
-    required this.likes,
-    required this.dislike,
-    required this.comment,
-    required this.postType,
   }) : super(key: key);
 
   @override
@@ -86,9 +76,16 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    bool userLiked = widget.postsData.likes.any(
+        (interaction) => interaction.user == authController.userdata.value.id);
+    bool userDisliked = widget.postsData.dislikes.any(
+        (interaction) => interaction.user == authController.userdata.value.id);
+    bool commented = widget.postsData.comments.any((commentsModel) =>
+        commentsModel.id == authController.userdata.value.id);
     return Obx(() {
       return Container(
-        height: widget.postType == "image" || widget.postType == "video"
+        height: widget.postsData.media.single.type == "image" ||
+                widget.postsData.media.single.type == "video"
             ? isExpanded.value
                 ? heightSize(640)
                 : heightSize(540)
@@ -102,21 +99,22 @@ class _PostWidgetState extends State<PostWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            postBarTitle(
-                widget.width, widget.name, widget.image, context, true),
+            postBarTitle(widget.width, widget.postsData.user.username,
+                widget.postsData.user.profileImage, context, true),
             SizedBox(height: heightSize(8)),
             PostContent(
                 isExpanded: isExpanded,
-                text: widget.content,
+                text: widget.postsData.caption,
                 size: 10,
                 color: const Color(0xFFD7D7D7),
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
-            widget.postType == "image" || widget.postType == "video"
-                ? widget.postType == "image"
+            widget.postsData.media.single.type == "image" ||
+                    widget.postsData.media.single.type == "video"
+                ? widget.postsData.media.single.type == "image"
                     ? CachedNetworkImage(
-                        imageUrl: widget.media,
+                        imageUrl: widget.postsData.media.single.url,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
                         imageBuilder: (context, imageprovider) {
@@ -125,14 +123,15 @@ class _PostWidgetState extends State<PostWidget> {
                             width: widget.width,
                             decoration: BoxDecoration(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                                    const BorderRadius.all(Radius.circular(10)),
                                 image: DecorationImage(
                                     image: imageprovider, fit: BoxFit.fill)),
                           );
                         },
                       )
                     : FutureBuilder<VideoPlayerController>(
-                        future: _initializeVideoPlayer(widget.media),
+                        future: _initializeVideoPlayer(
+                            widget.postsData.media.single.url),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
@@ -140,7 +139,7 @@ class _PostWidgetState extends State<PostWidget> {
                             return GestureDetector(
                               onTap: () {
                                 Get.to(() => VideoStreamPage(
-                                      url: widget.media,
+                                      url: widget.postsData.media.single.url,
                                     ));
                               },
                               child: AspectRatio(
@@ -172,42 +171,52 @@ class _PostWidgetState extends State<PostWidget> {
                         children: [
                           // Likes
                           GestureDetector(
-                            onTap: () => socket.likePost(widget.postId,
-                                authController.userdata.value.id),
+                            onTap: () async {
+                              await socket.likePost(widget.postsData.id,
+                                  authController.userdata.value.id);
+                            },
                             child: SizedBox(
                               height: heightSize(18),
                               child: Row(
                                 children: [
                                   Icon(
-                                    FontAwesomeIcons.heart,
-                                    size: heightSize(16),
-                                    color: textColor,
+                                    userLiked == true
+                                        ? CupertinoIcons.heart_fill
+                                        : FontAwesomeIcons.heart,
+                                    size: heightSize(20),
+                                    color: userLiked ? mainColor : textColor,
                                   ),
                                   SizedBox(width: widthSize(5)),
                                   CText(
-                                      text: homeController
-                                          .engagementShortened(widget.likes))
+                                      text: homeController.engagementShortened(
+                                          widget.postsData.likes.length))
                                 ],
                               ),
                             ),
                           ),
                           // dislikes
                           GestureDetector(
-                            onTap: () => socket.dislikePost(widget.postId,
-                                authController.userdata.value.id),
+                            onTap: () async {
+                              await socket.dislikePost(widget.postsData.id,
+                                  authController.userdata.value.id);
+                            },
                             child: SizedBox(
                               height: heightSize(18),
                               child: Row(
                                 children: [
                                   Icon(
-                                    FontAwesomeIcons.thumbsDown,
-                                    size: heightSize(16),
-                                    color: textColor,
+                                    userDisliked == true
+                                        ? Icons.thumb_down_rounded
+                                        : FontAwesomeIcons.thumbsDown,
+                                    size: heightSize(20),
+                                    color: userDisliked == true
+                                        ? Colors.red
+                                        : textColor,
                                   ),
                                   SizedBox(width: widthSize(5)),
                                   CText(
-                                      text: homeController
-                                          .engagementShortened(widget.dislike))
+                                      text: homeController.engagementShortened(
+                                          widget.postsData.dislikes.length))
                                 ],
                               ),
                             ),
@@ -221,14 +230,18 @@ class _PostWidgetState extends State<PostWidget> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    FontAwesomeIcons.comment,
-                                    size: heightSize(16),
-                                    color: textColor,
+                                    commented == true
+                                        ? Icons.comment_rounded
+                                        : FontAwesomeIcons.comment,
+                                    size: heightSize(20),
+                                    color: commented == true
+                                        ? mainColor
+                                        : textColor,
                                   ),
                                   SizedBox(width: widthSize(5)),
                                   CText(
-                                      text: homeController
-                                          .engagementShortened(widget.comment))
+                                      text: homeController.engagementShortened(
+                                          widget.postsData.comments.length))
                                 ],
                               ),
                             ),

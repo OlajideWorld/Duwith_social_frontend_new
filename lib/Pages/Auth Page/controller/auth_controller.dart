@@ -1,14 +1,16 @@
 import 'dart:math';
 
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Splash%20Screen/screens/onboard_main.dart';
 import 'package:duwith_social/models/user_data.dart';
-import 'package:duwith_social/utils/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../routes/routes.dart';
 import '../../../utils/get_user_key.dart';
+
+SocketService socket = SocketService.instance;
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -80,6 +82,7 @@ class AuthController extends GetxController {
       // Get.to(() => SignUpScreen());
       userEmail.value = box.read(userdataEmail);
       userId.value = box.read(userdataid);
+      await socket.getUserData2(authController.userEmail.value);
       Get.toNamed(MyRoutes.homeScreen);
     }
   }

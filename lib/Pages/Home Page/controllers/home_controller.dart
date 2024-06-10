@@ -2,13 +2,10 @@
 
 import 'package:cloudinary/cloudinary.dart';
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
-import 'package:duwith_social/Pages/Post%20page/components/post_content_widget.dart';
 import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
 import 'package:duwith_social/common/getxmessage.dart';
-import 'package:duwith_social/models/games_model.dart';
-import 'package:duwith_social/models/main_post_model.dart';
+import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:duwith_social/models/news_models.dart';
-import 'package:duwith_social/models/transaction_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -23,7 +20,7 @@ import '../../../Services/Ads Service/unity_ads_manager.dart';
 import '../../../models/post-data.dart';
 import '../../Auth Page/services/socket_sevice.dart';
 
-SocketService socketService = SocketService.instance;
+SocketService socket = SocketService.instance;
 AuthController authController = AuthController.instance;
 
 class HomeController extends GetxController {
@@ -105,9 +102,6 @@ class HomeController extends GetxController {
   TextEditingController bankName = TextEditingController();
   TextEditingController accountnumber = TextEditingController();
 
-  // Comments
-  RxList<Comment> comments = <Comment>[].obs;
-
   // Posts objects
   RxList<String> postcategories = <String>[].obs;
   TextEditingController postCaption = TextEditingController();
@@ -122,7 +116,7 @@ class HomeController extends GetxController {
   RxList<PostForYou> postList = <PostForYou>[].obs;
   RxList<PostForYou> postListVideo = <PostForYou>[].obs;
   RxList<NewsUpdate> newsUpdateList = <NewsUpdate>[].obs;
-  RxList<NewsUpdate> airdropList = <NewsUpdate>[].obs;
+  RxList<AirdropModel> airdropList = <AirdropModel>[].obs;
 
   final List<String> allInterests = [
     'Technology',
@@ -149,8 +143,6 @@ class HomeController extends GetxController {
 
   fetchPosts() async {
     homeloading.value = true;
-    await socket.getUserData2(authController.userEmail.value);
-
     var data = {
       'userId': authController.userId.value,
       'following': authController.userdata.value.following, // Add relevant data
@@ -182,16 +174,11 @@ class HomeController extends GetxController {
     };
     await socket.getPost(data);
     await Future.delayed(const Duration(seconds: 2), () {});
-    if (postList.value == []) {
-      getErrorSnackBar("No post Available now");
-    } else {
-      homeloading.value = false;
-    }
+    homeloading.value = false;
   }
 
   fetchvideos() async {
     homeloading.value = true;
-    await socket.getUserData2(authController.userEmail.value);
     await Future.delayed(const Duration(seconds: 2), () {});
     if (authController.userdata.value.email == "") {
       getErrorSnackBar("Unable to get your details, check internet Connection");
@@ -228,11 +215,7 @@ class HomeController extends GetxController {
       };
       await socket.getVideos(data);
       await Future.delayed(const Duration(seconds: 2), () {});
-      if (postList.value == []) {
-        getErrorSnackBar("No post Available now");
-      } else {
-        homeloading.value = false;
-      }
+      homeloading.value = false;
     }
   }
 

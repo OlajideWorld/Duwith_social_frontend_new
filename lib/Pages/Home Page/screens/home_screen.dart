@@ -58,10 +58,10 @@ class HomeScreen extends StatelessWidget {
                         ),
                         SizedBox(height: heightSize(13)),
                         if (homeController.viewBarOption.value == 0)
-                          homeController.homeloading.value
+                          homeController.homeloading.value == true
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : homeController.postList.value == []
+                              : homeController.postList.value.isEmpty
                                   ? const Center(
                                       child: CText(
                                         text:
@@ -77,10 +77,10 @@ class HomeScreen extends StatelessWidget {
                                       constraints.maxWidth,
                                     ),
                         if (homeController.viewBarOption.value == 1)
-                          homeController.homeloading.value
+                          homeController.homeloading.value == true
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : homeController.postList.value == []
+                              : homeController.postListVideo.value.isEmpty
                                   ? const Center(
                                       child: CText(
                                         text:
@@ -96,10 +96,10 @@ class HomeScreen extends StatelessWidget {
                                       constraints.maxWidth,
                                     ),
                         if (homeController.viewBarOption.value == 2)
-                          homeController.homeloading.value
+                          homeController.homeloading.value == true
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : homeController.postList.value == []
+                              : homeController.newsUpdateList.value.isEmpty
                                   ? const Center(
                                       child: CText(
                                         text:
@@ -112,10 +112,10 @@ class HomeScreen extends StatelessWidget {
                                     )
                                   : newsList(context, constraints.maxWidth),
                         if (homeController.viewBarOption.value == 3)
-                          homeController.homeloading.value
+                          homeController.homeloading.value == true
                               ? ShimmerLoadingWidget(
                                   width: constraints.maxWidth)
-                              : homeController.postList.value == []
+                              : homeController.airdropList.value.isEmpty
                                   ? const Center(
                                       child: CText(
                                         text:

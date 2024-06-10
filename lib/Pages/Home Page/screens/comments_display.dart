@@ -1,8 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import "package:duwith_social/Pages/Home%20Page/components/comments_replies_display.dart";
-import "package:duwith_social/utils/demo_data.dart";
-import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:google_mobile_ads/google_mobile_ads.dart";
 
@@ -56,7 +54,6 @@ showComments(
                   fontWeight: FontWeight.w500,
                 ),
                 commentsListView(width, commentsLength, repliesLength),
-                const Expanded(child: SizedBox()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
                   child: Row(

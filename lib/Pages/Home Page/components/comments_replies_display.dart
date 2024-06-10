@@ -17,7 +17,7 @@ commentsListView(double width, int commentsLength, int repliesLength) {
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
       child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: comments.value.length,
           itemBuilder: (context, index) {
             return Obx(() {

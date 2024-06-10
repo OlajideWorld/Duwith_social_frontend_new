@@ -5,6 +5,7 @@ import 'package:duwith_social/models/post-data.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pinput/pinput.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 
@@ -26,21 +27,10 @@ videosHome(BuildContext context, double width) {
             padding: EdgeInsets.only(bottom: heightSize(10)),
             child: Column(
               children: [
-                homeController.postListVideo.value != []
+                homeController.postListVideo.value.isNotEmpty
                     ? VideosPostWidget(
                         width: width,
-                        name: homeController
-                            .postListVideo.value[index].user.username,
-                        image: homeController
-                            .postListVideo.value[index].user.profileImage,
-                        content:
-                            homeController.postListVideo.value[index].caption,
-                        likes: homeController.postListVideo.value[index].likes,
-                        dislike:
-                            homeController.postListVideo.value[index].dislikes,
-                        comment: homeController
-                            .postListVideo.value[index].commentsCount,
-                        media: homeController.postListVideo.value[index].media,
+                        postVideos: homeController.postListVideo.value[index],
                       )
                     : const Center(
                         child: CText(
@@ -60,24 +50,12 @@ videosHome(BuildContext context, double width) {
 
 class VideosPostWidget extends StatefulWidget {
   final double width;
-  final String name;
-  final String image;
-  final List<Media> media;
-  final String content;
-  final int likes;
-  final int dislike;
-  final int comment;
+  final PostForYou postVideos;
 
   const VideosPostWidget({
     Key? key,
     required this.width,
-    required this.name,
-    required this.media,
-    required this.image,
-    required this.content,
-    required this.likes,
-    required this.dislike,
-    required this.comment,
+    required this.postVideos,
   }) : super(key: key);
 
   @override
@@ -99,26 +77,27 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            postBarTitle(
-                widget.width, widget.name, widget.image, context, true),
+            postBarTitle(widget.width, widget.postVideos.user.username,
+                widget.postVideos.media.single.type, context, true),
             SizedBox(height: heightSize(8)),
             PostContent(
                 isExpanded: isExpanded,
-                text: widget.content,
+                text: widget.postVideos.caption,
                 size: 10,
                 color: const Color(0xFFD7D7D7),
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
             FutureBuilder<VideoPlayerController>(
-              future: _initializeVideoPlayer(widget.media.single.url),
+              future:
+                  _initializeVideoPlayer(widget.postVideos.media.single.url),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final controller = snapshot.data!;
                   return GestureDetector(
                     onTap: () {
                       Get.to(() => VideoStreamPage(
-                            url: widget.media.single.url,
+                            url: widget.postVideos.media.single.url,
                           ));
                     },
                     child: AspectRatio(
@@ -131,17 +110,6 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                 }
               },
             ),
-
-            // Container(
-            //     height: heightSize(168),
-            //     width: widget.width,
-            //     decoration: const BoxDecoration(
-            //         borderRadius: BorderRadius.all(Radius.circular(10))),
-            //     child: Image.asset(
-            //       "assets/images/post.png",
-            //       fit: BoxFit.fill,
-            //     ),
-            //   )
 
             SizedBox(height: heightSize(12)),
             Padding(
@@ -170,8 +138,8 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                                 ),
                                 SizedBox(width: widthSize(5)),
                                 CText(
-                                    text: homeController
-                                        .engagementShortened(widget.likes))
+                                    text: homeController.engagementShortened(
+                                        widget.postVideos.likes.length))
                               ],
                             ),
                           ),
@@ -187,8 +155,8 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                                 ),
                                 SizedBox(width: widthSize(5)),
                                 CText(
-                                    text: homeController
-                                        .engagementShortened(widget.dislike))
+                                    text: homeController.engagementShortened(
+                                        widget.postVideos.dislikes.length))
                               ],
                             ),
                           ),
@@ -204,8 +172,8 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                                 ),
                                 SizedBox(width: widthSize(5)),
                                 CText(
-                                    text: homeController
-                                        .engagementShortened(widget.comment))
+                                    text: homeController.engagementShortened(
+                                        widget.postVideos.comments.length))
                               ],
                             ),
                           ),
@@ -335,3 +303,15 @@ postBarTitle(double width, String name, String image, BuildContext context,
     ),
   );
 }
+
+
+  // final String postId;
+  // final double width;
+  // final String name;
+  // final String image;
+  // final String media;
+  // final String content;
+  // final int likes;
+  // final int dislike;
+  // final int comment;
+  // final String postType;

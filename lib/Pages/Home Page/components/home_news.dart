@@ -24,14 +24,7 @@ newsList(BuildContext context, double width) {
               children: [
                 NewsPostDesign(
                   width: width,
-                  content: homeController.newsUpdateList.value[index].caption,
-                  image: homeController.newsUpdateList.value[index].media,
-                  likes:
-                      homeController.newsUpdateList.value[index].likes.length,
-                  dislike: homeController
-                      .newsUpdateList.value[index].dislikes.length,
-                  comment: homeController
-                      .newsUpdateList.value[index].comments.length,
+                  newsPost: homeController.newsUpdateList.value[index],
                 ),
               ],
             ),
@@ -42,20 +35,12 @@ newsList(BuildContext context, double width) {
 
 class NewsPostDesign extends StatefulWidget {
   final double width;
-  final List<Media> image;
-  final String content;
-  final int likes;
-  final int dislike;
-  final int comment;
+  final NewsUpdate newsPost;
 
   const NewsPostDesign({
     super.key,
     required this.width,
-    required this.image,
-    required this.content,
-    required this.likes,
-    required this.dislike,
-    required this.comment,
+    required this.newsPost,
   });
 
   @override
@@ -69,7 +54,7 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Container(
-        height: widget.image[0].type == "image"
+        height: widget.newsPost.media.single.type == "image"
             ? isExpanded.value
                 ? heightSize(640)
                 : heightSize(540)
@@ -88,15 +73,15 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
             // SizedBox(height: heightSize(10)),
             PostContent(
                 isExpanded: isExpanded,
-                text: widget.content,
+                text: widget.newsPost.caption,
                 size: 10,
                 color: const Color(0xFFD7D7D7),
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
-            widget.image[0].type == "image"
+            widget.newsPost.media.single.type == "image"
                 ? CachedNetworkImage(
-                    imageUrl: widget.image[0].url,
+                    imageUrl: widget.newsPost.media.single.url,
                     placeholder: (context, url) =>
                         const CircularProgressIndicator(),
                     imageBuilder: (context, imageprovider) {
@@ -138,8 +123,8 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                                 ),
                                 SizedBox(width: widthSize(5)),
                                 CText(
-                                    text: homeController
-                                        .engagementShortened(widget.likes))
+                                    text: homeController.engagementShortened(
+                                        widget.newsPost.likes.length))
                               ],
                             ),
                           ),
@@ -155,8 +140,8 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                                 ),
                                 SizedBox(width: widthSize(5)),
                                 CText(
-                                    text: homeController
-                                        .engagementShortened(widget.dislike))
+                                    text: homeController.engagementShortened(
+                                        widget.newsPost.dislikes.length))
                               ],
                             ),
                           ),
@@ -172,8 +157,8 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                                 ),
                                 SizedBox(width: widthSize(5)),
                                 CText(
-                                    text: homeController
-                                        .engagementShortened(widget.comment))
+                                    text: homeController.engagementShortened(
+                                        widget.newsPost.comments.length))
                               ],
                             ),
                           ),

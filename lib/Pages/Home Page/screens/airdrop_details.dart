@@ -1,4 +1,6 @@
+import "package:cached_network_image/cached_network_image.dart";
 import "package:duwith_social/common/button-widget.dart";
+import "package:duwith_social/models/airdrop_model.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -7,11 +9,11 @@ import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";
 
 class AirdropDetailsScreen extends StatelessWidget {
-  final String title;
-  final String body;
-  final String url;
-  const AirdropDetailsScreen(
-      {super.key, required this.title, required this.body, required this.url});
+  final AirdropModel airdropDetails;
+  const AirdropDetailsScreen({
+    super.key,
+    required this.airdropDetails,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class AirdropDetailsScreen extends StatelessWidget {
                                 Radius.circular(widthSize(20))),
                           ),
                           child: CText(
-                            text: title,
+                            text: airdropDetails.title,
                             size: 14.22,
                             color: const Color(0xFFECECEC),
                             fontFamily: UsedFonts.poppins,
@@ -59,7 +61,7 @@ class AirdropDetailsScreen extends StatelessWidget {
                                 Radius.circular(widthSize(20))),
                           ),
                           child: CText(
-                            text: body,
+                            text: airdropDetails.caption,
                             size: 14.22,
                             color: const Color(0xFFECECEC),
                             fontFamily: UsedFonts.poppins,
@@ -77,11 +79,25 @@ class AirdropDetailsScreen extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         ListTile(
-                                          leading: CircleAvatar(
-                                            backgroundColor: mainColor,
-                                            radius: widthSize(20),
-                                            backgroundImage: const AssetImage(
-                                                "assets/images/social.png"),
+                                          leading: CachedNetworkImage(
+                                            imageUrl:
+                                                airdropDetails.airdropLogo,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            imageBuilder:
+                                                (context, imageprovider) {
+                                              return Container(
+                                                height: heightSize(20),
+                                                width: widthSize(20),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(8)),
+                                                    image: DecorationImage(
+                                                        image: imageprovider,
+                                                        fit: BoxFit.fill)),
+                                              );
+                                            },
                                           ),
                                           title: const CText(
                                             text:
@@ -102,7 +118,7 @@ class AirdropDetailsScreen extends StatelessWidget {
                         SizedBox(height: heightSize(50)),
                         buttonsWidget(context, heightSize(40), widthSize(100),
                             "Claim", mainColor, 18, () {
-                          final website = Uri.parse(url);
+                          final website = Uri.parse(airdropDetails.airdropLink);
                           // External App
                           launchUrl(website,
                               mode: LaunchMode.externalApplication);

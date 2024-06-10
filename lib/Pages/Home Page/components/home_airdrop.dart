@@ -2,11 +2,13 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/screens/airdrop_details.dart';
+import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../common/custom-text.dart';
 import '../../../models/news_models.dart';
 
+import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
 import '../controllers/home_controller.dart';
 
@@ -23,13 +25,7 @@ airdropList(BuildContext context, double width) {
               children: [
                 AirdropDesign(
                   width: width,
-                  image: homeController.airdropList.value[index].media,
-                  content: homeController.airdropList.value[index].caption,
-                  likes: homeController.airdropList.value[index].likes.length,
-                  dislike:
-                      homeController.airdropList.value[index].dislikes.length,
-                  comment:
-                      homeController.airdropList.value[index].comments.length,
+                  airdropDetails: homeController.airdropList.value[index],
                 ),
               ],
             ),
@@ -40,19 +36,12 @@ airdropList(BuildContext context, double width) {
 
 class AirdropDesign extends StatefulWidget {
   final double width;
-  final List<Media> image;
-  final String content;
-  final int likes;
-  final int dislike;
-  final int comment;
+  final AirdropModel airdropDetails;
+
   const AirdropDesign({
     super.key,
     required this.width,
-    required this.image,
-    required this.content,
-    required this.likes,
-    required this.dislike,
-    required this.comment,
+    required this.airdropDetails,
   });
 
   @override
@@ -67,15 +56,13 @@ class _AirdropDesignState extends State<AirdropDesign> {
     return Obx(() {
       return GestureDetector(
         onTap: () => Get.to(() => AirdropDetailsScreen(
-            title: "AIrdrop update",
-            body: widget.content,
-            url:
-                "https://developers.applovin.com/en/flutter/overview/integration")),
+              airdropDetails: widget.airdropDetails,
+            )),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
           child: Container(
               alignment: Alignment.center,
-              height: widget.image[0].type == "image"
+              height: widget.airdropDetails.media.single.type == "image"
                   ? isExpanded.value
                       ? heightSize(180)
                       : heightSize(150)
@@ -86,25 +73,69 @@ class _AirdropDesignState extends State<AirdropDesign> {
               decoration: const BoxDecoration(color: Color(0xFF28282C)),
               padding: EdgeInsets.symmetric(
                   horizontal: widthSize(10), vertical: heightSize(10)),
-              child: widget.image[0].type == "image"
+              child: widget.airdropDetails.media.single.type == "image"
                   ? Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: widthSize(177),
-                          child: PostContent(
-                              isExpanded: isExpanded,
-                              text: widget.content,
-                              size: 10,
-                              color: const Color(0xFFD7D7D7),
-                              fontFamily: UsedFonts.poppins,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        widget.image[0].type == "image"
+                            width: widthSize(177),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: widget
+                                          .airdropDetails.media.single.url,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      imageBuilder: (context, imageprovider) {
+                                        return Container(
+                                          height: heightSize(20),
+                                          width: widthSize(20),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10)),
+                                              image: DecorationImage(
+                                                  image: imageprovider,
+                                                  fit: BoxFit.fill)),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(width: widthSize(10)),
+                                    CText(
+                                      text: truncate(
+                                          widget.airdropDetails.title,
+                                          length: 7),
+                                      size: 15,
+                                      color: textColor,
+                                      height: 0.8,
+                                      fontFamily: UsedFonts.stalinistOne,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: heightSize(10)),
+                                SizedBox(
+                                  width: widthSize(150),
+                                  child: CText(
+                                    text:
+                                        "${truncate(widget.airdropDetails.title, length: 30)}......",
+                                    size: 15,
+                                    color: textColor,
+                                    fontFamily: UsedFonts.poppins,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            )),
+                        widget.airdropDetails.media.single.type == "image"
                             ? Expanded(
                                 child: CachedNetworkImage(
-                                  imageUrl: widget.image[0].url,
+                                  imageUrl:
+                                      widget.airdropDetails.media.single.url,
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
                                   imageBuilder: (context, imageprovider) {
@@ -128,7 +159,7 @@ class _AirdropDesignState extends State<AirdropDesign> {
                       children: [
                         PostContent(
                             isExpanded: isExpanded,
-                            text: widget.content,
+                            text: widget.airdropDetails.title,
                             size: 10,
                             color: const Color(0xFFD7D7D7),
                             fontFamily: UsedFonts.poppins,
