@@ -1,92 +1,201 @@
-// ignore_for_file: invalid_use_of_protected_member
-
-import "package:duwith_social/Pages/Home%20Page/components/comments_replies_display.dart";
+// ignore_for_file: invalid_use_of_protected_member, must_be_immutabl, must_be_immutable
+import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
+import "package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart";
+import "package:duwith_social/common/comments_loading.dart";
+import "package:duwith_social/common/getxmessage.dart";
 import "package:flutter/material.dart";
+import "package:get/get.dart";
 import "package:google_mobile_ads/google_mobile_ads.dart";
 
 import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";
 import "../../../utils/sizes.dart";
+import "../components/comments_replies_display.dart";
 import "../controllers/home_controller.dart";
 
-HomeController homeController = HomeController.instance;
-
-showComments(
-    BuildContext context, double width, int commentsLength, int repliesLength) {
+showComments({required BuildContext context, required String postId}) {
   return showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      isDismissible: true,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          height: heightSize(700),
-          padding: EdgeInsets.only(
-              top: heightSize(15), left: widthSize(20), right: widthSize(20)),
-          decoration: BoxDecoration(
-            color: const Color(0xFF151B2E),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(widthSize(15)),
-                topRight: Radius.circular(widthSize(15))),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: heightSize(3),
-                  width: widthSize(127),
+        return CommentsDisplayBottomSheet(
+          postId: postId,
+        );
+      });
+}
+
+class CommentsDisplayBottomSheet extends StatelessWidget {
+  final String postId;
+  CommentsDisplayBottomSheet({
+    super.key,
+    required this.postId,
+  });
+
+  HomeController homeController = HomeController.instance;
+  AuthController authController = AuthController.instance;
+  SocketService socketService = SocketService.instance;
+  @override
+  Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.of(context).size.width;
+    return Container(
+      height: heightSize(700),
+      padding: EdgeInsets.only(
+          top: heightSize(15),
+          left: widthSize(20),
+          right: widthSize(20),
+          bottom: heightSize(20)),
+      decoration: BoxDecoration(
+        color: const Color(0xFF151B2E),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(widthSize(15)),
+            topRight: Radius.circular(widthSize(15))),
+      ),
+      child: Obx(() {
+        return SizedBox(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: heightSize(3),
+                width: widthSize(127),
+                decoration: BoxDecoration(
+                    color: textColor,
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(widthSize(5)))),
+              ),
+              SizedBox(height: heightSize(21)),
+              SizedBox(
+                  height: heightSize(100),
+                  width: maxWidth,
+                  child: AdWidget(ad: homeController.bannerAd!)),
+              CText(
+                text: "${homeController.commentsList.length} Comments",
+                size: 18,
+                color: const Color(0xFFBEBEBE),
+                fontFamily: UsedFonts.poppins,
+                fontWeight: FontWeight.w500,
+              ),
+
+              homeController.loadingComment.value == true
+                  ? const CommentShimmerLoading()
+                  : homeController.commentsList.isEmpty
+                      ? const SizedBox()
+                      : Expanded(
+                          child: ListView.builder(
+                              itemCount: homeController.commentsList.length,
+                              itemBuilder: (context, index) {
+                                return commentsListView(
+                                    context,
+                                    maxWidth,
+                                    homeController.commentsList.value,
+                                    homeController.commentsList.value[index]);
+                              }),
+                        ),
+
+              // This is the design to send message
+
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: heightSize(60),
+                  width: maxWidth,
                   decoration: BoxDecoration(
-                      color: textColor,
+                      color: const Color(0xFF151B2E),
+                      border: Border.all(color: buttonColor2),
                       borderRadius:
-                          BorderRadius.all(Radius.circular(widthSize(5)))),
-                ),
-                SizedBox(height: heightSize(21)),
-                SizedBox(
-                    height: heightSize(100),
-                    width: width,
-                    child: AdWidget(ad: homeController.bannerAd!)),
-                CText(
-                  text: "$commentsLength Comments",
-                  size: 14,
-                  color: const Color(0xFFBEBEBE),
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w500,
-                ),
-                commentsListView(width, commentsLength, repliesLength),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
+                          BorderRadius.all(Radius.circular(widthSize(20)))),
+                  padding: EdgeInsets.symmetric(
+                      vertical: heightSize(5), horizontal: widthSize(8)),
                   child: Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: TextField(
-                          // controller: _controller,
+                          style: TextStyle(
+                              fontFamily: UsedFonts.poppins,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFFB4B4B4),
+                              fontSize: fontSize(14)),
+                          maxLines: 5,
+                          controller: homeController.commentsText,
+                          textInputAction: TextInputAction.done,
                           decoration: InputDecoration(
-                            labelText: 'Type a comment',
+                            hintText: "Add Comments",
+                            hintStyle:
+                                const TextStyle(color: Color(0xFF918F99)),
+                            filled: true,
+                            fillColor: Color(0xFF151B2E),
+                            border: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Color(0xFF1F2138)),
+                                borderRadius: BorderRadius.circular(16)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: Color(0xFF1F2138)),
+                                borderRadius: BorderRadius.circular(16)),
+                            contentPadding: EdgeInsets.only(
+                                left: widthSize(15),
+                                top: heightSize(4),
+                                right: widthSize(4),
+                                bottom: heightSize(5)),
                           ),
                         ),
                       ),
-                      Container(
-                        height: heightSize(40),
-                        width: widthSize(40),
-                        alignment: Alignment.center,
-                        decoration: const ShapeDecoration(
-                            shape: OvalBorder(), color: mainColor),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.send,
-                            size: heightSize(12),
-                            color: textColor,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
+                      SizedBox(width: widthSize(10)),
+                      GestureDetector(
+                          onTap: () async {
+                            if (homeController.commentsText.text.trim() == "") {
+                              getErrorSnackBar(
+                                  "you have to input a message to comment");
+                            } else {
+                              homeController.isCommenting.value = true;
+                              final data = {
+                                "post": postId,
+                                "user": authController.userdata.value.id,
+                                "content":
+                                    homeController.commentsText.text.trim(),
+                                "parentComment": homeController.isReply.value
+                                    ? homeController.parentCommentId.value
+                                    : null,
+                              };
+                              await socketService.addComment(data);
+                              await socketService.getCommentByPostId(postId);
+                              homeController.commentsText.text = "";
+                            }
+                          },
+                          child: homeController.isCommenting.value == true
+                              ? Container(
+                                  height: heightSize(50),
+                                  width: widthSize(50),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: widthSize(10),
+                                      vertical: heightSize(10)),
+                                  alignment: Alignment.center,
+                                  decoration: const ShapeDecoration(
+                                      shape: OvalBorder(), color: mainColor),
+                                  child: const CircularProgressIndicator(
+                                    color: textColor,
+                                  ))
+                              : Container(
+                                  height: heightSize(50),
+                                  width: widthSize(50),
+                                  alignment: Alignment.center,
+                                  decoration: const ShapeDecoration(
+                                      shape: OvalBorder(), color: mainColor),
+                                  child: Icon(
+                                    Icons.send,
+                                    size: heightSize(30),
+                                    color: textColor,
+                                  ),
+                                )),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
-      });
+      }),
+    );
+  }
 }

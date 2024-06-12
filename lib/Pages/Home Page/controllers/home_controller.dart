@@ -17,6 +17,7 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 import '../../../Services/Ads Service/admob_manager.dart';
 import '../../../Services/Ads Service/unity_ads_manager.dart';
+import '../../../models/comments_model.dart';
 import '../../../models/post-data.dart';
 import '../../Auth Page/services/socket_sevice.dart';
 
@@ -118,6 +119,14 @@ class HomeController extends GetxController {
   RxList<NewsUpdate> newsUpdateList = <NewsUpdate>[].obs;
   RxList<AirdropModel> airdropList = <AirdropModel>[].obs;
 
+  // Comments
+  RxBool isCommenting = false.obs;
+  RxBool loadingComment = false.obs;
+  RxList<CommentModel> commentsList = <CommentModel>[].obs;
+  TextEditingController commentsText = TextEditingController();
+  RxString parentCommentId = "".obs;
+  RxBool isReply = false.obs;
+
   final List<String> allInterests = [
     'Technology',
     'Sports',
@@ -181,7 +190,7 @@ class HomeController extends GetxController {
     homeloading.value = true;
     await Future.delayed(const Duration(seconds: 2), () {});
     if (authController.userdata.value.email == "") {
-      getErrorSnackBar("Unable to get your details, check internet Connection");
+      // getErrorSnackBar("Unable to get your details, check internet Connection");
     } else {
       var data = {
         'userId': authController.userId.value,

@@ -1,4 +1,3 @@
-import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
 import "package:shimmer/shimmer.dart";

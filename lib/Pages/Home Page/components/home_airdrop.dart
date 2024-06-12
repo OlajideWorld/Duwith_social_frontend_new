@@ -6,7 +6,6 @@ import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../common/custom-text.dart';
-import '../../../models/news_models.dart';
 
 import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
@@ -76,20 +75,25 @@ class _AirdropDesignState extends State<AirdropDesign> {
               child: widget.airdropDetails.media.single.type == "image"
                   ? Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
                             width: widthSize(177),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
                                     CachedNetworkImage(
                                       imageUrl: widget
                                           .airdropDetails.media.single.url,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
+                                      placeholder: (context, url) => Align(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                              height: heightSize(30),
+                                              width: widthSize(30),
+                                              child:
+                                                  const CircularProgressIndicator())),
                                       imageBuilder: (context, imageprovider) {
                                         return Container(
                                           height: heightSize(20),
@@ -117,20 +121,43 @@ class _AirdropDesignState extends State<AirdropDesign> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: heightSize(10)),
                                 SizedBox(
-                                  width: widthSize(150),
+                                  width: widthSize(400),
                                   child: CText(
                                     text:
-                                        "${truncate(widget.airdropDetails.title, length: 30)}......",
+                                        "${truncate(widget.airdropDetails.title, length: 70)}......",
                                     size: 15,
                                     color: textColor,
                                     fontFamily: UsedFonts.poppins,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+                                const CText(
+                                  text: "23,400 Participants",
+                                  size: 12,
+                                  color: textColor3,
+                                  fontFamily: UsedFonts.poppins,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                Container(
+                                  height: heightSize(20),
+                                  width: widthSize(100),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(widthSize(15))),
+                                      color: highlightColor),
+                                  child: const CText(
+                                    text: "Claim 50 Points",
+                                    size: 12,
+                                    color: textColor,
+                                    fontFamily: UsedFonts.poppins,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )
                               ],
                             )),
+                        SizedBox(width: widthSize(10)),
                         widget.airdropDetails.media.single.type == "image"
                             ? Expanded(
                                 child: CachedNetworkImage(

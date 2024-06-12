@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/screens/verify_success.dart';
 import 'package:duwith_social/common/getxmessage.dart';

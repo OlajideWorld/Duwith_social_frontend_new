@@ -173,7 +173,7 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                                 SizedBox(width: widthSize(5)),
                                 CText(
                                     text: homeController.engagementShortened(
-                                        widget.postVideos.comments.length))
+                                        widget.postVideos.comments))
                               ],
                             ),
                           ),

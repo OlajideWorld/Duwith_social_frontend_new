@@ -5,6 +5,7 @@ import "dart:async";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
 import "package:duwith_social/common/getxmessage.dart";
+import "package:duwith_social/models/comments_model.dart";
 import "package:duwith_social/models/news_models.dart";
 import "package:duwith_social/models/post-data.dart";
 
@@ -142,8 +143,8 @@ class SocketService extends GetxService {
       if (data != null && data["email"] != null) {
         authController.userdata.value = User.fromJson(data);
         isloading.value = false;
-        getErrorSnackBar(
-            "Unable to get your details, check internet Connection");
+        // getErrorSnackBar(
+        //     "Unable to get your details, check internet Connection");
       } else {
         homeController.homeloading.value = true;
       }
@@ -249,8 +250,6 @@ class SocketService extends GetxService {
     _socket.emit("createPost", data);
 
     _socket.on("postCreated", (data) {
-      // var jsondata = jsonDecode(data);
-      // debugPrint(jsondata);
       getSuccessSnackBar("Post Created Successfully");
     });
   }
@@ -272,11 +271,14 @@ class SocketService extends GetxService {
       // getSuccessSnackBar("Post Liked");
       List<Interaction> likes = List<Interaction>.from(
           data['likes'].map((like) => Interaction.fromJson(like)));
+      List<Interaction> dislikes = List<Interaction>.from(
+          data['dislikes'].map((dislikes) => Interaction.fromJson(dislikes)));
       int index =
           homeController.postList.value.indexWhere((post) => post.id == postId);
 
       if (index != -1) {
         homeController.postList.value[index].likes = likes;
+        homeController.postList.value[index].dislikes = dislikes;
         homeController.postList.refresh();
       }
     });
@@ -288,27 +290,31 @@ class SocketService extends GetxService {
     });
     //
     _socket.on("postDisliked", (data) {
-      getSuccessSnackBar("Post disliked Successfuly");
       List<Interaction> dislikes = List<Interaction>.from(
           data['dislikes'].map((dislikes) => Interaction.fromJson(dislikes)));
+      List<Interaction> likes = List<Interaction>.from(
+          data['likes'].map((like) => Interaction.fromJson(like)));
       int index =
           homeController.postList.value.indexWhere((post) => post.id == postId);
 
       if (index != -1) {
         homeController.postList.value[index].dislikes = dislikes;
+        homeController.postList.value[index].likes = likes;
         homeController.postList.refresh();
       }
     });
   }
 
   // Comments Functions
-
-  void addComment(Map<String, dynamic> data) {
+  addComment(Map<String, dynamic> data) {
     _socket.emit("addComment", data);
 
     //
     _socket.on("commentAdded", (data) {
-      getSuccessSnackBar("Comments Added Successfully");
+      if (data != null && data["_id"] != "") {
+        homeController.isCommenting.value = false;
+        getSuccessSnackBar("Comments Added Successfully");
+      }
     });
   }
 
@@ -321,11 +327,27 @@ class SocketService extends GetxService {
     });
   }
 
-  void getCommentByPostId() {
-    _socket.emit("getCommentsByPost", {});
+  getCommentByPostId(String postId) {
+    _socket.emit("getCommentsByPost", postId);
 //
-    _socket.on("commentsFetched",
-        (data) => {getSuccessSnackBar("Comments Fetched successfully")});
+    _socket.on("commentsFetched", (data) {
+      List<CommentModel> commentsList = (data as List)
+          .map((item) => CommentModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      homeController.commentsList.value = commentsList;
+      homeController.commentsList.refresh();
+      int index =
+          homeController.postList.value.indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.postList.value[index].comments =
+            homeController.commentsList.length;
+        homeController.postList.refresh();
+      }
+
+      homeController.loadingComment.value = false;
+    });
   }
 
   // News
@@ -338,13 +360,13 @@ class SocketService extends GetxService {
           .toList();
 
       homeController.newsUpdateList.value = newsList;
-      if (homeController.newsUpdateList.value == [] ||
+      if (homeController.newsUpdateList.value.isEmpty ||
           homeController.newsUpdateList.value == null) {
         homeController.homeloading.value = true;
         getErrorSnackBar("Not able to news");
       } else {
         homeController.homeloading.value = false;
-        getSuccessSnackBar("success");
+        // getSuccessSnackBar("success");
       }
     });
   }
@@ -359,13 +381,13 @@ class SocketService extends GetxService {
           .toList();
 
       homeController.airdropList.value = airdropList;
-      if (homeController.airdropList.value == [] ||
+      if (homeController.airdropList.value.isEmpty ||
           homeController.airdropList.value == null) {
         homeController.homeloading.value = true;
         getErrorSnackBar("Not able to get airdrop");
       } else {
         homeController.homeloading.value = false;
-        getSuccessSnackBar("success");
+        // getSuccessSnackBar("success");
       }
     });
   }

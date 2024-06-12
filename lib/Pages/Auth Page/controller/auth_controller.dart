@@ -82,7 +82,7 @@ class AuthController extends GetxController {
       // Get.to(() => SignUpScreen());
       userEmail.value = box.read(userdataEmail);
       userId.value = box.read(userdataid);
-      await socket.getUserData2(authController.userEmail.value);
+      await socket.getUserData2(userEmail.value);
       Get.toNamed(MyRoutes.homeScreen);
     }
   }
