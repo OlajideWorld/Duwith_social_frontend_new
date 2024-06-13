@@ -12,10 +12,10 @@ String newsUpdateToJson(NewsUpdate data) => json.encode(data.toJson());
 class NewsUpdate {
   final List<Media> media;
   final String caption;
-  final List<dynamic> comments;
+  List<dynamic> comments;
   final String id;
-  final List<dynamic> likes;
-  final List<dynamic> dislikes;
+  List<NewsInteraction> likes;
+  List<NewsInteraction> dislikes;
   final DateTime createdAt;
 
   NewsUpdate({
@@ -33,8 +33,12 @@ class NewsUpdate {
         caption: json["caption"],
         comments: List<dynamic>.from(json["comments"].map((x) => x)),
         id: json["_id"],
-        likes: List<dynamic>.from(json["likes"].map((x) => x)),
-        dislikes: List<dynamic>.from(json["dislikes"].map((x) => x)),
+        likes: (json['likes'] as List)
+            .map((i) => NewsInteraction.fromJson(i))
+            .toList(),
+        dislikes: (json['likes'] as List)
+            .map((i) => NewsInteraction.fromJson(i))
+            .toList(),
         createdAt: DateTime.parse(json["createdAt"]),
       );
 
@@ -47,6 +51,23 @@ class NewsUpdate {
         "dislikes": List<dynamic>.from(dislikes.map((x) => x)),
         "createdAt": createdAt.toIso8601String(),
       };
+}
+
+class NewsInteraction {
+  String user;
+  DateTime createdAt;
+
+  NewsInteraction({
+    required this.user,
+    required this.createdAt,
+  });
+
+  factory NewsInteraction.fromJson(Map<String, dynamic> json) {
+    return NewsInteraction(
+      user: json['user'],
+      createdAt: DateTime.parse(json['createdAt']),
+    );
+  }
 }
 
 class Media {

@@ -1,9 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:duwith_social/models/post-data.dart';
 import 'package:duwith_social/utils/color.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pinput/pinput.dart';
 import 'package:video_player/video_player.dart';
@@ -13,39 +16,61 @@ import '../../../common/button-widget.dart';
 import '../../../common/custom-text.dart';
 import '../../../common/stream_video.dart';
 import '../../../utils/sizes.dart';
+import '../../Auth Page/controller/auth_controller.dart';
+import '../../Auth Page/services/socket_sevice.dart';
 import '../../View Profile Page/screens/view_profile_screen.dart';
 import '../controllers/home_controller.dart';
+import '../screens/comments_display.dart';
+import '../screens/comments_display_video.dart';
 
 HomeController homeController = HomeController.instance;
+SocketService socket = SocketService.instance;
+AuthController authController = AuthController.instance;
 
 videosHome(BuildContext context, double width) {
-  return Expanded(
-    child: ListView.builder(
-        itemCount: homeController.postListVideo.value.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: heightSize(10)),
-            child: Column(
-              children: [
-                homeController.postListVideo.value.isNotEmpty
-                    ? VideosPostWidget(
-                        width: width,
-                        postVideos: homeController.postListVideo.value[index],
-                      )
-                    : const Center(
-                        child: CText(
-                          text: "No videos found",
-                          size: 12,
-                          color: timeColor,
-                          fontFamily: UsedFonts.poppins,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-              ],
+  return homeController.postListVideo.value.isEmpty ||
+          homeController.postListVideo.value == null
+      ? const Align(
+          alignment: Alignment.center,
+          child: Center(
+            child: CText(
+              text:
+                  "Not able to fetch data, Check internet connection and try again",
+              size: 18,
+              color: textColor,
+              fontFamily: UsedFonts.poppins,
+              fontWeight: FontWeight.w500,
             ),
-          );
-        }),
-  );
+          ),
+        )
+      : Expanded(
+          child: ListView.builder(
+              itemCount: homeController.postListVideo.value.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: heightSize(10)),
+                  child: Column(
+                    children: [
+                      homeController.postListVideo.value.isNotEmpty
+                          ? VideosPostWidget(
+                              width: width,
+                              postVideos:
+                                  homeController.postListVideo.value[index],
+                            )
+                          : const Center(
+                              child: CText(
+                                text: "No videos found",
+                                size: 12,
+                                color: timeColor,
+                                fontFamily: UsedFonts.poppins,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                    ],
+                  ),
+                );
+              }),
+        );
 }
 
 class VideosPostWidget extends StatefulWidget {
@@ -67,9 +92,13 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    bool userLiked = widget.postVideos.likes.any(
+        (interaction) => interaction.user == authController.userdata.value.id);
+    bool userDisliked = widget.postVideos.dislikes.any(
+        (interaction) => interaction.user == authController.userdata.value.id);
     return Obx(() {
       return Container(
-        height: isExpanded.value ? heightSize(440) : heightSize(360),
+        height: isExpanded.value ? heightSize(500) : heightSize(400),
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF28282C)),
         padding: EdgeInsets.symmetric(
@@ -78,7 +107,7 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             postBarTitle(widget.width, widget.postVideos.user.username,
-                widget.postVideos.media.single.type, context, true),
+                widget.postVideos.user.profileImage, context, true),
             SizedBox(height: heightSize(8)),
             PostContent(
                 isExpanded: isExpanded,
@@ -88,7 +117,7 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
-            FutureBuilder<VideoPlayerController>(
+            FutureBuilder<CachedVideoPlayerPlusController>(
               future:
                   _initializeVideoPlayer(widget.postVideos.media.single.url),
               builder: (context, snapshot) {
@@ -100,17 +129,30 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                             url: widget.postVideos.media.single.url,
                           ));
                     },
-                    child: AspectRatio(
-                      aspectRatio: controller.value.aspectRatio,
-                      child: VideoPlayer(controller),
-                    ),
+                    child: Stack(children: [
+                      AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: CachedVideoPlayerPlus(controller),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: widthSize(170),
+                            vertical: heightSize(100)),
+                        child: SizedBox(
+                            height: heightSize(52),
+                            width: widthSize(52),
+                            child: Image.asset(
+                              "assets/images/playsymbols.png",
+                              fit: BoxFit.contain,
+                            )),
+                      )
+                    ]),
                   );
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
               },
             ),
-
             SizedBox(height: heightSize(12)),
             Padding(
               padding:
@@ -127,54 +169,83 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Likes
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.heart,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController.engagementShortened(
-                                        widget.postVideos.likes.length))
-                              ],
+                          GestureDetector(
+                            onTap: () async {
+                              await socket.likePost(widget.postVideos.id,
+                                  authController.userdata.value.id, 2);
+                            },
+                            child: SizedBox(
+                              height: heightSize(18),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    userLiked == true
+                                        ? CupertinoIcons.heart_fill
+                                        : FontAwesomeIcons.heart,
+                                    size: heightSize(16),
+                                    color: userLiked ? mainColor : textColor,
+                                  ),
+                                  SizedBox(width: widthSize(5)),
+                                  CText(
+                                      text: homeController.engagementShortened(
+                                          widget.postVideos.likes.length))
+                                ],
+                              ),
                             ),
                           ),
                           // dislikes
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.thumbsDown,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController.engagementShortened(
-                                        widget.postVideos.dislikes.length))
-                              ],
+                          GestureDetector(
+                            onTap: () async {
+                              await socket.dislikePost(widget.postVideos.id,
+                                  authController.userdata.value.id, 2);
+                            },
+                            child: SizedBox(
+                              height: heightSize(18),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    userDisliked == true
+                                        ? Icons.thumb_down_rounded
+                                        : FontAwesomeIcons.thumbsDown,
+                                    size: heightSize(16),
+                                    color: userDisliked == true
+                                        ? Colors.red
+                                        : textColor,
+                                  ),
+                                  SizedBox(width: widthSize(5)),
+                                  CText(
+                                      text: homeController.engagementShortened(
+                                          widget.postVideos.dislikes.length))
+                                ],
+                              ),
                             ),
                           ),
                           // comment
-                          SizedBox(
-                            height: heightSize(18),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.comment,
-                                  size: heightSize(16),
-                                  color: textColor,
-                                ),
-                                SizedBox(width: widthSize(5)),
-                                CText(
-                                    text: homeController.engagementShortened(
-                                        widget.postVideos.comments))
-                              ],
+                          GestureDetector(
+                            onTap: () async {
+                              homeController.loadingComment.value = true;
+                              // debugPrint(widget.postsData.id);
+                              showCommentsVideo(
+                                  context: context,
+                                  postId: widget.postVideos.id);
+                              await socket.getCommentByPostId(
+                                  widget.postVideos.id, 2);
+                            },
+                            child: SizedBox(
+                              height: heightSize(18),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.comment,
+                                    size: heightSize(16),
+                                    color: textColor,
+                                  ),
+                                  SizedBox(width: widthSize(5)),
+                                  CText(
+                                      text: homeController.engagementShortened(
+                                          widget.postVideos.comments))
+                                ],
+                              ),
                             ),
                           ),
                           // Share
@@ -198,21 +269,16 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                 ),
               ),
             ),
-            // Button to toggle expand
-            // ElevatedButton(
-            //   onPressed: () {
-            //     isExpanded.value = !isExpanded.value;
-            //   },
-            //   child: Text(isExpanded.value ? 'Collapse' : 'Expand'),
-            // ),
           ],
         ),
       );
     });
   }
 
-  Future<VideoPlayerController> _initializeVideoPlayer(String videoFile) async {
-    final controller = VideoPlayerController.networkUrl(Uri.parse(videoFile));
+  Future<CachedVideoPlayerPlusController> _initializeVideoPlayer(
+      String videoFile) async {
+    final controller =
+        CachedVideoPlayerPlusController.networkUrl(Uri.parse(videoFile));
     await controller.initialize();
     return controller;
   }

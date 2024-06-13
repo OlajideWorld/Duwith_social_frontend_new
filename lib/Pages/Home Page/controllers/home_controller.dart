@@ -123,6 +123,9 @@ class HomeController extends GetxController {
   RxBool isCommenting = false.obs;
   RxBool loadingComment = false.obs;
   RxList<CommentModel> commentsList = <CommentModel>[].obs;
+  RxList<CommentModel> commentsListVideo = <CommentModel>[].obs;
+  RxList<CommentModel> commentsNews = <CommentModel>[].obs;
+  RxList<CommentModel> commentsAirdrop = <CommentModel>[].obs;
   TextEditingController commentsText = TextEditingController();
   RxString parentCommentId = "".obs;
   RxBool isReply = false.obs;

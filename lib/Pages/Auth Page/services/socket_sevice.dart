@@ -263,7 +263,7 @@ class SocketService extends GetxService {
     });
   }
 
-  likePost(String postId, String userId) async {
+  likePost(String postId, String userId, int type) async {
     _socket.emit("likePost", {'postId': postId, 'userId': userId});
 
 //
@@ -273,18 +273,29 @@ class SocketService extends GetxService {
           data['likes'].map((like) => Interaction.fromJson(like)));
       List<Interaction> dislikes = List<Interaction>.from(
           data['dislikes'].map((dislikes) => Interaction.fromJson(dislikes)));
-      int index =
-          homeController.postList.value.indexWhere((post) => post.id == postId);
+      if (type == 1) {
+        int index = homeController.postList.value
+            .indexWhere((post) => post.id == postId);
 
-      if (index != -1) {
-        homeController.postList.value[index].likes = likes;
-        homeController.postList.value[index].dislikes = dislikes;
-        homeController.postList.refresh();
+        if (index != -1) {
+          homeController.postList.value[index].likes = likes;
+          homeController.postList.value[index].dislikes = dislikes;
+          homeController.postList.refresh();
+        }
+      } else {
+        int index = homeController.postListVideo.value
+            .indexWhere((post) => post.id == postId);
+
+        if (index != -1) {
+          homeController.postListVideo.value[index].likes = likes;
+          homeController.postListVideo.value[index].dislikes = dislikes;
+          homeController.postListVideo.refresh();
+        }
       }
     });
   }
 
-  dislikePost(String postId, String userId) {
+  dislikePost(String postId, String userId, int type) {
     _socket.emit("dislikePost", {
       {'postId': postId, 'userId': userId}
     });
@@ -294,13 +305,24 @@ class SocketService extends GetxService {
           data['dislikes'].map((dislikes) => Interaction.fromJson(dislikes)));
       List<Interaction> likes = List<Interaction>.from(
           data['likes'].map((like) => Interaction.fromJson(like)));
-      int index =
-          homeController.postList.value.indexWhere((post) => post.id == postId);
+      if (type == 1) {
+        int index = homeController.postList.value
+            .indexWhere((post) => post.id == postId);
 
-      if (index != -1) {
-        homeController.postList.value[index].dislikes = dislikes;
-        homeController.postList.value[index].likes = likes;
-        homeController.postList.refresh();
+        if (index != -1) {
+          homeController.postList.value[index].likes = likes;
+          homeController.postList.value[index].dislikes = dislikes;
+          homeController.postList.refresh();
+        }
+      } else {
+        int index = homeController.postListVideo.value
+            .indexWhere((post) => post.id == postId);
+
+        if (index != -1) {
+          homeController.postListVideo.value[index].likes = likes;
+          homeController.postListVideo.value[index].dislikes = dislikes;
+          homeController.postListVideo.refresh();
+        }
       }
     });
   }
@@ -327,7 +349,33 @@ class SocketService extends GetxService {
     });
   }
 
-  getCommentByPostId(String postId) {
+  likeComments(String postId, String userId, int type) {
+    _socket.emit("like_Post_Comment", {"postId": postId, "userId": userId});
+    //
+    _socket.on("post_comment_liked", (data) {
+      List<LikeModel> likesgotten =
+          List<LikeModel>.from(data["likes"].map((x) => LikeModel.fromJson(x)));
+      if (type == 1) {
+        int index = homeController.commentsList.value
+            .indexWhere((post) => post.id == postId);
+
+        if (index != -1) {
+          homeController.commentsList.value[index].likes = likesgotten;
+          homeController.commentsList.refresh();
+        }
+      } else {
+        int index = homeController.commentsListVideo.value
+            .indexWhere((post) => post.id == postId);
+
+        if (index != -1) {
+          homeController.commentsListVideo.value[index].likes = likesgotten;
+          homeController.commentsListVideo.refresh();
+        }
+      }
+    });
+  }
+
+  getCommentByPostId(String postId, int type) {
     _socket.emit("getCommentsByPost", postId);
 //
     _socket.on("commentsFetched", (data) {
@@ -335,20 +383,37 @@ class SocketService extends GetxService {
           .map((item) => CommentModel.fromJson(item as Map<String, dynamic>))
           .toList();
 
-      homeController.commentsList.value = commentsList;
-      homeController.commentsList.refresh();
-      int index =
-          homeController.postList.value.indexWhere((post) => post.id == postId);
+      if (type == 1) {
+        homeController.commentsList.value = commentsList;
+        homeController.commentsList.refresh();
+        int index = homeController.postList.value
+            .indexWhere((post) => post.id == postId);
 
-      if (index != -1) {
-        homeController.postList.value[index].comments =
-            homeController.commentsList.length;
-        homeController.postList.refresh();
+        if (index != -1) {
+          homeController.postList.value[index].comments =
+              homeController.commentsList.length;
+          homeController.postList.refresh();
+        }
+      } else {
+        homeController.commentsListVideo.value = commentsList;
+        homeController.commentsListVideo.refresh();
+        int index = homeController.postListVideo.value
+            .indexWhere((post) => post.id == postId);
+
+        if (index != -1) {
+          homeController.postListVideo.value[index].comments =
+              homeController.commentsList.length;
+          homeController.postListVideo.refresh();
+        }
       }
 
       homeController.loadingComment.value = false;
     });
   }
+
+  //
+  //
+  // News Method
 
   // News
   getNewsList(Map<String, dynamic> data) async {
@@ -371,6 +436,106 @@ class SocketService extends GetxService {
     });
   }
 
+  likeNewsPost(String postId, String userId) async {
+    _socket.emit("like_news", {'postId': postId, 'userId': userId});
+
+//
+    _socket.on("news_post_liked", (data) {
+      // getSuccessSnackBar("Post Liked");
+      List<NewsInteraction> likes = List<NewsInteraction>.from(
+          data['likes'].map((like) => NewsInteraction.fromJson(like)));
+      List<NewsInteraction> dislikes = List<NewsInteraction>.from(
+          data['dislikes']
+              .map((dislikes) => NewsInteraction.fromJson(dislikes)));
+      int index = homeController.newsUpdateList.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.newsUpdateList.value[index].likes = likes;
+        homeController.newsUpdateList.value[index].dislikes = dislikes;
+        homeController.newsUpdateList.refresh();
+      }
+    });
+  }
+
+  dislikeNewsPost(String postId, String userId) {
+    _socket.emit("dislike_news", {
+      {'postId': postId, 'userId': userId}
+    });
+    //
+    _socket.on("news_post_disliked", (data) {
+      List<NewsInteraction> dislikes = List<NewsInteraction>.from(
+          data['dislikes']
+              .map((dislikes) => NewsInteraction.fromJson(dislikes)));
+      List<NewsInteraction> likes = List<NewsInteraction>.from(
+          data['likes'].map((like) => NewsInteraction.fromJson(like)));
+      int index = homeController.newsUpdateList.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.newsUpdateList.value[index].dislikes = dislikes;
+        homeController.newsUpdateList.value[index].likes = likes;
+        homeController.newsUpdateList.refresh();
+      }
+    });
+  }
+
+  addNewsComment(Map<String, dynamic> data) {
+    _socket.emit("add_comment_news", data);
+
+    //
+    _socket.on("news_comment_added", (data) {
+      if (data != null && data["_id"] != "") {
+        homeController.isCommenting.value = false;
+        getSuccessSnackBar("Comments Added Successfully");
+      }
+    });
+  }
+
+  likeNewsComment(String postId, String userId) {
+    _socket.emit("like_news_comment", {"postId": postId, "userId": userId});
+    //
+    _socket.on("news_comment_liked", (data) {
+      List<LikeModel> likesgotten =
+          List<LikeModel>.from(data["likes"].map((x) => LikeModel.fromJson(x)));
+      int index = homeController.commentsNews.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.commentsNews.value[index].likes = likesgotten;
+        homeController.commentsNews.refresh();
+      }
+    });
+  }
+
+  getCommentByNewsId(String postId) {
+    _socket.emit("get_news_comments", postId);
+//
+    _socket.on("news_comment_gotten", (data) {
+      List<CommentModel> commentsList = (data as List)
+          .map((item) => CommentModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      homeController.commentsNews.value = commentsList;
+      homeController.commentsNews.refresh();
+      int index = homeController.newsUpdateList.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.newsUpdateList.value[index].comments =
+            homeController.commentsNews;
+        homeController.newsUpdateList.refresh();
+      }
+
+      homeController.loadingComment.value = false;
+    });
+  }
+
+  //
+  //
+  //
+  //  Airdrop Methods
+
 // Air-drop
   getAirdropList(Map<String, dynamic> data) async {
     _socket.emit("get-airdrop", data);
@@ -389,6 +554,101 @@ class SocketService extends GetxService {
         homeController.homeloading.value = false;
         // getSuccessSnackBar("success");
       }
+    });
+  }
+
+  likeAirdropPost(String postId, String userId) async {
+    _socket.emit("like_airdrop", {'postId': postId, 'userId': userId});
+
+//
+    _socket.on("airdrop_post_liked", (data) {
+      // getSuccessSnackBar("Post Liked");
+      List<AirdropInteraction> likes = List<AirdropInteraction>.from(
+          data['likes'].map((like) => AirdropInteraction.fromJson(like)));
+      List<AirdropInteraction> dislikes = List<AirdropInteraction>.from(
+          data['dislikes']
+              .map((dislikes) => AirdropInteraction.fromJson(dislikes)));
+      int index = homeController.airdropList.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.airdropList.value[index].likes = likes;
+        homeController.airdropList.value[index].dislikes = dislikes;
+        homeController.airdropList.refresh();
+      }
+    });
+  }
+
+  dislikeAirdropPost(String postId, String userId) {
+    _socket.emit("dislike_airdrop", {
+      {'postId': postId, 'userId': userId}
+    });
+    //
+    _socket.on("airdrop_post_disliked", (data) {
+      List<AirdropInteraction> dislikes = List<AirdropInteraction>.from(
+          data['dislikes']
+              .map((dislikes) => AirdropInteraction.fromJson(dislikes)));
+      List<AirdropInteraction> likes = List<AirdropInteraction>.from(
+          data['likes'].map((like) => AirdropInteraction.fromJson(like)));
+      int index = homeController.airdropList.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.airdropList.value[index].dislikes = dislikes;
+        homeController.airdropList.value[index].likes = likes;
+        homeController.airdropList.refresh();
+      }
+    });
+  }
+
+  addAirdropComment(Map<String, dynamic> data) {
+    _socket.emit("add_airdrop_comment", data);
+
+    //
+    _socket.on("airdrop_comment_added", (data) {
+      if (data != null && data["_id"] != "") {
+        homeController.isCommenting.value = false;
+        getSuccessSnackBar("Comments Added Successfully");
+      }
+    });
+  }
+
+  likeAirdropComment(String postId, String userId) {
+    _socket.emit("like_airdrop_comment", {"postId": postId, "userId": userId});
+    //
+    _socket.on("airdrop_comment_liked", (data) {
+      List<LikeModel> likesgotten =
+          List<LikeModel>.from(data["likes"].map((x) => LikeModel.fromJson(x)));
+      int index = homeController.commentsAirdrop.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.commentsAirdrop.value[index].likes = likesgotten;
+        homeController.commentsAirdrop.refresh();
+      }
+    });
+  }
+
+  getCommentByAirdropId(String postId) {
+    _socket.emit("get_airdrop_comment", postId);
+//
+    _socket.on("airdrop_comment_post", (data) {
+      List<CommentModel> commentsList = (data as List)
+          .map((item) => CommentModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      homeController.commentsAirdrop.value = commentsList;
+      homeController.commentsAirdrop.refresh();
+      int index = homeController.airdropList.value
+          .indexWhere((post) => post.id == postId);
+
+      if (index != -1) {
+        homeController.airdropList.value[index].comments =
+            homeController.commentsAirdrop.length;
+        homeController.airdropList.refresh();
+      }
+
+      homeController.loadingComment.value = false;
     });
   }
 }

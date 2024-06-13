@@ -9,7 +9,7 @@ class CommentModel {
   String content;
   dynamic parentComment;
   // List<dynamic> replies;
-  List<String> likes;
+  List<LikeModel> likes;
   String createdAt;
 
   CommentModel({
@@ -30,8 +30,21 @@ class CommentModel {
         content: json["content"],
         parentComment: json["parentComment"],
         // replies: List<dynamic>.from(json["replies"].map((x) => x)),
-        likes: List<String>.from(json["likes"].map((x) => x)),
+        likes: List<LikeModel>.from(
+            json["likes"].map((x) => LikeModel.fromJson(x))),
         createdAt: json["createdAt"],
+      );
+}
+
+class LikeModel {
+  String user;
+
+  LikeModel({
+    required this.user,
+  });
+
+  factory LikeModel.fromJson(Map<String, dynamic> json) => LikeModel(
+        user: json["user"],
       );
 }
 

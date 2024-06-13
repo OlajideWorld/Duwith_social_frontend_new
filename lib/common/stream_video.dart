@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import "package:flutter/material.dart";
@@ -15,16 +16,17 @@ class VideoStreamPage extends StatefulWidget {
 }
 
 class _VideoStreamPageState extends State<VideoStreamPage> {
-  late VideoPlayerController _controller;
+  late CachedVideoPlayerPlusController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-      });
+    _controller =
+        CachedVideoPlayerPlusController.networkUrl(Uri.parse(widget.url))
+          ..initialize().then((_) {
+            setState(() {});
+            _controller.play();
+          });
   }
 
   @override
@@ -52,7 +54,7 @@ class _VideoStreamPageState extends State<VideoStreamPage> {
         child: _controller.value.isInitialized
             ? AspectRatio(
                 aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+                child: CachedVideoPlayerPlus(_controller),
               )
             : const CircularProgressIndicator(),
       ),

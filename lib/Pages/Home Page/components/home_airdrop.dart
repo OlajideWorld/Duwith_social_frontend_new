@@ -9,28 +9,47 @@ import '../../../common/custom-text.dart';
 
 import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
+import '../../Auth Page/controller/auth_controller.dart';
+import '../../Auth Page/services/socket_sevice.dart';
 import '../controllers/home_controller.dart';
 
 HomeController homeController = HomeController.instance;
+SocketService socket = SocketService.instance;
+AuthController authController = AuthController.instance;
 
 airdropList(BuildContext context, double width) {
-  return Expanded(
-    child: ListView.builder(
-        itemCount: homeController.airdropList.value.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: heightSize(10)),
-            child: Column(
-              children: [
-                AirdropDesign(
-                  width: width,
-                  airdropDetails: homeController.airdropList.value[index],
-                ),
-              ],
+  return homeController.airdropList.value.isEmpty ||
+          homeController.airdropList.value == null
+      ? const Align(
+          alignment: Alignment.center,
+          child: Center(
+            child: CText(
+              text:
+                  "Not able to fetch data, Check internet connection and try again",
+              size: 18,
+              color: textColor,
+              fontFamily: UsedFonts.poppins,
+              fontWeight: FontWeight.w500,
             ),
-          );
-        }),
-  );
+          ),
+        )
+      : Expanded(
+          child: ListView.builder(
+              itemCount: homeController.airdropList.value.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: heightSize(10)),
+                  child: Column(
+                    children: [
+                      AirdropDesign(
+                        width: width,
+                        airdropDetails: homeController.airdropList.value[index],
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        );
 }
 
 class AirdropDesign extends StatefulWidget {
@@ -54,9 +73,13 @@ class _AirdropDesignState extends State<AirdropDesign> {
   Widget build(BuildContext context) {
     return Obx(() {
       return GestureDetector(
-        onTap: () => Get.to(() => AirdropDetailsScreen(
-              airdropDetails: widget.airdropDetails,
-            )),
+        onTap: () async {
+          Get.to(() => AirdropDetailsScreen(
+                airdropDetails: widget.airdropDetails,
+              ));
+
+          await socket.getCommentByAirdropId(widget.airdropDetails.id);
+        },
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
           child: Container(

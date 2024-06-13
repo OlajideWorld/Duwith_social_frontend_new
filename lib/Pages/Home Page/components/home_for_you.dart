@@ -3,7 +3,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
-import 'package:duwith_social/Pages/Earn%20More%20Page/components/social_bottom_sheet.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Pages/Home%20Page/screens/comments_display.dart';
 import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
@@ -12,11 +11,9 @@ import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/common/stream_video.dart';
 import 'package:duwith_social/models/post-data.dart';
 import 'package:duwith_social/utils/color.dart';
-import 'package:duwith_social/utils/demo_data.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -173,7 +170,7 @@ class _PostWidgetState extends State<PostWidget> {
                           GestureDetector(
                             onTap: () async {
                               await socket.likePost(widget.postsData.id,
-                                  authController.userdata.value.id);
+                                  authController.userdata.value.id, 1);
                             },
                             child: SizedBox(
                               height: heightSize(18),
@@ -198,7 +195,7 @@ class _PostWidgetState extends State<PostWidget> {
                           GestureDetector(
                             onTap: () async {
                               await socket.dislikePost(widget.postsData.id,
-                                  authController.userdata.value.id);
+                                  authController.userdata.value.id, 1);
                             },
                             child: SizedBox(
                               height: heightSize(18),
@@ -229,8 +226,8 @@ class _PostWidgetState extends State<PostWidget> {
                               showComments(
                                   context: context,
                                   postId: widget.postsData.id);
-                              await socket
-                                  .getCommentByPostId(widget.postsData.id);
+                              await socket.getCommentByPostId(
+                                  widget.postsData.id, 1);
                             },
                             child: SizedBox(
                               height: heightSize(18),

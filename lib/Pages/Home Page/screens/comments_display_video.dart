@@ -14,7 +14,7 @@ import "../../../utils/sizes.dart";
 import "../components/comments_replies_display.dart";
 import "../controllers/home_controller.dart";
 
-showComments({required BuildContext context, required String postId}) {
+showCommentsVideo({required BuildContext context, required String postId}) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -101,9 +101,9 @@ class _CommentsDisplayBottomSheetState
                           height: heightSize(100),
                           width: maxWidth,
                           child: AdWidget(ad: homeController.bannerAd!))
-                      : SizedBox(),
+                      : const SizedBox(),
                   CText(
-                    text: "${homeController.commentsList.length} Comments",
+                    text: "${homeController.commentsListVideo.length} Comments",
                     size: 18,
                     color: const Color(0xFFBEBEBE),
                     fontFamily: UsedFonts.poppins,
@@ -112,23 +112,24 @@ class _CommentsDisplayBottomSheetState
 
                   homeController.loadingComment.value == true
                       ? const CommentShimmerLoading()
-                      : homeController.commentsList.isEmpty
+                      : homeController.commentsListVideo.isEmpty
                           ? const SizedBox()
                           : Expanded(
                               child: ListView.builder(
-                                  itemCount: homeController.commentsList.length,
+                                  itemCount:
+                                      homeController.commentsListVideo.length,
                                   itemBuilder: (context, index) {
                                     return commentsListView(
                                         context,
                                         maxWidth,
-                                        homeController.commentsList.value,
-                                        homeController.commentsList
+                                        homeController.commentsListVideo.value,
+                                        homeController.commentsListVideo
                                             .value[index], () async {
                                       await socketService.likeComments(
-                                          homeController
-                                              .commentsList.value[index].id,
+                                          homeController.commentsListVideo
+                                              .value[index].id,
                                           authController.userId.value,
-                                          1);
+                                          2);
                                     });
                                   }),
                             ),
@@ -172,7 +173,7 @@ class _CommentsDisplayBottomSheetState
                           hintText: "Add Comments",
                           hintStyle: const TextStyle(color: Color(0xFF918F99)),
                           filled: true,
-                          fillColor: Color(0xFF151B2E),
+                          fillColor: const Color(0xFF151B2E),
                           border: InputBorder.none,
                           focusedBorder: OutlineInputBorder(
                               borderSide:
@@ -209,7 +210,7 @@ class _CommentsDisplayBottomSheetState
                             };
                             await socketService.addComment(data);
                             await socketService.getCommentByPostId(
-                                widget.postId, 1);
+                                widget.postId, 2);
                             homeController.commentsText.text = "";
                           }
                         },

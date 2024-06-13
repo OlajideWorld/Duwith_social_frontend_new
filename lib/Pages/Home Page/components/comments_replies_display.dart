@@ -1,6 +1,8 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/common/getxmessage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -14,8 +16,11 @@ import '../../../utils/color.dart';
 import '../../../utils/demo_data.dart';
 import '../../../utils/sizes.dart';
 
+SocketService socketService = SocketService.instance;
+AuthController authController = AuthController.instance;
+
 commentsListView(BuildContext context, double width, List<CommentModel> replies,
-    CommentModel commentsdata) {
+    CommentModel commentsdata, VoidCallback onTap) {
   RxBool isExpanded = false.obs;
 
   return Container(
@@ -160,7 +165,7 @@ commentsListView(BuildContext context, double width, List<CommentModel> replies,
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: onTap,
           child: SizedBox(
             height: heightSize(40),
             width: widthSize(40),
@@ -169,9 +174,11 @@ commentsListView(BuildContext context, double width, List<CommentModel> replies,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
-                  FontAwesomeIcons.heart,
+                  commentsdata.likes.isNotEmpty
+                      ? CupertinoIcons.heart_fill
+                      : FontAwesomeIcons.heart,
                   size: widthSize(16),
-                  color: textColor,
+                  color: commentsdata.likes.isNotEmpty ? Colors.red : textColor,
                 ),
                 CText(
                   text: commentsdata.likes.isNotEmpty

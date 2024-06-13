@@ -15,7 +15,7 @@ class AirdropModel {
   String airdropLink;
   List<AirdropInteraction> likes;
   List<AirdropInteraction> dislikes;
-  List<AirdropComment> comments;
+  int comments;
   DateTime createdAt;
   int v;
 
@@ -50,9 +50,7 @@ class AirdropModel {
         dislikes: (json['dislikes'] as List)
             .map((i) => AirdropInteraction.fromJson(i))
             .toList(),
-        comments: (json['comments'] as List)
-            .map((c) => AirdropComment.fromJson(c))
-            .toList(),
+        comments: json["comments"].length,
         createdAt: DateTime.parse(json["createdAt"]),
         v: json["__v"],
       );
@@ -103,39 +101,5 @@ class AirdropInteraction {
       'user': user,
       'createdAt': createdAt.toIso8601String(),
     };
-  }
-}
-
-class AirdropComment {
-  String id;
-  String post;
-  String user;
-  String content;
-  String? parentComment;
-  List<AirdropComment> replies;
-  DateTime createdAt;
-
-  AirdropComment({
-    required this.id,
-    required this.post,
-    required this.user,
-    required this.content,
-    this.parentComment,
-    this.replies = const [],
-    required this.createdAt,
-  });
-
-  factory AirdropComment.fromJson(Map<String, dynamic> json) {
-    return AirdropComment(
-      id: json['_id'],
-      post: json['post'],
-      user: json['user'],
-      content: json['content'],
-      parentComment: json['parentComment'],
-      replies: (json['replies'] as List)
-          .map((reply) => AirdropComment.fromJson(reply))
-          .toList(),
-      createdAt: DateTime.parse(json['createdAt']),
-    );
   }
 }
