@@ -44,7 +44,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          testUrl,
+          productionUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -64,37 +64,6 @@ class SocketService extends GetxService {
     }
     return this;
   }
-
-  // void connectSocket() async {
-  //   try {
-  //     _socket = io(
-  //         'http://192.168.1.123:3000',
-  //         // OptionBuilder()
-  //         //   .setTransports(['websocket']) // for Flutter or Dart VM
-  //         //   .disableAutoConnect()  // disable auto-connection
-  //         //   .setExtraHeaders({'foo': 'bar'}) // optional
-  //         //   .build()
-  //         <String, dynamic>{
-  //           'transports': ['websocket'],
-  //           'autoConnect': false,
-  //           // 'query': {'token': 'THIS IS MY TOKEN FOR AUTHENTICATION'}
-  //         });
-
-  //     _socket.onConnect((_) {
-  //       print('connected');
-  //       // socket.emit('msg', 'test');
-  //     });
-
-  //     _socket
-  //         .onDisconnect((_) => getErrorSnackBar("diconnected, check internet"));
-
-  //     _socket.connect();
-  //     print(_socket);
-  //   } catch (e) {
-  //     print('ConnectionScreen -> initState -> err ->');
-  //     print(e.toString());
-  //   }
-  // }
 
   RxBool isloading = false.obs;
 
