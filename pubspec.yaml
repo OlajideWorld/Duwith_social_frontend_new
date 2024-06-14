@@ -30,12 +30,14 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   add_to_cart_animation: ^2.0.3
+  better_player_plus: ^1.0.6
   cached_network_image: ^3.3.1
   cached_video_player_plus: ^2.0.0
+  chewie: ^1.8.1
   cloudinary: ^1.2.0
   cupertino_icons: ^1.0.2
   email_validator: ^2.1.17
-  file_picker: ^8.0.3
+  file_picker: ^8.0.5
   flutter:
     sdk: flutter
   flutter_advanced_switch: ^3.1.0
@@ -53,7 +55,7 @@ dependencies:
   http: ^1.2.1
   icons_launcher: ^2.1.7
   image_picker: ^1.1.1
-  intl: ^0.19.0
+  intl: ^0.18.1
   loading_indicator: ^3.1.1
   loading_overlay_pro: ^2.1.1
   onesignal_flutter: ^5.1.6

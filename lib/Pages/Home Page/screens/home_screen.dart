@@ -49,7 +49,6 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           homeAppBar(constraints.maxWidth),
-                          SizedBox(height: heightSize(13)),
                           selectHomeView(context, constraints.maxWidth),
                           SizedBox(height: heightSize(5)),
                           UnityBannerAd(
@@ -133,7 +132,8 @@ class HomeScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       )
-                                    : airdropList(context, constraints.maxWidth)
+                                    : AirdropListWidget(
+                                        width: constraints.maxWidth)
                         ],
                       ),
                     ),

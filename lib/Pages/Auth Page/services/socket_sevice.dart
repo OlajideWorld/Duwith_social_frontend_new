@@ -14,9 +14,11 @@ import "package:socket_io_client/socket_io_client.dart" as IO;
 
 import "../../../models/airdrop_model.dart";
 import "../../../models/user_data.dart";
+import "../../Home Page/controllers/home_controller.dart";
 import "../screens/verify_details.dart";
 
 AuthController authController = AuthController.instance;
+HomeController homeController = HomeController.instance;
 
 class SocketService extends GetxService {
   static SocketService instance = Get.find<SocketService>();
@@ -37,7 +39,7 @@ class SocketService extends GetxService {
 
   String productionUrl = 'https://duwith-social-backend.onrender.com';
   String testUrl = "http://192.168.1.123:3000";
-  String testurl2 = "http://192.168.28.56:3000";
+  String testurl2 = "http://192.168.23.56:3000";
 
   Future<SocketService> init() async {
     try {
@@ -219,10 +221,13 @@ class SocketService extends GetxService {
       homeController.postList.value = postList;
       if (homeController.postList.value.isEmpty || data == null) {
         homeController.homeloading.value = true;
-        getErrorSnackBar("Not able to posts");
+        getErrorSnackBar("No post data found");
       } else {
         homeController.homeloading.value = false;
         getSuccessSnackBar("success");
+        if (homeController.postList.value.length < homeController.limit.value) {
+          homeController.hasmoreData.value = false;
+        }
       }
     });
   }
@@ -427,7 +432,7 @@ class SocketService extends GetxService {
       homeController.newsUpdateList.value = newsList;
       if (homeController.newsUpdateList.value.isEmpty ||
           homeController.newsUpdateList.value == null) {
-        homeController.homeloading.value = true;
+        // homeController.homeloading.value = true;
         getErrorSnackBar("Not able to news");
       } else {
         homeController.homeloading.value = false;
@@ -552,7 +557,10 @@ class SocketService extends GetxService {
         getErrorSnackBar("Not able to get airdrop");
       } else {
         homeController.homeloading.value = false;
-        // getSuccessSnackBar("success");
+        // if (homeController.airdropList.value.length <
+        //     homeController.limit.value) {
+        //   homeController.hasmoreData.value = false;
+        // }
       }
     });
   }
@@ -574,6 +582,9 @@ class SocketService extends GetxService {
       if (index != -1) {
         homeController.airdropList.value[index].likes = likes;
         homeController.airdropList.value[index].dislikes = dislikes;
+        homeController.airdropDetails.value.likes = likes;
+        homeController.airdropDetails.value.dislikes = dislikes;
+        homeController.airdropDetails.refresh();
         homeController.airdropList.refresh();
       }
     });
@@ -596,6 +607,9 @@ class SocketService extends GetxService {
       if (index != -1) {
         homeController.airdropList.value[index].dislikes = dislikes;
         homeController.airdropList.value[index].likes = likes;
+        homeController.airdropDetails.value.likes = likes;
+        homeController.airdropDetails.value.dislikes = dislikes;
+        homeController.airdropDetails.refresh();
         homeController.airdropList.refresh();
       }
     });
@@ -644,6 +658,8 @@ class SocketService extends GetxService {
 
       if (index != -1) {
         homeController.airdropList.value[index].comments =
+            homeController.commentsAirdrop.length;
+        homeController.airdropDetails.value.comments =
             homeController.commentsAirdrop.length;
         homeController.airdropList.refresh();
       }

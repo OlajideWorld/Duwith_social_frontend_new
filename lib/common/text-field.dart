@@ -56,7 +56,7 @@ class _InputTextFieldState extends State<InputTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: heightSize(50),
+      height: heightSize(60),
       decoration: ShapeDecoration(
         color: const Color(0xFF111112),
         shape: RoundedRectangleBorder(

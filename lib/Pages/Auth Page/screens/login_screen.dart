@@ -9,7 +9,6 @@ import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 import 'package:get/get.dart';
 
@@ -47,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         const CText(
                           text: "DUWITH SOCIAL",
-                          size: 15,
+                          size: 18,
                           fontFamily: UsedFonts.stalinistOne,
                           fontWeight: FontWeight.w400,
                         ),
@@ -61,7 +60,7 @@ class LoginScreen extends StatelessWidget {
                               const CText(
                                 text: "Let's Get You Back In!",
                                 fontFamily: UsedFonts.poppins,
-                                size: 15,
+                                size: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                               SizedBox(
@@ -71,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                                       "Log in to reconnect with your friends and discover new content.",
                                   fontFamily: UsedFonts.poppins,
                                   textAlign: TextAlign.center,
-                                  size: 11,
+                                  size: 13,
                                   color: textColor3,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -83,7 +82,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: heightSize(24)),
                         buttonsWidget2(
                             context,
-                            heightSize(45),
+                            heightSize(55),
                             constraints.maxWidth,
                             "Sign in with Email and phone",
                             Icons.email_rounded,
@@ -94,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: heightSize(16)),
                         buttonsWidget2(
                             context,
-                            heightSize(45),
+                            heightSize(55),
                             constraints.maxWidth,
                             "Sign up with wallet",
                             Icons.wallet_outlined,

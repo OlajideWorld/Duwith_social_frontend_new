@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/screens/airdrop_details.dart';
@@ -9,93 +9,143 @@ import '../../../common/custom-text.dart';
 
 import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
-import '../../Auth Page/controller/auth_controller.dart';
 import '../../Auth Page/services/socket_sevice.dart';
 import '../controllers/home_controller.dart';
 
-HomeController homeController = HomeController.instance;
-SocketService socket = SocketService.instance;
-AuthController authController = AuthController.instance;
+class AirdropListWidget extends StatefulWidget {
+  final double width;
+  const AirdropListWidget({super.key, required this.width});
 
-airdropList(BuildContext context, double width) {
-  return homeController.airdropList.value.isEmpty ||
-          homeController.airdropList.value == null
-      ? const Align(
-          alignment: Alignment.center,
-          child: Center(
-            child: CText(
-              text:
-                  "Not able to fetch data, Check internet connection and try again",
-              size: 18,
-              color: textColor,
-              fontFamily: UsedFonts.poppins,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        )
-      : Expanded(
-          child: ListView.builder(
-              itemCount: homeController.airdropList.value.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(bottom: heightSize(10)),
-                  child: Column(
-                    children: [
-                      AirdropDesign(
-                        width: width,
-                        airdropDetails: homeController.airdropList.value[index],
-                      ),
-                    ],
-                  ),
-                );
-              }),
-        );
+  @override
+  State<AirdropListWidget> createState() => _AirdropListWidgetState();
 }
 
-class AirdropDesign extends StatefulWidget {
+class _AirdropListWidgetState extends State<AirdropListWidget> {
+  HomeController homeController = HomeController.instance;
+
+  // final ScrollController scrollController = ScrollController();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   scrollController.addListener(() {
+  //     if (scrollController.position.extentAfter < 500 &&
+  //         !homeController.postloading.value) {
+  //       homeController.fetchAirdrops();
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   scrollController.dispose();
+  //   super.dispose();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return homeController.airdropList.value.isEmpty ||
+            homeController.airdropList.value == null
+        ? const Align(
+            alignment: Alignment.center,
+            child: Center(
+              child: CText(
+                text:
+                    "Not able to fetch data, Check internet connection and try again",
+                size: 18,
+                color: textColor,
+                fontFamily: UsedFonts.poppins,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          )
+        : Expanded(
+            child: ListView.builder(
+                // controller: scrollController,
+                scrollDirection: Axis.vertical,
+                itemCount: homeController.airdropList.value.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: heightSize(10)),
+                    child: Column(
+                      children: [
+                        AirdropDesign(
+                          width: widget.width,
+                          airdropDetails:
+                              homeController.airdropList.value[index],
+                        ),
+                        SizedBox(
+                          height: heightSize(20),
+                        )
+                      ],
+                    ),
+                  );
+                  // if (index < homeController.airdropList.value.length) {
+
+                  // } else {
+                  //   return Padding(
+                  //     padding: EdgeInsets.symmetric(vertical: heightSize(32)),
+                  //     child: homeController.hasmoreData.value == true
+                  //         ? const Center(
+                  //             child: CircularProgressIndicator(
+                  //               color: mainColor,
+                  //             ),
+                  //           )
+                  //         : const CText(
+                  //             text: "NO more posts",
+                  //             size: 12,
+                  //             color: timeColor,
+                  //             fontFamily: UsedFonts.poppins,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //   );
+                  // }
+                }),
+          );
+  }
+}
+
+class AirdropDesign extends StatelessWidget {
   final double width;
   final AirdropModel airdropDetails;
 
-  const AirdropDesign({
+  AirdropDesign({
     super.key,
     required this.width,
     required this.airdropDetails,
   });
 
-  @override
-  State<AirdropDesign> createState() => _AirdropDesignState();
-}
-
-class _AirdropDesignState extends State<AirdropDesign> {
   RxBool isExpanded = false.obs;
+
+  SocketService socket = SocketService.instance;
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return GestureDetector(
         onTap: () async {
-          Get.to(() => AirdropDetailsScreen(
-                airdropDetails: widget.airdropDetails,
-              ));
-
-          await socket.getCommentByAirdropId(widget.airdropDetails.id);
+          homeController.airdropDetails.value = airdropDetails;
+          Get.to(() => AirdropDetailsScreen());
+          await socket.getCommentByAirdropId(airdropDetails.id);
+          // debugPrint(airdropDetails.id);
         },
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
           child: Container(
               alignment: Alignment.center,
-              height: widget.airdropDetails.media.single.type == "image"
+              height: airdropDetails.media.single.type == "image"
                   ? isExpanded.value
                       ? heightSize(180)
                       : heightSize(150)
                   : isExpanded.value
                       ? heightSize(120)
                       : heightSize(100),
-              width: widget.width,
+              width: width,
               decoration: const BoxDecoration(color: Color(0xFF28282C)),
               padding: EdgeInsets.symmetric(
                   horizontal: widthSize(10), vertical: heightSize(10)),
-              child: widget.airdropDetails.media.single.type == "image"
+              child: airdropDetails.media.single.type == "image"
                   ? Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -108,8 +158,7 @@ class _AirdropDesignState extends State<AirdropDesign> {
                                 Row(
                                   children: [
                                     CachedNetworkImage(
-                                      imageUrl: widget
-                                          .airdropDetails.media.single.url,
+                                      imageUrl: airdropDetails.media.single.url,
                                       placeholder: (context, url) => Align(
                                           alignment: Alignment.center,
                                           child: SizedBox(
@@ -133,8 +182,7 @@ class _AirdropDesignState extends State<AirdropDesign> {
                                     ),
                                     SizedBox(width: widthSize(10)),
                                     CText(
-                                      text: truncate(
-                                          widget.airdropDetails.title,
+                                      text: truncate(airdropDetails.title,
                                           length: 7),
                                       size: 15,
                                       color: textColor,
@@ -148,7 +196,7 @@ class _AirdropDesignState extends State<AirdropDesign> {
                                   width: widthSize(400),
                                   child: CText(
                                     text:
-                                        "${truncate(widget.airdropDetails.title, length: 70)}......",
+                                        "${truncate(airdropDetails.title, length: 70)}......",
                                     size: 15,
                                     color: textColor,
                                     fontFamily: UsedFonts.poppins,
@@ -181,11 +229,10 @@ class _AirdropDesignState extends State<AirdropDesign> {
                               ],
                             )),
                         SizedBox(width: widthSize(10)),
-                        widget.airdropDetails.media.single.type == "image"
+                        airdropDetails.media.single.type == "image"
                             ? Expanded(
                                 child: CachedNetworkImage(
-                                  imageUrl:
-                                      widget.airdropDetails.media.single.url,
+                                  imageUrl: airdropDetails.media.single.url,
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
                                   imageBuilder: (context, imageprovider) {
@@ -209,7 +256,7 @@ class _AirdropDesignState extends State<AirdropDesign> {
                       children: [
                         PostContent(
                             isExpanded: isExpanded,
-                            text: widget.airdropDetails.title,
+                            text: airdropDetails.title,
                             size: 10,
                             color: const Color(0xFFD7D7D7),
                             fontFamily: UsedFonts.poppins,

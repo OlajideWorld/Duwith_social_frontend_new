@@ -37,7 +37,8 @@ class LoginWithScreen extends StatelessWidget {
                 return LoadingOverlayPro(
                   isLoading: socket.isloading.value,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: widthSize(30)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: widthSize(30), vertical: heightSize(20)),
                     child: Column(
                       children: [
                         Align(
@@ -53,7 +54,7 @@ class LoginWithScreen extends StatelessWidget {
                         ),
                         SizedBox(height: heightSize(39)),
                         selectLoginOption(context, constraints.maxWidth),
-                        SizedBox(height: heightSize(43)),
+                        SizedBox(height: heightSize(55)),
                         Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: widthSize(20)),
@@ -70,9 +71,9 @@ class LoginWithScreen extends StatelessWidget {
                               textColor: textColor,
                               differentiate: 1),
                         ),
-                        SizedBox(height: heightSize(32)),
+                        SizedBox(height: heightSize(35)),
                         SizedBox(
-                          height: heightSize(22),
+                          height: heightSize(30),
                           width: widthSize(260),
                           child: Row(
                             children: [
@@ -91,13 +92,13 @@ class LoginWithScreen extends StatelessWidget {
                                     text:
                                         "By continuing you’ve agreed with our",
                                     color: textColor3,
-                                    size: 11,
+                                    size: 13,
                                     fontFamily: UsedFonts.poppins,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   CText(
                                     text: "terms and conditions",
-                                    size: 11,
+                                    size: 13,
                                     color: highlightColor,
                                     fontFamily: UsedFonts.poppins,
                                     fontWeight: FontWeight.w500,
@@ -107,13 +108,13 @@ class LoginWithScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: heightSize(18)),
+                        SizedBox(height: heightSize(30)),
                         Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: widthSize(20)),
                           child: buttonsWidget(
                               context,
-                              heightSize(50),
+                              heightSize(60),
                               constraints.maxWidth,
                               "Continue",
                               mainColor,

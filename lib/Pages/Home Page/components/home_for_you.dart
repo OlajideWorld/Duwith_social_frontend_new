@@ -1,6 +1,9 @@
 // ignore_for_file: file_names, invalid_use_of_protected_member, library_private_types_in_public_api
 
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
+import 'package:chewie/chewie.dart';
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
@@ -73,6 +76,57 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   RxBool isExpanded = false.obs;
 
+  late BetterPlayerController betterPlayerController;
+  late BetterPlayerDataSource betterPlayerDataSource;
+
+  @override
+  void initState() {
+    BetterPlayerConfiguration betterPlayerConfiguration =
+        const BetterPlayerConfiguration(
+      aspectRatio: 16 / 9,
+      fit: BoxFit.contain,
+    );
+    betterPlayerDataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      widget.postsData.media.single.url,
+      cacheConfiguration: const BetterPlayerCacheConfiguration(
+        useCache: true,
+        preCacheSize: 10 * 1024 * 1024,
+        maxCacheSize: 10 * 1024 * 1024,
+        maxCacheFileSize: 10 * 1024 * 1024,
+
+        ///Android only option to use cached video between app sessions
+        key: "testCacheKey",
+      ),
+    );
+    betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
+    super.initState();
+  }
+
+  // Future<BetterPlayerController> initializeVideoPlayer(String videoFile) async {
+  //   BetterPlayerConfiguration betterPlayerConfiguration =
+  //       BetterPlayerConfiguration(
+  //     aspectRatio: 16 / 9,
+  //     fit: BoxFit.contain,
+  //   );
+  //   BetterPlayerDataSource _betterPlayerDataSource = BetterPlayerDataSource(
+  //     BetterPlayerDataSourceType.network,
+  //     videoFile,
+  //     cacheConfiguration: BetterPlayerCacheConfiguration(
+  //       useCache: true,
+  //       preCacheSize: 10 * 1024 * 1024,
+  //       maxCacheSize: 10 * 1024 * 1024,
+  //       maxCacheFileSize: 10 * 1024 * 1024,
+
+  //       ///Android only option to use cached video between app sessions
+  //       key: "testCacheKey",
+  //     ),
+  //   );
+  //   BetterPlayerController _betterPlayerController =
+  //       BetterPlayerController(betterPlayerConfiguration);
+  //   return _betterPlayerController;
+  // }
+
   @override
   Widget build(BuildContext context) {
     bool userLiked = widget.postsData.likes.any(
@@ -86,6 +140,10 @@ class _PostWidgetState extends State<PostWidget> {
             ? isExpanded.value
                 ? heightSize(640)
                 : heightSize(540)
+            // : widget.postsData.media.single.type == "video"
+            //     ? isExpanded.value
+            //         ? heightSize(500)
+            //         : heightSize(400)
             : isExpanded.value
                 ? heightSize(260)
                 : heightSize(200),
@@ -126,29 +184,46 @@ class _PostWidgetState extends State<PostWidget> {
                           );
                         },
                       )
-                    : FutureBuilder<VideoPlayerController>(
-                        future: _initializeVideoPlayer(
-                            widget.postsData.media.single.url),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            final controller = snapshot.data!;
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(() => VideoStreamPage(
-                                      url: widget.postsData.media.single.url,
-                                    ));
-                              },
-                              child: AspectRatio(
-                                aspectRatio: controller.value.aspectRatio,
-                                child: VideoPlayer(controller),
-                              ),
-                            );
-                          } else {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
+                    : GestureDetector(
+                        onTap: () {
+                          Get.to(() => VideoStreamPage(
+                                url: widget.postsData.media.single.url,
+                              ));
                         },
+                        child: SizedBox(
+                          height: heightSize(400),
+                          child: Stack(children: [
+                            // AspectRatio(
+                            //   aspectRatio: controller.value.aspectRatio,
+                            //   child: CachedVideoPlayerPlus(controller),
+                            // ),
+                            Container(
+                              height: heightSize(400),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(widthSize(20)))),
+                              child: BetterPlayer.network(
+                                widget.postsData.media.single.url,
+                                betterPlayerConfiguration:
+                                    BetterPlayerConfiguration(
+                                  aspectRatio: 1,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthSize(170),
+                                  vertical: heightSize(170)),
+                              child: SizedBox(
+                                  height: heightSize(52),
+                                  width: widthSize(52),
+                                  child: Image.asset(
+                                    "assets/images/playsymbols.png",
+                                    fit: BoxFit.contain,
+                                  )),
+                            )
+                          ]),
+                        ),
                       )
                 : const SizedBox(),
             SizedBox(height: heightSize(12)),
@@ -271,12 +346,6 @@ class _PostWidgetState extends State<PostWidget> {
         ),
       );
     });
-  }
-
-  Future<VideoPlayerController> _initializeVideoPlayer(String videoFile) async {
-    final controller = VideoPlayerController.networkUrl(Uri.parse(videoFile));
-    await controller.initialize();
-    return controller;
   }
 }
 

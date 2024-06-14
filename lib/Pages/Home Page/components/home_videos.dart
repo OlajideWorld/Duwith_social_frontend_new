@@ -1,15 +1,14 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:duwith_social/models/post-data.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pinput/pinput.dart';
-import 'package:video_player/video_player.dart';
+
 import 'package:get/get.dart';
 
 import '../../../common/button-widget.dart';
@@ -20,7 +19,7 @@ import '../../Auth Page/controller/auth_controller.dart';
 import '../../Auth Page/services/socket_sevice.dart';
 import '../../View Profile Page/screens/view_profile_screen.dart';
 import '../controllers/home_controller.dart';
-import '../screens/comments_display.dart';
+
 import '../screens/comments_display_video.dart';
 
 HomeController homeController = HomeController.instance;
@@ -117,42 +116,77 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
-            FutureBuilder<CachedVideoPlayerPlusController>(
-              future:
-                  _initializeVideoPlayer(widget.postVideos.media.single.url),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  final controller = snapshot.data!;
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(() => VideoStreamPage(
-                            url: widget.postVideos.media.single.url,
-                          ));
-                    },
-                    child: Stack(children: [
-                      AspectRatio(
-                        aspectRatio: controller.value.aspectRatio,
-                        child: CachedVideoPlayerPlus(controller),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: widthSize(170),
-                            vertical: heightSize(100)),
-                        child: SizedBox(
-                            height: heightSize(52),
-                            width: widthSize(52),
-                            child: Image.asset(
-                              "assets/images/playsymbols.png",
-                              fit: BoxFit.contain,
-                            )),
-                      )
-                    ]),
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            GestureDetector(
+              onTap: () {
+                Get.to(() => VideoStreamPage(
+                      url: widget.postVideos.media.single.url,
+                    ));
               },
+              child: SizedBox(
+                height: heightSize(400),
+                child: Stack(children: [
+                  Container(
+                    height: heightSize(400),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(widthSize(20)))),
+                    child: BetterPlayer.network(
+                      widget.postVideos.media.single.url,
+                      betterPlayerConfiguration: BetterPlayerConfiguration(
+                        aspectRatio: 1,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: widthSize(170), vertical: heightSize(170)),
+                    child: SizedBox(
+                        height: heightSize(52),
+                        width: widthSize(52),
+                        child: Image.asset(
+                          "assets/images/playsymbols.png",
+                          fit: BoxFit.contain,
+                        )),
+                  )
+                ]),
+              ),
             ),
+            // FutureBuilder<CachedVideoPlayerPlusController>(
+            //   future:
+            //       _initializeVideoPlayer(widget.postVideos.media.single.url),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.connectionState == ConnectionState.done) {
+            //       final controller = snapshot.data!;
+            //       return GestureDetector(
+            //         onTap: () {
+            //           Get.to(() => VideoStreamPage(
+            //                 url: widget.postVideos.media.single.url,
+            //               ));
+            //         },
+            //         child: Stack(children: [
+            //           AspectRatio(
+            //             aspectRatio: controller.value.aspectRatio,
+            //             child: CachedVideoPlayerPlus(controller),
+            //           ),
+            //           Padding(
+            //             padding: EdgeInsets.symmetric(
+            //                 horizontal: widthSize(170),
+            //                 vertical: heightSize(100)),
+            //             child: SizedBox(
+            //                 height: heightSize(52),
+            //                 width: widthSize(52),
+            //                 child: Image.asset(
+            //                   "assets/images/playsymbols.png",
+            //                   fit: BoxFit.contain,
+            //                 )),
+            //           )
+            //         ]),
+            //       );
+            //     } else {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //   },
+            // ),
             SizedBox(height: heightSize(12)),
             Padding(
               padding:

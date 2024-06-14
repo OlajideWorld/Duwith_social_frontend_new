@@ -20,13 +20,16 @@ import "../../Auth Page/services/socket_sevice.dart";
 import "../components/comments_replies_display.dart";
 import "../controllers/home_controller.dart";
 
-class AirdropDetailsScreen extends StatelessWidget {
-  AirdropModel airdropDetails;
+class AirdropDetailsScreen extends StatefulWidget {
   AirdropDetailsScreen({
     super.key,
-    required this.airdropDetails,
   });
 
+  @override
+  State<AirdropDetailsScreen> createState() => _AirdropDetailsScreenState();
+}
+
+class _AirdropDetailsScreenState extends State<AirdropDetailsScreen> {
   HomeController homeController = HomeController.instance;
 
   SocketService socket = SocketService.instance;
@@ -35,11 +38,11 @@ class AirdropDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RxBool userLiked = airdropDetails.likes
+    RxBool userLiked = homeController.airdropDetails.value.likes
         .any((interaction) =>
             interaction.user == authController.userdata.value.id)
         .obs;
-    RxBool userDisliked = airdropDetails.dislikes
+    RxBool userDisliked = homeController.airdropDetails.value.dislikes
         .any((interaction) =>
             interaction.user == authController.userdata.value.id)
         .obs;
@@ -67,7 +70,8 @@ class AirdropDetailsScreen extends StatelessWidget {
                         Row(
                           children: [
                             CachedNetworkImage(
-                              imageUrl: airdropDetails.media.single.url,
+                              imageUrl: homeController
+                                  .airdropDetails.value.media.single.url,
                               placeholder: (context, url) => Align(
                                   alignment: Alignment.center,
                                   child: SizedBox(
@@ -90,7 +94,9 @@ class AirdropDetailsScreen extends StatelessWidget {
                             ),
                             SizedBox(width: widthSize(10)),
                             CText(
-                              text: truncate(airdropDetails.title, length: 7),
+                              text: truncate(
+                                  homeController.airdropDetails.value.title,
+                                  length: 7),
                               size: 15,
                               color: textColor,
                               height: 0.8,
@@ -122,7 +128,7 @@ class AirdropDetailsScreen extends StatelessWidget {
                               ),
                               SizedBox(height: heightSize(10)),
                               CText(
-                                text: airdropDetails.title,
+                                text: homeController.airdropDetails.value.title,
                                 size: 15,
                                 color: const Color(0xFFECECEC),
                                 fontFamily: UsedFonts.archivo,
@@ -130,7 +136,8 @@ class AirdropDetailsScreen extends StatelessWidget {
                               ),
                               SizedBox(height: heightSize(10)),
                               CText(
-                                text: airdropDetails.caption,
+                                text:
+                                    homeController.airdropDetails.value.caption,
                                 size: 13,
                                 color: const Color(0xFFECECEC),
                                 fontFamily: UsedFonts.poppins,
@@ -143,7 +150,8 @@ class AirdropDetailsScreen extends StatelessWidget {
                         ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
-                            itemCount: airdropDetails.activities.length,
+                            itemCount: homeController
+                                .airdropDetails.value.activities.length,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return SizedBox(
@@ -166,8 +174,12 @@ class AirdropDetailsScreen extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: [
                                           CachedNetworkImage(
-                                            imageUrl:
-                                                airdropDetails.media.single.url,
+                                            imageUrl: homeController
+                                                .airdropDetails
+                                                .value
+                                                .media
+                                                .single
+                                                .url,
                                             placeholder: (context, url) => Align(
                                                 alignment: Alignment.center,
                                                 child: SizedBox(
@@ -194,7 +206,9 @@ class AirdropDetailsScreen extends StatelessWidget {
                                           SizedBox(width: widthSize(9)),
                                           Expanded(
                                             child: CText(
-                                              text: airdropDetails
+                                              text: homeController
+                                                  .airdropDetails
+                                                  .value
                                                   .activities[index],
                                               textAlign: TextAlign.left,
                                               size: 15,
@@ -243,7 +257,8 @@ class AirdropDetailsScreen extends StatelessWidget {
                         SizedBox(height: heightSize(30)),
                         buttonsWidget(context, heightSize(50),
                             constraints.maxWidth, "Claim", mainColor, 18, () {
-                          final website = Uri.parse(airdropDetails.airdropLink);
+                          final website = Uri.parse(
+                              homeController.airdropDetails.value.airdropLink);
                           // External App
                           launchUrl(website,
                               mode: LaunchMode.externalApplication);
@@ -272,8 +287,10 @@ class AirdropDetailsScreen extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () async {
                                         await socket.likeAirdropPost(
-                                            airdropDetails.id,
+                                            homeController
+                                                .airdropDetails.value.id,
                                             authController.userdata.value.id);
+                                        setState(() {});
                                       },
                                       child: SizedBox(
                                         height: heightSize(18),
@@ -292,8 +309,11 @@ class AirdropDetailsScreen extends StatelessWidget {
                                             CText(
                                                 text: homeController
                                                     .engagementShortened(
-                                                        airdropDetails
-                                                            .likes.length))
+                                                        homeController
+                                                            .airdropDetails
+                                                            .value
+                                                            .likes
+                                                            .length))
                                           ],
                                         ),
                                       ),
@@ -307,8 +327,10 @@ class AirdropDetailsScreen extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () async {
                                         await socket.dislikeAirdropPost(
-                                            airdropDetails.id,
+                                            homeController
+                                                .airdropDetails.value.id,
                                             authController.userdata.value.id);
+                                        setState(() {});
                                       },
                                       child: SizedBox(
                                         height: heightSize(18),
@@ -327,8 +349,11 @@ class AirdropDetailsScreen extends StatelessWidget {
                                             CText(
                                                 text: homeController
                                                     .engagementShortened(
-                                                        airdropDetails
-                                                            .dislikes.length))
+                                                        homeController
+                                                            .airdropDetails
+                                                            .value
+                                                            .dislikes
+                                                            .length))
                                           ],
                                         ),
                                       ),
@@ -344,6 +369,124 @@ class AirdropDetailsScreen extends StatelessWidget {
                                 color: const Color(0xFFBEBEBE),
                                 fontFamily: UsedFonts.poppins,
                                 fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(height: heightSize(20)),
+                              Container(
+                                height: heightSize(60),
+                                width: constraints.maxWidth,
+                                decoration: BoxDecoration(
+                                    color: const Color(0xFF151B2E),
+                                    border: Border.all(color: buttonColor2),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(widthSize(20)))),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: heightSize(5),
+                                    horizontal: widthSize(8)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        style: TextStyle(
+                                            fontFamily: UsedFonts.poppins,
+                                            fontWeight: FontWeight.w500,
+                                            color: const Color(0xFFB4B4B4),
+                                            fontSize: fontSize(14)),
+                                        maxLines: 5,
+                                        controller: homeController.commentsText,
+                                        textInputAction: TextInputAction.done,
+                                        decoration: InputDecoration(
+                                          hintText: "Add Comments",
+                                          hintStyle: const TextStyle(
+                                              color: Color(0xFF918F99)),
+                                          filled: true,
+                                          fillColor: Color(0xFF151B2E),
+                                          border: InputBorder.none,
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color(0xFF1F2138)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color(0xFF1F2138)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          contentPadding: EdgeInsets.only(
+                                              left: widthSize(15),
+                                              top: heightSize(4),
+                                              right: widthSize(4),
+                                              bottom: heightSize(5)),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: widthSize(10)),
+                                    GestureDetector(
+                                        onTap: () async {
+                                          if (homeController.commentsText.text
+                                                  .trim() ==
+                                              "") {
+                                            getErrorSnackBar(
+                                                "you have to input a message to comment");
+                                          } else {
+                                            homeController.isCommenting.value =
+                                                true;
+                                            final data = {
+                                              "post": homeController
+                                                  .airdropDetails.value.id,
+                                              "user": authController
+                                                  .userdata.value.id,
+                                              "content": homeController
+                                                  .commentsText.text
+                                                  .trim(),
+                                              "parentComment":
+                                                  homeController.isReply.value
+                                                      ? homeController
+                                                          .parentCommentId.value
+                                                      : null,
+                                            };
+                                            await socket
+                                                .addAirdropComment(data);
+                                            await socket.getCommentByAirdropId(
+                                                homeController
+                                                    .airdropDetails.value.id);
+                                            homeController.commentsText.text =
+                                                "";
+                                          }
+                                        },
+                                        child: homeController
+                                                    .isCommenting.value ==
+                                                true
+                                            ? Container(
+                                                height: heightSize(50),
+                                                width: widthSize(50),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: widthSize(10),
+                                                    vertical: heightSize(10)),
+                                                alignment: Alignment.center,
+                                                decoration:
+                                                    const ShapeDecoration(
+                                                        shape: OvalBorder(),
+                                                        color: mainColor),
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  color: textColor,
+                                                ))
+                                            : Container(
+                                                height: heightSize(50),
+                                                width: widthSize(50),
+                                                alignment: Alignment.center,
+                                                decoration:
+                                                    const ShapeDecoration(
+                                                        shape: OvalBorder(),
+                                                        color: mainColor),
+                                                child: Icon(
+                                                  Icons.send,
+                                                  size: heightSize(30),
+                                                  color: textColor,
+                                                ),
+                                              )),
+                                  ],
+                                ),
                               ),
                               SizedBox(height: heightSize(20)),
                               ListView.builder(
@@ -366,127 +509,6 @@ class AirdropDetailsScreen extends StatelessWidget {
                                     });
                                   }),
                               SizedBox(height: heightSize(20)),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  height: heightSize(60),
-                                  width: constraints.maxWidth,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF151B2E),
-                                      border: Border.all(color: buttonColor2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(widthSize(20)))),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: heightSize(5),
-                                      horizontal: widthSize(8)),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextField(
-                                          style: TextStyle(
-                                              fontFamily: UsedFonts.poppins,
-                                              fontWeight: FontWeight.w500,
-                                              color: const Color(0xFFB4B4B4),
-                                              fontSize: fontSize(14)),
-                                          maxLines: 5,
-                                          controller:
-                                              homeController.commentsText,
-                                          textInputAction: TextInputAction.done,
-                                          decoration: InputDecoration(
-                                            hintText: "Add Comments",
-                                            hintStyle: const TextStyle(
-                                                color: Color(0xFF918F99)),
-                                            filled: true,
-                                            fillColor: Color(0xFF151B2E),
-                                            border: InputBorder.none,
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color(0xFF1F2138)),
-                                                borderRadius:
-                                                    BorderRadius.circular(16)),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color(0xFF1F2138)),
-                                                borderRadius:
-                                                    BorderRadius.circular(16)),
-                                            contentPadding: EdgeInsets.only(
-                                                left: widthSize(15),
-                                                top: heightSize(4),
-                                                right: widthSize(4),
-                                                bottom: heightSize(5)),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: widthSize(10)),
-                                      GestureDetector(
-                                          onTap: () async {
-                                            if (homeController.commentsText.text
-                                                    .trim() ==
-                                                "") {
-                                              getErrorSnackBar(
-                                                  "you have to input a message to comment");
-                                            } else {
-                                              homeController
-                                                  .isCommenting.value = true;
-                                              final data = {
-                                                "post": airdropDetails.id,
-                                                "user": authController
-                                                    .userdata.value.id,
-                                                "content": homeController
-                                                    .commentsText.text
-                                                    .trim(),
-                                                "parentComment":
-                                                    homeController.isReply.value
-                                                        ? homeController
-                                                            .parentCommentId
-                                                            .value
-                                                        : null,
-                                              };
-                                              await socket
-                                                  .addAirdropComment(data);
-                                              await socket
-                                                  .getCommentByAirdropId(
-                                                      airdropDetails.id);
-                                              homeController.commentsText.text =
-                                                  "";
-                                            }
-                                          },
-                                          child: homeController
-                                                      .isCommenting.value ==
-                                                  true
-                                              ? Container(
-                                                  height: heightSize(50),
-                                                  width: widthSize(50),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: widthSize(10),
-                                                      vertical: heightSize(10)),
-                                                  alignment: Alignment.center,
-                                                  decoration:
-                                                      const ShapeDecoration(
-                                                          shape: OvalBorder(),
-                                                          color: mainColor),
-                                                  child:
-                                                      const CircularProgressIndicator(
-                                                    color: textColor,
-                                                  ))
-                                              : Container(
-                                                  height: heightSize(50),
-                                                  width: widthSize(50),
-                                                  alignment: Alignment.center,
-                                                  decoration:
-                                                      const ShapeDecoration(
-                                                          shape: OvalBorder(),
-                                                          color: mainColor),
-                                                  child: Icon(
-                                                    Icons.send,
-                                                    size: heightSize(30),
-                                                    color: textColor,
-                                                  ),
-                                                )),
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         )

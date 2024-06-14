@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 
 homeAppBar(double width) {
   return Padding(
-    padding: EdgeInsets.only(left: widthSize(18), right: widthSize(22)),
+    padding: EdgeInsets.only(left: widthSize(18), right: widthSize(30)),
     child: SizedBox(
       height: heightSize(44),
       width: width,
@@ -23,7 +23,6 @@ homeAppBar(double width) {
             onTap: () => Get.to(() => WalletScreen()),
             child: SizedBox(
               height: heightSize(44),
-              width: widthSize(100),
               child: Row(
                 children: [
                   SizedBox(
@@ -31,22 +30,23 @@ homeAppBar(double width) {
                     width: widthSize(44),
                     child: Image.asset(
                       "assets/images/points.png",
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  const Row(
+                  Row(
                     children: [
-                      CText(
+                      const CText(
                         text: "1000",
-                        size: 11,
+                        size: 15,
                         fontFamily: UsedFonts.poppins,
                         fontWeight: FontWeight.w600,
                         color: textColor,
                       ),
-                      CText(
+                      SizedBox(width: widthSize(5)),
+                      const CText(
                         text: "points",
                         color: textColor3,
-                        size: 9,
+                        size: 13,
                         fontFamily: UsedFonts.poppins,
                         fontWeight: FontWeight.w600,
                       ),

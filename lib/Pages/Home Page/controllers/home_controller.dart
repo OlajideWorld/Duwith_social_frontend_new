@@ -8,6 +8,8 @@ import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:duwith_social/models/news_models.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/state_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -66,8 +68,12 @@ class HomeController extends GetxController {
   }
 
 // Posts Data
-  RxInt limit = 10.obs;
-  RxInt page = 0.obs;
+  RxInt limit = 15.obs;
+  RxInt page = 1.obs;
+  RxInt videopage = 1.obs;
+  RxInt newspage = 1.obs;
+  RxInt airdroppage = 1.obs;
+  RxBool hasmoreData = true.obs;
 
   // start App Ads
   StartAppBannerAd? startBannerAd;
@@ -90,6 +96,7 @@ class HomeController extends GetxController {
   //
   RxBool homeloading = true.obs;
   RxBool continueLoading = false.obs;
+  RxBool postloading = false.obs;
 
   RxInt viewBarOption = 0.obs;
   RxInt viewprofileslide = 0.obs;
@@ -118,6 +125,21 @@ class HomeController extends GetxController {
   RxList<PostForYou> postListVideo = <PostForYou>[].obs;
   RxList<NewsUpdate> newsUpdateList = <NewsUpdate>[].obs;
   RxList<AirdropModel> airdropList = <AirdropModel>[].obs;
+  Rx<AirdropModel> airdropDetails = AirdropModel(
+          id: "",
+          title: "title",
+          airdropLogo: "airdropLogo",
+          media: [],
+          caption: "caption",
+          participants: [],
+          activities: [],
+          airdropLink: "",
+          comments: 0,
+          likes: [],
+          dislikes: [],
+          createdAt: DateTime.now(),
+          v: 1)
+      .obs;
 
   // Comments
   RxBool isCommenting = false.obs;
@@ -181,12 +203,13 @@ class HomeController extends GetxController {
       ], // Add relevant data
       // 'interests': authController.userdata.value.interests,
       'sortBy': 'createdAt',
-      'skip': page.value * limit.value,
+      'skip': (page.value - 1) * limit.value,
       'limit': limit.value,
     };
     await socket.getPost(data);
     await Future.delayed(const Duration(seconds: 2), () {});
     homeloading.value = false;
+    // page.value++;
   }
 
   fetchvideos() async {
@@ -222,12 +245,13 @@ class HomeController extends GetxController {
         ], // Add relevant data
         // 'interests': authController.userdata.value.interests,
         'sortBy': 'createdAt',
-        'skip': page.value * limit.value,
+        'skip': (page.value - 1) * limit.value,
         'limit': limit.value,
       };
       await socket.getVideos(data);
       await Future.delayed(const Duration(seconds: 2), () {});
       homeloading.value = false;
+      // videopage.value++;
     }
   }
 
@@ -235,14 +259,15 @@ class HomeController extends GetxController {
     homeloading.value = true;
     var data = {
       'sortBy': 'createdAt',
-      'skip': page.value * limit.value,
+      'skip': (page.value - 1) * limit.value,
       'limit': limit.value,
     };
     await socket.getNewsList(data);
-    if (newsUpdateList.value == []) {
+    if (newsUpdateList.value.isEmpty) {
       getErrorSnackBar("No post Available now");
     } else {
       homeloading.value = false;
+      // newspage.value++;
     }
   }
 
@@ -250,15 +275,16 @@ class HomeController extends GetxController {
     homeloading.value = true;
     var data = {
       'sortBy': 'createdAt',
-      'skip': page.value * limit.value,
+      'skip': (page.value - 1) * limit.value,
       'limit': limit.value,
     };
     await socket.getAirdropList(data);
     await Future.delayed(const Duration(seconds: 5), () {});
-    if (newsUpdateList.value == []) {
+    if (airdropList.value.isEmpty) {
       getErrorSnackBar("No post Available now");
     } else {
       homeloading.value = false;
+      // airdroppage.value++;
     }
   }
 

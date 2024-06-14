@@ -1,8 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:better_player_plus/better_player_plus.dart';
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
+import 'package:chewie/chewie.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
+import 'package:duwith_social/utils/sizes.dart';
 import "package:flutter/material.dart";
 import 'package:video_player/video_player.dart';
 
@@ -16,24 +19,21 @@ class VideoStreamPage extends StatefulWidget {
 }
 
 class _VideoStreamPageState extends State<VideoStreamPage> {
-  late CachedVideoPlayerPlusController _controller;
+  bool isVideoInitialized = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller =
-        CachedVideoPlayerPlusController.networkUrl(Uri.parse(widget.url))
-          ..initialize().then((_) {
-            setState(() {});
-            _controller.play();
-          });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  //   chewieController = ChewieController(
+  //       videoPlayerController: _controller, autoPlay: true, looping: true);
+
+  //   _controller.initialize().then((_) {
+  //     setState(() {});
+  //     isVideoInitialized = true;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +51,16 @@ class _VideoStreamPageState extends State<VideoStreamPage> {
         backgroundColor: backgroundColor,
       ),
       body: Center(
-        child: _controller.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: CachedVideoPlayerPlus(_controller),
-              )
-            : const CircularProgressIndicator(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller.value.isPlaying
-                ? _controller.pause()
-                : _controller.play();
-          });
-        },
-        child: Icon(
-          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+        child: Container(
+          height: heightSize(400),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(widthSize(20)))),
+          child: BetterPlayer.network(
+            widget.url,
+            betterPlayerConfiguration: const BetterPlayerConfiguration(
+              aspectRatio: 1,
+            ),
+          ),
         ),
       ),
     );
