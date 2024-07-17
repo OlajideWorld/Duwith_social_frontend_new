@@ -20,7 +20,7 @@ homeAppBar(double width) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () => Get.to(() => WalletScreen()),
+            onTap: () => Get.to(() => const WalletScreen()),
             child: SizedBox(
               height: heightSize(44),
               child: Row(

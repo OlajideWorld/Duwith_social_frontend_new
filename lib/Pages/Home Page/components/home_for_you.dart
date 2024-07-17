@@ -103,29 +103,11 @@ class _PostWidgetState extends State<PostWidget> {
     super.initState();
   }
 
-  // Future<BetterPlayerController> initializeVideoPlayer(String videoFile) async {
-  //   BetterPlayerConfiguration betterPlayerConfiguration =
-  //       BetterPlayerConfiguration(
-  //     aspectRatio: 16 / 9,
-  //     fit: BoxFit.contain,
-  //   );
-  //   BetterPlayerDataSource _betterPlayerDataSource = BetterPlayerDataSource(
-  //     BetterPlayerDataSourceType.network,
-  //     videoFile,
-  //     cacheConfiguration: BetterPlayerCacheConfiguration(
-  //       useCache: true,
-  //       preCacheSize: 10 * 1024 * 1024,
-  //       maxCacheSize: 10 * 1024 * 1024,
-  //       maxCacheFileSize: 10 * 1024 * 1024,
-
-  //       ///Android only option to use cached video between app sessions
-  //       key: "testCacheKey",
-  //     ),
-  //   );
-  //   BetterPlayerController _betterPlayerController =
-  //       BetterPlayerController(betterPlayerConfiguration);
-  //   return _betterPlayerController;
-  // }
+  @override
+  void dispose() {
+    betterPlayerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,10 +175,6 @@ class _PostWidgetState extends State<PostWidget> {
                         child: SizedBox(
                           height: heightSize(400),
                           child: Stack(children: [
-                            // AspectRatio(
-                            //   aspectRatio: controller.value.aspectRatio,
-                            //   child: CachedVideoPlayerPlus(controller),
-                            // ),
                             Container(
                               height: heightSize(400),
                               decoration: BoxDecoration(
@@ -205,7 +183,7 @@ class _PostWidgetState extends State<PostWidget> {
                               child: BetterPlayer.network(
                                 widget.postsData.media.single.url,
                                 betterPlayerConfiguration:
-                                    BetterPlayerConfiguration(
+                                    const BetterPlayerConfiguration(
                                   aspectRatio: 1,
                                 ),
                               ),

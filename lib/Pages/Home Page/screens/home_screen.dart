@@ -5,6 +5,7 @@ import 'package:duwith_social/Pages/Home%20Page/components/home_appBar.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_news.dart';
+import 'package:duwith_social/Pages/Home%20Page/components/home_quiz.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_videos.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
@@ -133,7 +134,24 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       )
                                     : AirdropListWidget(
-                                        width: constraints.maxWidth)
+                                        width: constraints.maxWidth),
+                          if (homeController.viewBarOption.value == 4)
+                            homeController.homeloading.value == true
+                                ? ShimmerLoadingWidget(
+                                    width: constraints.maxWidth)
+                                : homeController.mainquizList.value.isEmpty
+                                    ? const Center(
+                                        child: CText(
+                                          text:
+                                              "Unable to get the Quiz, check internet connection and try again",
+                                          size: 12,
+                                          color: timeColor,
+                                          fontFamily: UsedFonts.poppins,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      )
+                                    : quizListWidget(
+                                        context, constraints.maxWidth)
                         ],
                       ),
                     ),

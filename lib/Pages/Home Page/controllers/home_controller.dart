@@ -2,13 +2,17 @@
 
 import 'package:cloudinary/cloudinary.dart';
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
+import 'package:duwith_social/Pages/Home%20Page/screens/quiz_questions.dart';
 import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
 import 'package:duwith_social/common/getxmessage.dart';
+import 'package:duwith_social/models/questions_model.dart';
+import 'package:duwith_social/models/quiz_model.dart';
 import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:duwith_social/models/news_models.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
@@ -65,6 +69,46 @@ class HomeController extends GetxController {
     bankName.dispose();
     accountnumber.dispose();
     postCaption.dispose();
+  }
+
+  // Quiz Model
+  RxList<MainQuizModel> mainquizList = <MainQuizModel>[].obs;
+  RxList<QuestionModel> quizQuestions = <QuestionModel>[].obs;
+
+  RxBool isgettngQuestions = false.obs;
+  RxInt currentIndex = 0.obs;
+  RxInt reward = 0.obs;
+  RxInt isSelected = 0.obs;
+
+  fetchQuizQuestionsList(String id, String image, String writeup,
+      String quizType, int quiztaker) async {
+    isgettngQuestions.value = true;
+    await socket.getMainQuizList();
+    await Future.delayed(const Duration(seconds: 2), () {});
+    if (quizQuestions.value.isEmpty) {
+      isgettngQuestions.value = false;
+      getErrorSnackBar("No Questions Available now");
+    } else {
+      isgettngQuestions.value = false;
+      Get.to(() => QuizQuestionsDetails(
+            image: image,
+            writeup: writeup,
+            quizType: quizType,
+            quiztakers: quiztaker,
+          ));
+    }
+  }
+
+  fetchMainQuizList() async {
+    homeloading.value = true;
+    await socket.getMainQuizList();
+    await Future.delayed(const Duration(seconds: 3), () {});
+    if (mainquizList.value.isEmpty) {
+      homeloading.value = false;
+      getErrorSnackBar("No Quiz Available now");
+    } else {
+      homeloading.value = false;
+    }
   }
 
 // Posts Data
@@ -263,6 +307,7 @@ class HomeController extends GetxController {
       'limit': limit.value,
     };
     await socket.getNewsList(data);
+    await Future.delayed(const Duration(seconds: 5), () {});
     if (newsUpdateList.value.isEmpty) {
       getErrorSnackBar("No post Available now");
     } else {

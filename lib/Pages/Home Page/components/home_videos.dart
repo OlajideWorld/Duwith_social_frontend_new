@@ -97,7 +97,7 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
         (interaction) => interaction.user == authController.userdata.value.id);
     return Obx(() {
       return Container(
-        height: isExpanded.value ? heightSize(500) : heightSize(400),
+        height: isExpanded.value ? heightSize(640) : heightSize(560),
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF28282C)),
         padding: EdgeInsets.symmetric(
@@ -132,7 +132,8 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                             BorderRadius.all(Radius.circular(widthSize(20)))),
                     child: BetterPlayer.network(
                       widget.postVideos.media.single.url,
-                      betterPlayerConfiguration: BetterPlayerConfiguration(
+                      betterPlayerConfiguration:
+                          const BetterPlayerConfiguration(
                         aspectRatio: 1,
                       ),
                     ),
@@ -151,42 +152,6 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                 ]),
               ),
             ),
-            // FutureBuilder<CachedVideoPlayerPlusController>(
-            //   future:
-            //       _initializeVideoPlayer(widget.postVideos.media.single.url),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.done) {
-            //       final controller = snapshot.data!;
-            //       return GestureDetector(
-            //         onTap: () {
-            //           Get.to(() => VideoStreamPage(
-            //                 url: widget.postVideos.media.single.url,
-            //               ));
-            //         },
-            //         child: Stack(children: [
-            //           AspectRatio(
-            //             aspectRatio: controller.value.aspectRatio,
-            //             child: CachedVideoPlayerPlus(controller),
-            //           ),
-            //           Padding(
-            //             padding: EdgeInsets.symmetric(
-            //                 horizontal: widthSize(170),
-            //                 vertical: heightSize(100)),
-            //             child: SizedBox(
-            //                 height: heightSize(52),
-            //                 width: widthSize(52),
-            //                 child: Image.asset(
-            //                   "assets/images/playsymbols.png",
-            //                   fit: BoxFit.contain,
-            //                 )),
-            //           )
-            //         ]),
-            //       );
-            //     } else {
-            //       return const Center(child: CircularProgressIndicator());
-            //     }
-            //   },
-            // ),
             SizedBox(height: heightSize(12)),
             Padding(
               padding:

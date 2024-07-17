@@ -5,9 +5,12 @@ import "dart:async";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
 import "package:duwith_social/common/getxmessage.dart";
+import "package:duwith_social/models/questions_model.dart";
+import "package:duwith_social/models/quiz_model.dart";
 import "package:duwith_social/models/comments_model.dart";
 import "package:duwith_social/models/news_models.dart";
 import "package:duwith_social/models/post-data.dart";
+import "package:flutter/cupertino.dart";
 
 import "package:get/get.dart";
 import "package:socket_io_client/socket_io_client.dart" as IO;
@@ -44,7 +47,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          productionUrl,
+          testUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -506,8 +509,6 @@ class SocketService extends GetxService {
   }
 
   //
-  //
-  //
   //  Airdrop Methods
 
 // Air-drop
@@ -522,7 +523,7 @@ class SocketService extends GetxService {
       homeController.airdropList.value = airdropList;
       if (homeController.airdropList.value.isEmpty ||
           homeController.airdropList.value == null) {
-        homeController.homeloading.value = true;
+        homeController.homeloading.value = false;
         getErrorSnackBar("Not able to get airdrop");
       } else {
         homeController.homeloading.value = false;
@@ -634,6 +635,50 @@ class SocketService extends GetxService {
       }
 
       homeController.loadingComment.value = false;
+    });
+  }
+
+////
+  // Quiz Methods
+
+  getMainQuizList() {
+    _socket.emit("get_quiz");
+    //
+    _socket.on("quiz_gotten", (data) {
+      List<MainQuizModel> mainquizList = (data as List)
+          .map((item) => MainQuizModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      homeController.mainquizList.value = mainquizList;
+
+      debugPrint(mainquizList.first.quizName.toString());
+
+      if (homeController.mainquizList.value.isEmpty ||
+          homeController.mainquizList.value == null) {
+        homeController.homeloading.value = false;
+        getErrorSnackBar("Not able to get airdrop");
+      } else {
+        homeController.homeloading.value = false;
+      }
+    });
+  }
+
+  getQuizQuestions(String id) {
+    _socket.emit("get_questions", id);
+    //
+    _socket.on("quiz_questions_gotten", (data) {
+      List<QuestionModel> questionsList = (data as List)
+          .map((item) => QuestionModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+      questionsList.shuffle();
+      homeController.quizQuestions.value = questionsList.take(3).toList();
+      if (homeController.quizQuestions.value.isEmpty ||
+          homeController.quizQuestions.value == null) {
+        homeController.isgettngQuestions.value = false;
+        getErrorSnackBar("Not able to get questions");
+      } else {
+        homeController.isgettngQuestions.value = false;
+      }
     });
   }
 }

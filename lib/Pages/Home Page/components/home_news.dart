@@ -82,15 +82,15 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
       return Container(
         height: widget.newsPost.media.single.type == "image"
             ? isExpanded.value
-                ? heightSize(640)
+                ? heightSize(600)
                 : heightSize(540)
             : isExpanded.value
-                ? heightSize(260)
-                : heightSize(200),
+                ? heightSize(240)
+                : heightSize(150),
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF28282C)),
         padding: EdgeInsets.symmetric(
-            horizontal: widthSize(10), vertical: heightSize(5)),
+            horizontal: widthSize(10), vertical: heightSize(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
