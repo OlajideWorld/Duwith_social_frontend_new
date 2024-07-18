@@ -1,7 +1,11 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:math';
 
+import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_money_component.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/screens/games_screen.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -15,37 +19,86 @@ import '../../../common/custom-text.dart';
 import '../../../common/spindata.dart';
 import '../../../utils/color.dart';
 
-earnTapMoneyWuidget() {
-  return Bounceable(
-    onTap: () {},
-    child: SizedBox(
-      height: heightSize(202),
-      width: widthSize(202),
-      child: Stack(
-        children: [
-          SizedBox(
-            height: heightSize(218),
-            width: widthSize(202),
-            child: Image.asset(
-              "assets/images/Earn/earn_more4.png",
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              height: heightSize(145),
-              width: widthSize(143),
-              child: Image.asset(
-                "assets/images/Earn/dog_earn.png",
-                fit: BoxFit.contain,
+class EarnTapMoneyWidget extends StatefulWidget {
+  EarnTapMoneyWidget({super.key});
+
+  @override
+  State<EarnTapMoneyWidget> createState() => _EarnTapMoneyWidgetState();
+}
+
+class _EarnTapMoneyWidgetState extends State<EarnTapMoneyWidget> {
+  EarnController earnController = EarnController();
+
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () {
+        earnController.isAnimating.value = !earnController.isAnimating.value;
+        earnController.coinPosition.value = Offset(width - widthSize(59) - 100,
+            heightSize(118)); // Position near the jar
+      },
+      child: Bounceable(
+        onTap: () {},
+        child: SizedBox(
+          height: heightSize(202),
+          width: widthSize(202),
+          child: Stack(
+            children: [
+              SizedBox(
+                height: heightSize(218),
+                width: widthSize(202),
+                child: Image.asset(
+                  "assets/images/Earn/earn_more4.png",
+                  fit: BoxFit.fitHeight,
+                ),
               ),
-            ),
-          )
-        ],
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  height: heightSize(145),
+                  width: widthSize(143),
+                  child: Image.asset(
+                    "assets/images/Earn/dog_earn.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  void queueAnimation() {
+    earnController.tapCount.value++;
+    earnController.animationQueue.add(startAnimation);
+    if (!earnController.isAnimating.value) {
+      processNextAnimation();
+    }
+  }
+
+  void startAnimation() {
+    earnController.isAnimating.value = true;
+    earnController.coinPosition.value = Offset(
+        earnController.width.value - widthSize(59) - 20,
+        heightSize(118)); // Position near the jar
+
+    Future.delayed(const Duration(seconds: 1), () {
+      earnController.isAnimating.value = false;
+      earnController.coinPosition.value = const Offset(0, 0); // Reset position
+      earnController.tapCount.value--;
+      processNextAnimation();
+    });
+  }
+
+  void processNextAnimation() {
+    if (earnController.tapCount.value > 0) {
+      final animation = earnController.animationQueue.removeAt(0);
+      animation();
+    }
+  }
 }
 
 earnMoreExtraWidget(Color box1, String headline, String body, String tagline,

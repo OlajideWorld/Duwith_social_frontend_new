@@ -1,15 +1,21 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_money_component.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
 import '../../../utils/sizes.dart';
 
 class EarnMorePage extends StatelessWidget {
-  const EarnMorePage({super.key});
+  EarnMorePage({super.key});
+
+  EarnController earnController = EarnController.instance;
 
   @override
   Widget build(BuildContext context) {
+    earnController.width.value = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: backgroundColor,
       body: LayoutBuilder(

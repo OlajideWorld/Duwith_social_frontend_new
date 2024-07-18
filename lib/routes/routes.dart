@@ -1,4 +1,5 @@
 import 'package:duwith_social/Pages/Auth%20Page/screens/login_screen.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_binding.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_bindings.dart';
 import 'package:duwith_social/Pages/Home%20Page/screens/home_screen.dart';
 import 'package:duwith_social/Pages/Splash%20Screen/screens/splash_screen.dart';
@@ -24,6 +25,6 @@ class Pages {
     GetPage(
         name: MyRoutes.homeScreen,
         page: () => HomeScreen(),
-        binding: HomeBindings())
+        bindings: [HomeBindings(), EarnBinding()])
   ];
 }

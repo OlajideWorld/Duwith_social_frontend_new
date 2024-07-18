@@ -1,14 +1,20 @@
+import "package:add_to_cart_animation/add_to_cart_animation.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/social_bottom_sheet.dart";
+import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
 import "package:duwith_social/Services/Ads%20Service/admob_manager.dart";
 import "package:duwith_social/Services/Ads%20Service/start_app_manager.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:get/get.dart";
+import "package:get/state_manager.dart";
 
 import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";
 import "../../../utils/sizes.dart";
+
+EarnController earnController = EarnController.instance;
 
 earnBalanceWidget() {
   return SizedBox(
@@ -243,7 +249,7 @@ earnTap(double width) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              earnTapMoneyWuidget(),
+              EarnTapMoneyWidget(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -275,7 +281,36 @@ earnTap(double width) {
             ],
           ),
         ),
-      )
+      ),
+      // AddToCartIcon(key: key, icon: icon),
+      Obx(() {
+        return AnimatedPositioned(
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeInOut,
+          left: earnController.isAnimating.value
+              ? earnController.coinPosition.value.dx
+              : widthSize(59) +
+                  30, // Initial position of the coin (near the dog)
+          top: earnController.isAnimating.value
+              ? earnController.coinPosition.value.dy
+              : heightSize(118), // Initial position of the coin (near the dog)
+
+          child: GestureDetector(
+            onTap: () {
+              earnController.isAnimating.value =
+                  !earnController.isAnimating.value;
+              earnController.coinPosition.value = Offset(
+                  width - widthSize(59) - 100,
+                  heightSize(118)); // Position near the jar
+            },
+            child: Image.asset(
+              "assets/images/points.png", // the coin image
+              height: heightSize(20),
+              width: widthSize(20),
+            ),
+          ),
+        );
+      }),
     ]),
   );
 }
