@@ -36,12 +36,12 @@ quizListWidget(BuildContext context, double width) {
             ),
           ),
         )
-      : LoadingOverlayPro(
-          isLoading: homeController.isgettngQuestions.value,
-          progressIndicator: const LoadingBouncingGrid.square(
-            backgroundColor: mainColor,
-          ),
-          child: Expanded(
+      : Expanded(
+          child: LoadingOverlayPro(
+            isLoading: homeController.isgettngQuestions.value,
+            progressIndicator: const LoadingBouncingGrid.square(
+              backgroundColor: mainColor,
+            ),
             child: ListView.builder(
                 itemCount: homeController.mainquizList.value.length,
                 itemBuilder: (context, index) {

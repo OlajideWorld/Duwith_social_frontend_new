@@ -1,11 +1,10 @@
 // ignore_for_file: must_be_immutable, invalid_use_of_protected_member
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_quiz.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/quiz_questions_widget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:duwith_social/common/button-widget.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
@@ -29,284 +28,381 @@ class QuizQuestionsDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Obx(() {
-            return SizedBox(
-              height: constraints.maxHeight,
-              width: constraints.maxWidth,
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: SizedBox(
-                    child: Column(
-                      children: [
-                        SizedBox(height: heightSize(30)),
-                        quizAppBar(),
-                        SizedBox(height: heightSize(32)),
-                        quizQuestionsContainer(
-                            constraints.maxWidth, image, writeup, quizType),
-                        SizedBox(height: heightSize(5)),
-                        Container(
-                          height: heightSize(567),
-                          width: constraints.maxWidth,
-                          padding: EdgeInsets.symmetric(
-                              vertical: heightSize(20),
-                              horizontal: widthSize(20)),
-                          decoration:
-                              const BoxDecoration(color: Color(0xFF28282C)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const CText(
-                                text: "Quiz",
-                                size: 17,
-                                color: Color(0xFFC5CAD8),
-                                fontFamily: UsedFonts.poppins,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              SizedBox(height: heightSize(5)),
-                              const CText(
-                                text:
-                                    "Make sure to complete the questions before you can be given full points",
-                                size: 12,
-                                color: Color(0xFFC5CAD8),
-                                fontFamily: UsedFonts.poppins,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              SizedBox(height: heightSize(5)),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: heightSize(5),
-                                    horizontal: widthSize(7)),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(widthSize(10))),
-                                    color: const Color(0xFF054C8D)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.people,
-                                        color: textColor, size: heightSize(12)),
-                                    SizedBox(width: widthSize(5)),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(top: heightSize(3)),
+    return WillPopScope(
+      onWillPop: () async {
+        homeController.currentIndex.value = 0;
+        homeController.totalReward.value = 0;
+        homeController.numberPassed.value = 0;
+        homeController.numberfailed.value = 0;
+        homeController.isSelected.value = 0;
+        homeController.selectedAnswer.value = "";
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Obx(() {
+              return SizedBox(
+                height: constraints.maxHeight,
+                width: constraints.maxWidth,
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(
+                      child: Column(
+                        children: [
+                          SizedBox(height: heightSize(30)),
+                          quizAppBar(),
+                          SizedBox(height: heightSize(32)),
+                          quizQuestionsContainer(
+                              constraints.maxWidth, image, writeup, quizType),
+                          SizedBox(height: heightSize(5)),
+                          Container(
+                            height: heightSize(567),
+                            width: constraints.maxWidth,
+                            padding: EdgeInsets.symmetric(
+                                vertical: heightSize(20),
+                                horizontal: widthSize(20)),
+                            decoration:
+                                const BoxDecoration(color: Color(0xFF28282C)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CText(
+                                  text: "Quiz",
+                                  size: 17,
+                                  color: Color(0xFFC5CAD8),
+                                  fontFamily: UsedFonts.poppins,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                SizedBox(height: heightSize(5)),
+                                const CText(
+                                  text:
+                                      "Make sure to complete the questions before you can be given full points",
+                                  size: 12,
+                                  color: Color(0xFFC5CAD8),
+                                  fontFamily: UsedFonts.poppins,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                SizedBox(height: heightSize(5)),
+                                Container(
+                                  width: widthSize(130),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: heightSize(5),
+                                      horizontal: widthSize(7)),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(widthSize(10))),
+                                      color: const Color(0xFF054C8D)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(Icons.people,
+                                          color: textColor,
+                                          size: heightSize(12)),
+                                      SizedBox(width: widthSize(5)),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(top: heightSize(3)),
+                                        child: CText(
+                                          text:
+                                              "${homeController.engagementShortened(quiztakers)}  participants",
+                                          size: 10,
+                                          color: textColor,
+                                          fontFamily: UsedFonts.poppins,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: heightSize(66)),
+                                GestureDetector(
+                                  onTap: () {
+                                    homeController.isSelected.value = 1;
+                                    homeController.selectedAnswer.value =
+                                        homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionA;
+                                  },
+                                  child: Container(
+                                    height: heightSize(60),
+                                    width: constraints.maxWidth,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            homeController.isSelected.value == 1
+                                                ? widthSize(10)
+                                                : widthSize(0)),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(10))),
+                                        color:
+                                            homeController.isSelected.value == 1
+                                                ? const Color(0xFF0BCEDB)
+                                                : const Color(0xFF373F5A),
+                                        border: Border.all(
+                                            color: homeController
+                                                        .isSelected.value ==
+                                                    1
+                                                ? const Color(0xFF0BCEDB)
+                                                : const Color(0xFF373F5A))),
+                                    child: Container(
+                                      height: heightSize(60),
+                                      width: constraints.maxWidth,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFF373F5A),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(widthSize(10)))),
                                       child: CText(
-                                        text:
-                                            "${homeController.engagementShortened(quiztakers)} participants",
-                                        size: 10,
+                                        text: homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionA,
+                                        size: 14,
                                         color: textColor,
                                         fontFamily: UsedFonts.poppins,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: heightSize(66)),
-                              GestureDetector(
-                                onTap: () {
-                                  homeController.isSelected.value = 1;
-                                },
-                                child: Container(
-                                  height: heightSize(60),
-                                  width: constraints.maxWidth,
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.only(
-                                      left: homeController.isSelected.value == 1
-                                          ? widthSize(10)
-                                          : widthSize(0)),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(widthSize(10))),
-                                      color:
-                                          homeController.isSelected.value == 1
-                                              ? const Color(0xFF0BCEDB)
-                                              : const Color(0xFF373F5A),
-                                      border: Border.all(
-                                          color:
-                                              homeController.isSelected.value ==
-                                                      1
-                                                  ? const Color(0xFF0BCEDB)
-                                                  : const Color(0xFF373F5A))),
+                                SizedBox(height: heightSize(8)),
+                                GestureDetector(
+                                  onTap: () {
+                                    homeController.isSelected.value = 2;
+                                    homeController.selectedAnswer.value =
+                                        homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionB;
+                                  },
                                   child: Container(
                                     height: heightSize(60),
                                     width: constraints.maxWidth,
                                     alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF373F5A),
-                                    ),
-                                    child: CText(
-                                      text: homeController
-                                          .quizQuestions
-                                          .value[
-                                              homeController.currentIndex.value]
-                                          .optionA,
-                                      size: 14,
-                                      color: textColor,
-                                      fontFamily: UsedFonts.poppins,
-                                      fontWeight: FontWeight.w500,
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            homeController.isSelected.value == 2
+                                                ? widthSize(10)
+                                                : widthSize(0)),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(10))),
+                                        color:
+                                            homeController.isSelected.value == 2
+                                                ? const Color(0xFF0BCEDB)
+                                                : const Color(0xFF373F5A),
+                                        border: Border.all(
+                                            color: homeController
+                                                        .isSelected.value ==
+                                                    2
+                                                ? const Color(0xFF0BCEDB)
+                                                : const Color(0xFF373F5A))),
+                                    child: Container(
+                                      height: heightSize(60),
+                                      width: constraints.maxWidth,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(10))),
+                                        color: Color(0xFF373F5A),
+                                      ),
+                                      child: CText(
+                                        text: homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionB,
+                                        size: 14,
+                                        color: textColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: heightSize(8)),
-                              GestureDetector(
-                                onTap: () {
-                                  homeController.isSelected.value = 2;
-                                },
-                                child: Container(
-                                  height: heightSize(60),
-                                  width: constraints.maxWidth,
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.only(
-                                      left: homeController.isSelected.value == 2
-                                          ? widthSize(10)
-                                          : widthSize(0)),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(widthSize(10))),
-                                      color:
-                                          homeController.isSelected.value == 2
-                                              ? const Color(0xFF0BCEDB)
-                                              : const Color(0xFF373F5A),
-                                      border: Border.all(
-                                          color:
-                                              homeController.isSelected.value ==
-                                                      2
-                                                  ? const Color(0xFF0BCEDB)
-                                                  : const Color(0xFF373F5A))),
+                                SizedBox(height: heightSize(8)),
+                                GestureDetector(
+                                  onTap: () {
+                                    homeController.isSelected.value = 3;
+                                    homeController.selectedAnswer.value =
+                                        homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionC;
+                                  },
                                   child: Container(
                                     height: heightSize(60),
                                     width: constraints.maxWidth,
                                     alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF373F5A),
-                                    ),
-                                    child: CText(
-                                      text: homeController
-                                          .quizQuestions
-                                          .value[
-                                              homeController.currentIndex.value]
-                                          .optionB,
-                                      size: 14,
-                                      color: textColor,
-                                      fontFamily: UsedFonts.poppins,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: heightSize(8)),
-                              GestureDetector(
-                                onTap: () {
-                                  homeController.isSelected.value = 3;
-                                },
-                                child: Container(
-                                  height: heightSize(60),
-                                  width: constraints.maxWidth,
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.only(
-                                      left: homeController.isSelected.value == 3
-                                          ? widthSize(10)
-                                          : widthSize(0)),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(widthSize(10))),
-                                      color:
-                                          homeController.isSelected.value == 3
-                                              ? const Color(0xFF0BCEDB)
-                                              : const Color(0xFF373F5A),
-                                      border: Border.all(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            homeController.isSelected.value == 3
+                                                ? widthSize(10)
+                                                : widthSize(0)),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(10))),
                                         color:
                                             homeController.isSelected.value == 3
                                                 ? const Color(0xFF0BCEDB)
                                                 : const Color(0xFF373F5A),
-                                      )),
+                                        border: Border.all(
+                                          color:
+                                              homeController.isSelected.value ==
+                                                      3
+                                                  ? const Color(0xFF0BCEDB)
+                                                  : const Color(0xFF373F5A),
+                                        )),
+                                    child: Container(
+                                      height: heightSize(60),
+                                      width: constraints.maxWidth,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(10))),
+                                        color: const Color(0xFF373F5A),
+                                      ),
+                                      child: CText(
+                                        text: homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionC,
+                                        size: 14,
+                                        color: textColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: heightSize(8)),
+                                GestureDetector(
+                                  onTap: () {
+                                    homeController.isSelected.value = 4;
+                                    homeController.selectedAnswer.value =
+                                        homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionD;
+                                  },
                                   child: Container(
                                     height: heightSize(60),
                                     width: constraints.maxWidth,
                                     alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF373F5A),
-                                    ),
-                                    child: CText(
-                                      text: homeController
-                                          .quizQuestions
-                                          .value[
-                                              homeController.currentIndex.value]
-                                          .optionC,
-                                      size: 14,
-                                      color: textColor,
-                                      fontFamily: UsedFonts.poppins,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: heightSize(8)),
-                              GestureDetector(
-                                onTap: () {
-                                  homeController.isSelected.value = 4;
-                                },
-                                child: Container(
-                                  height: heightSize(60),
-                                  width: constraints.maxWidth,
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.only(
-                                      left: homeController.isSelected.value == 4
-                                          ? widthSize(10)
-                                          : widthSize(0)),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(widthSize(10))),
-                                    color: homeController.isSelected.value == 4
-                                        ? const Color(0xFF0BCEDB)
-                                        : const Color(0xFF373F5A),
-                                    border: Border.all(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            homeController.isSelected.value == 4
+                                                ? widthSize(10)
+                                                : widthSize(0)),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(widthSize(10))),
                                       color:
                                           homeController.isSelected.value == 4
                                               ? const Color(0xFF0BCEDB)
                                               : const Color(0xFF373F5A),
+                                      border: Border.all(
+                                        color:
+                                            homeController.isSelected.value == 4
+                                                ? const Color(0xFF0BCEDB)
+                                                : const Color(0xFF373F5A),
+                                      ),
                                     ),
-                                  ),
-                                  child: Container(
-                                    height: heightSize(60),
-                                    width: constraints.maxWidth,
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF373F5A),
-                                    ),
-                                    child: CText(
-                                      text: homeController
-                                          .quizQuestions
-                                          .value[
-                                              homeController.currentIndex.value]
-                                          .optionD,
-                                      size: 14,
-                                      color: textColor,
-                                      fontFamily: UsedFonts.poppins,
-                                      fontWeight: FontWeight.w500,
+                                    child: Container(
+                                      height: heightSize(60),
+                                      width: constraints.maxWidth,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(10))),
+                                        color: const Color(0xFF373F5A),
+                                      ),
+                                      child: CText(
+                                        text: homeController
+                                            .quizQuestions
+                                            .value[homeController
+                                                .currentIndex.value]
+                                            .optionD,
+                                        size: 14,
+                                        color: textColor,
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                                SizedBox(height: heightSize(32)),
+                                SizedBox(
+                                  height: heightSize(40),
+                                  width: constraints.maxWidth,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      buttonsWidget(
+                                          context,
+                                          heightSize(40),
+                                          widthSize(160),
+                                          "Previous",
+                                          const Color(0xFF131827),
+                                          17, () {
+                                        if (homeController.currentIndex.value >
+                                            0) {
+                                          homeController.removeAnswer();
+                                          homeController.currentIndex.value--;
+                                        } else {
+                                          Get.back();
+                                        }
+                                      }, true, textColor),
+                                      buttonsWidget(
+                                          context,
+                                          heightSize(40),
+                                          widthSize(160),
+                                          "Next",
+                                          mainColor,
+                                          17, () {
+                                        if (homeController.isSelected.value !=
+                                            0) {
+                                          homeController.answerQuestion(
+                                              homeController
+                                                  .selectedAnswer.value,
+                                              context,
+                                              constraints.maxWidth);
+                                          homeController.isSelected.value = 0;
+                                        } else {
+                                          getErrorSnackBar(
+                                              "you must select an option to continue");
+                                        }
+                                      }, false, textColor)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          });
-        },
+              );
+            });
+          },
+        ),
       ),
     );
   }

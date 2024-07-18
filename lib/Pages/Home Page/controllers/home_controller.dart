@@ -1,7 +1,10 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'dart:ffi';
+
 import 'package:cloudinary/cloudinary.dart';
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
+import 'package:duwith_social/Pages/Home%20Page/components/quiz_questions_widget.dart';
 import 'package:duwith_social/Pages/Home%20Page/screens/quiz_questions.dart';
 import 'package:duwith_social/Services/Ads%20Service/start_app_manager.dart';
 import 'package:duwith_social/common/getxmessage.dart';
@@ -77,13 +80,37 @@ class HomeController extends GetxController {
 
   RxBool isgettngQuestions = false.obs;
   RxInt currentIndex = 0.obs;
-  RxInt reward = 0.obs;
+  RxInt totalReward = 0.obs;
+  RxInt numberPassed = 0.obs;
+  RxInt numberfailed = 0.obs;
   RxInt isSelected = 0.obs;
+  RxString selectedAnswer = "".obs;
+
+  void answerQuestion(
+      String selectedAnswer, BuildContext context, double width) {
+    if (selectedAnswer == quizQuestions[currentIndex.value].answer) {
+      totalReward.value += quizQuestions[currentIndex.value].reward;
+      numberPassed.value++;
+    } else {
+      numberfailed.value++;
+    }
+
+    if (currentIndex.value < 2) {
+      currentIndex.value++;
+    } else {
+      showQuizResults(context, width);
+    }
+  }
+
+  void removeAnswer() {
+    totalReward.value -= quizQuestions[currentIndex.value].reward;
+    selectedAnswer.value = "";
+  }
 
   fetchQuizQuestionsList(String id, String image, String writeup,
       String quizType, int quiztaker) async {
     isgettngQuestions.value = true;
-    await socket.getMainQuizList();
+    await socket.getQuizQuestions(id);
     await Future.delayed(const Duration(seconds: 2), () {});
     if (quizQuestions.value.isEmpty) {
       isgettngQuestions.value = false;
