@@ -1,11 +1,15 @@
+// ignore_for_file: must_be_immutable
+
 import "package:add_to_cart_animation/add_to_cart_animation.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/social_bottom_sheet.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
 import "package:duwith_social/Services/Ads%20Service/admob_manager.dart";
 import "package:duwith_social/Services/Ads%20Service/start_app_manager.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
+import "package:flutter_bounceable/flutter_bounceable.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:get/get.dart";
 import "package:get/state_manager.dart";
@@ -97,7 +101,7 @@ earnLuckySpin(double width) {
 earnSocialMediaWidget(BuildContext context, double width) {
   return GestureDetector(
     onTap: () {
-      AdmobAdsClass().loadBannerAd(width.toInt(), 100);
+      // AdmobAdsClass().loadBannerAd(width.toInt(), 100);
       // StartAppAdsClass().loadBannerAds();
       showsocialMediaActivity(context, width);
     },
@@ -125,7 +129,7 @@ earnSocialMediaWidget(BuildContext context, double width) {
                         fit: BoxFit.contain),
                   ),
                   const CText(
-                    text: "+0.003",
+                    text: "+100k",
                     size: 8,
                     color: textColor,
                     fontFamily: UsedFonts.poppins,
@@ -184,133 +188,169 @@ earnSocialMediaWidget(BuildContext context, double width) {
   );
 }
 
-earnTap(double width) {
-  return SizedBox(
-    height: heightSize(218),
-    width: width,
-    child: Stack(children: [
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: SizedBox(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: heightSize(53),
-                child: Row(
+class EarnTapWidget extends StatelessWidget {
+  final double width;
+  GlobalKey widgetKey = GlobalKey();
+  final Function(GlobalKey) addtoCartClick;
+  EarnTapWidget({super.key, required this.addtoCartClick, required this.width});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: heightSize(218),
+      width: width,
+      child: Stack(children: [
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: heightSize(53),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: heightSize(53),
+                        width: widthSize(17),
+                        child: Image.asset(
+                          "assets/images/Earn/thunder.png",
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CText(
+                            text: "2,000,000",
+                            size: 14,
+                            fontFamily: UsedFonts.poppins,
+                            fontWeight: FontWeight.w600,
+                            color: textColor,
+                          ),
+                          SizedBox(height: heightSize(4)),
+                          const CText(
+                            text: "/10,000,000",
+                            size: 14,
+                            fontFamily: UsedFonts.archivo,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFB57C44),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                AddToCartIcon(
+                  key: earnController.cartkey,
+                  icon: SizedBox(
+                    height: heightSize(100),
+                    width: widthSize(59),
+                    child: Image.asset("assets/images/Earn/goldjar.png",
+                        fit: BoxFit.fitHeight),
+                  ),
+                  badgeOptions: BadgeOptions(
+                      width: widthSize(20),
+                      backgroundColor: mainColor,
+                      foregroundColor: textColor),
+                )
+              ],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            height: heightSize(218),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // EarnTapMoneyWidget(),
+                SizedBox(
+                  height: heightSize(202),
+                  child: Stack(children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: widthSize(80), top: heightSize(80)),
+                      child: Container(
+                        key: widgetKey,
+                        child: Image.asset(
+                          "assets/images/points.png",
+                          fit: BoxFit.fitHeight,
+                          height: heightSize(30),
+                          width: widthSize(30),
+                        ),
+                      ),
+                    ),
+                    Bounceable(
+                      onTap: () {
+                        addtoCartClick(widgetKey);
+                      },
+                      child: SizedBox(
+                        height: heightSize(202),
+                        width: widthSize(202),
+                        child: Stack(
+                          children: [
+                            SizedBox(
+                              height: heightSize(218),
+                              width: widthSize(202),
+                              child: Image.asset(
+                                "assets/images/Earn/earn_more4.png",
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                height: heightSize(145),
+                                width: widthSize(143),
+                                child: Image.asset(
+                                  "assets/images/Earn/dog_earn.png",
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    const CText(
+                      text: "Dog to produce",
+                      size: 10,
+                      fontFamily: UsedFonts.archivo,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
                     SizedBox(
-                      height: heightSize(53),
-                      width: widthSize(17),
+                      height: heightSize(11),
+                      width: widthSize(11),
                       child: Image.asset(
-                        "assets/images/Earn/thunder.png",
+                        "assets/images/points.png",
                         fit: BoxFit.fitHeight,
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CText(
-                          text: "2,000,000",
-                          size: 14,
-                          fontFamily: UsedFonts.poppins,
-                          fontWeight: FontWeight.w600,
-                          color: textColor,
-                        ),
-                        SizedBox(height: heightSize(4)),
-                        const CText(
-                          text: "/10,000,000",
-                          size: 14,
-                          fontFamily: UsedFonts.archivo,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFFB57C44),
-                        ),
-                      ],
-                    )
+                    const CText(
+                      text: "100/hr ",
+                      size: 12,
+                      fontFamily: UsedFonts.archivo,
+                      fontWeight: FontWeight.w500,
+                      color: textColor,
+                    ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: heightSize(100),
-                width: widthSize(59),
-                child: Image.asset("assets/images/Earn/goldjar.png",
-                    fit: BoxFit.fitHeight),
-              )
-            ],
-          ),
-        ),
-      ),
-      Align(
-        alignment: Alignment.center,
-        child: SizedBox(
-          height: heightSize(218),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              EarnTapMoneyWidget(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CText(
-                    text: "Dog to produce",
-                    size: 10,
-                    fontFamily: UsedFonts.archivo,
-                    fontWeight: FontWeight.w500,
-                    color: textColor,
-                  ),
-                  SizedBox(
-                    height: heightSize(11),
-                    width: widthSize(11),
-                    child: Image.asset(
-                      "assets/images/points.png",
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                  const CText(
-                    text: "100/hr ",
-                    size: 12,
-                    fontFamily: UsedFonts.archivo,
-                    fontWeight: FontWeight.w500,
-                    color: textColor,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      // AddToCartIcon(key: key, icon: icon),
-      Obx(() {
-        return AnimatedPositioned(
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeInOut,
-          left: earnController.isAnimating.value
-              ? earnController.coinPosition.value.dx
-              : widthSize(59) +
-                  30, // Initial position of the coin (near the dog)
-          top: earnController.isAnimating.value
-              ? earnController.coinPosition.value.dy
-              : heightSize(118), // Initial position of the coin (near the dog)
-
-          child: GestureDetector(
-            onTap: () {
-              earnController.isAnimating.value =
-                  !earnController.isAnimating.value;
-              earnController.coinPosition.value = Offset(
-                  width - widthSize(59) - 100,
-                  heightSize(118)); // Position near the jar
-            },
-            child: Image.asset(
-              "assets/images/points.png", // the coin image
-              height: heightSize(20),
-              width: widthSize(20),
+              ],
             ),
           ),
-        );
-      }),
-    ]),
-  );
+        ),
+      ]),
+    );
+  }
 }

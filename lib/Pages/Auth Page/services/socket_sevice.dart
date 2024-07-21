@@ -3,6 +3,7 @@
 import "dart:async";
 
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
+import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
 import "package:duwith_social/common/getxmessage.dart";
 import "package:duwith_social/models/questions_model.dart";
@@ -10,6 +11,7 @@ import "package:duwith_social/models/quiz_model.dart";
 import "package:duwith_social/models/comments_model.dart";
 import "package:duwith_social/models/news_models.dart";
 import "package:duwith_social/models/post-data.dart";
+import "package:duwith_social/models/social_task_model.dart";
 import "package:flutter/cupertino.dart";
 
 import "package:get/get.dart";
@@ -22,6 +24,7 @@ import "../screens/verify_details.dart";
 
 AuthController authController = AuthController.instance;
 HomeController homeController = HomeController.instance;
+EarnController earnController = EarnController.instance;
 
 class SocketService extends GetxService {
   static SocketService instance = Get.find<SocketService>();
@@ -679,6 +682,34 @@ class SocketService extends GetxService {
       } else {
         homeController.isgettngQuestions.value = false;
       }
+    });
+  }
+
+  // Social Task
+
+  getSocialTask(String id) {
+    _socket.emit("get_social_task", id);
+    //
+    _socket.on("social_gotten", (data) {
+      List<SocialModel> tasksList = (data as List)
+          .map((item) => SocialModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+      earnController.socialTaskList.value = tasksList;
+      if (earnController.socialTaskList.value.isEmpty ||
+          earnController.socialTaskList.value == null) {
+        earnController.earnLoading.value = false;
+        getErrorSnackBar("Not able to get social tasks");
+      } else {
+        earnController.earnLoading.value = false;
+      }
+    });
+  }
+
+  updateSocialTask(Map<String, dynamic> socialData) {
+    _socket.emit("update_social_task", socialData);
+//
+    _socket.on("social_updated", (data) {
+      getSuccessSnackBarEdit("Notification", "Task completion, in review");
     });
   }
 }
