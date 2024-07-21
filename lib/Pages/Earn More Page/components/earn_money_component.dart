@@ -4,15 +4,12 @@ import "package:add_to_cart_animation/add_to_cart_animation.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/social_bottom_sheet.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
-import "package:duwith_social/Services/Ads%20Service/admob_manager.dart";
-import "package:duwith_social/Services/Ads%20Service/start_app_manager.dart";
+
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:flutter_bounceable/flutter_bounceable.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
-import "package:get/get.dart";
-import "package:get/state_manager.dart";
 
 import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";

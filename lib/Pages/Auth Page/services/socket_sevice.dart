@@ -687,7 +687,7 @@ class SocketService extends GetxService {
 
   // Social Task
 
-  getSocialTask(String id) {
+  getSocialTask(int id) {
     _socket.emit("get_social_task", id);
     //
     _socket.on("social_gotten", (data) {

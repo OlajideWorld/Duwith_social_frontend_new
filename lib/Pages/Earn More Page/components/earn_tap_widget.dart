@@ -1,23 +1,17 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:async';
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_money_component.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/components/spin_wheel_screen.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/screens/games_screen.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bounceable/flutter_bounceable.dart';
-import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-
-import '../../../common/button-widget.dart';
 import '../../../common/custom-text.dart';
-import '../../../common/spindata.dart';
+
 import '../../../utils/color.dart';
+
+EarnController earnController = EarnController.instance;
 
 earnMoreExtraWidget(Color box1, String headline, String body, String tagline,
     String image, String namegiven) {
@@ -104,79 +98,9 @@ earnMoreExtraWidget(Color box1, String headline, String body, String tagline,
 }
 
 earnspinActivity(double width) {
-  StreamController<int> controller = StreamController<int>();
   return SmartDialog.show(builder: (context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-      child: Container(
-        height: heightSize(456),
-        width: width,
-        padding: EdgeInsets.only(
-            top: heightSize(34),
-            left: widthSize(18),
-            right: widthSize(20),
-            bottom: heightSize(34)),
-        decoration: ShapeDecoration(
-          color: const Color(0xFF0E1528),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: heightSize(44),
-                width: widthSize(179),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CText(
-                      text: "Spin and earn",
-                      color: Colors.white,
-                      size: 20,
-                      textAlign: TextAlign.center,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    CText(
-                      text: "Spin and earn amazing rewards",
-                      color: Colors.white,
-                      size: 12,
-                      textAlign: TextAlign.center,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: heightSize(267),
-                width: widthSize(300),
-                child: FortuneWheel(
-                  duration: const Duration(seconds: 5),
-                  indicators: [
-                    // FortuneIndicator(child: child)
-                  ],
-                  animateFirst: false,
-                  selected: controller.stream,
-                  items: wheelitems,
-                ),
-              ),
-              buttonsWidget(
-                  context,
-                  heightSize(40),
-                  widthSize(264),
-                  "Spin",
-                  mainColor,
-                  12,
-                  () => controller.add(Random().nextInt(wheelitems.length)),
-                  false,
-                  Colors.white)
-            ]),
-      ),
+    return SpinWheelScreen(
+      width: width,
     );
   });
 }
