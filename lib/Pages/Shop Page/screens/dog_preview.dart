@@ -1,8 +1,11 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Services/Ads%20Service/admob_manager.dart';
 import 'package:duwith_social/Services/Ads%20Service/unity_ads_manager.dart';
+import 'package:duwith_social/common/getxmessage.dart';
+import 'package:duwith_social/models/games_model.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +17,15 @@ import '../../../utils/color.dart';
 import '../components/box_list.dart';
 
 class DogPreviewScreen extends StatelessWidget {
-  DogPreviewScreen({super.key});
+  final ShopModel shopData;
+  DogPreviewScreen({super.key, required this.shopData});
 
   HomeController homeController = HomeController.instance;
 
   @override
   Widget build(BuildContext context) {
+    var amount = double.parse(shopData.amount.toString());
+    var digitalAmount = homeController.formatNumberWithCommasWithDouble(amount);
     return WillPopScope(
       onWillPop: () async {
         // homeController.interstitialAd!.show();
@@ -28,7 +34,7 @@ class DogPreviewScreen extends StatelessWidget {
         //   // Reward the user for watching an ad.
         // });
 
-        homeController.showAd(AdManager.rewardedVideoAdPlacementId);
+        // homeController.showAd(AdManager.rewardedVideoAdPlacementId);
         return true;
       },
       child: Scaffold(
@@ -64,14 +70,23 @@ class DogPreviewScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height: heightSize(148),
-                                width: widthSize(116),
-                                child: Image.asset(
-                                    "assets/images/Shop/opendog.png"),
+                              CachedNetworkImage(
+                                imageUrl: shopData.image,
+                                placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator()),
+                                imageBuilder: (context, imageprovider) {
+                                  return Container(
+                                    height: heightSize(150),
+                                    width: widthSize(198),
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: imageprovider,
+                                            fit: BoxFit.fill)),
+                                  );
+                                },
                               ),
-                              const CText(
-                                text: "GRANDMASTER",
+                              CText(
+                                text: shopData.shopItemName,
                                 size: 18,
                                 fontFamily: UsedFonts.poppins,
                                 fontWeight: FontWeight.w500,
@@ -102,7 +117,7 @@ class DogPreviewScreen extends StatelessWidget {
                                         color: Color(0xFFEDDAF9),
                                       ),
                                       shopIconwidget("assets/images/points.png",
-                                          "12,000", 30, 27, 16, textColor)
+                                          digitalAmount, 30, 27, 16, textColor)
                                     ],
                                   ),
                                 ),
@@ -111,8 +126,14 @@ class DogPreviewScreen extends StatelessWidget {
                                   thickness: 1,
                                   color: const Color(0xFF7F219D),
                                 ),
-                                upgradewidget("Commission", "0%", 21, 11, 16,
-                                    const Color(0xFFC8B5D3), textColor),
+                                upgradewidget(
+                                    "points per Hour",
+                                    shopData.shopReward.toString(),
+                                    21,
+                                    11,
+                                    16,
+                                    const Color(0xFFC8B5D3),
+                                    textColor),
                                 Container(
                                   height: heightSize(40),
                                   decoration: BoxDecoration(
@@ -158,10 +179,10 @@ class DogPreviewScreen extends StatelessWidget {
                                     constraints.maxWidth,
                                     "Buy",
                                     Colors.white,
-                                    15,
-                                    () {},
-                                    false,
-                                    Colors.black),
+                                    15, () {
+                                  getSuccessSnackBarEdit(
+                                      "Notification", "Coming Soon");
+                                }, false, Colors.black),
                                 RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(

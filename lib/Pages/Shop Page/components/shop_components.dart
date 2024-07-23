@@ -2,15 +2,15 @@ import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart
 import 'package:duwith_social/Pages/Shop%20Page/screens/upgrade_screen.dart';
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/utils/sizes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
+import '../controller/shop_controller.dart';
 
 HomeController homeController = HomeController.instance;
+ShopController shopController = ShopController.instance;
 
 shopAppBar() {
   return Padding(
@@ -23,8 +23,9 @@ shopAppBar() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               homeController.shoptype.value = 0;
+              await shopController.fetchDogsList();
             },
             child: Container(
               height: heightSize(28),
@@ -51,8 +52,9 @@ shopAppBar() {
             ),
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               homeController.shoptype.value = 1;
+              await shopController.fetchJarsList();
             },
             child: Container(
               height: heightSize(28),
@@ -79,8 +81,9 @@ shopAppBar() {
             ),
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               homeController.shoptype.value = 2;
+              await shopController.fetchBoxList();
             },
             child: Container(
               height: heightSize(28),

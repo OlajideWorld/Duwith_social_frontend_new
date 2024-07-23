@@ -98,7 +98,7 @@ class QuizListWidget extends StatelessWidget {
                 CachedNetworkImage(
                   imageUrl: mainQuizData.image,
                   placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
+                      const Center(child: CircularProgressIndicator()),
                   imageBuilder: (context, imageprovider) {
                     return Container(
                       height: heightSize(200),

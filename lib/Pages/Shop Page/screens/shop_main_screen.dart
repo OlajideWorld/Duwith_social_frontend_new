@@ -1,7 +1,5 @@
-// ignore_for_file: must_be_immutable
-
+// ignore_for_file: must_be_immutable, invalid_use_of_protected_member
 import 'package:duwith_social/Pages/Shop%20Page/components/dog_list.dart';
-
 import 'package:duwith_social/Pages/Shop%20Page/components/jar_list.dart';
 import 'package:duwith_social/Pages/Shop%20Page/components/shop_components.dart';
 import 'package:duwith_social/utils/color.dart';
@@ -10,15 +8,18 @@ import 'package:get/get.dart';
 
 import '../../../common/custom-nav-bar.dart';
 import '../../../common/custom-text.dart';
+import '../../../common/shimmer_loading_widget.dart';
 import '../../../utils/sizes.dart';
 import '../../Home Page/controllers/home_controller.dart';
 import '../../Wallet Page/components/wallet_app_bar.dart';
 import '../components/box_list.dart';
+import '../controller/shop_controller.dart';
 
 class ShoppingMainScreen extends StatelessWidget {
   ShoppingMainScreen({super.key});
 
   HomeController homeController = HomeController.instance;
+  ShopController shopController = ShopController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +57,20 @@ class ShoppingMainScreen extends StatelessWidget {
                               ),
                               SizedBox(height: heightSize(22)),
                               if (homeController.shoptype.value == 0)
-                                showDogList(context),
+                                shopController.shopLoading.value == true
+                                    ? ShimmerLoadingWidget(
+                                        width: constraints.maxWidth)
+                                    : showDogList(context),
                               if (homeController.shoptype.value == 1)
-                                showJarList(context),
+                                shopController.shopLoading.value == true
+                                    ? ShimmerLoadingWidget(
+                                        width: constraints.maxWidth)
+                                    : showJarList(context),
                               if (homeController.shoptype.value == 2)
-                                showBoxList(context),
+                                shopController.shopLoading.value == true
+                                    ? ShimmerLoadingWidget(
+                                        width: constraints.maxWidth)
+                                    : showBoxList(context),
                               SizedBox(height: heightSize(33)),
                               Container(
                                 height: heightSize(58),

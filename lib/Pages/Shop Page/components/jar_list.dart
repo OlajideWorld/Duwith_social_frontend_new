@@ -10,48 +10,64 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
+import '../../../common/custom-text.dart';
+import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
 import '../../Home Page/controllers/home_controller.dart';
+import '../controller/shop_controller.dart';
 
 HomeController homeController = HomeController.instance;
+ShopController shopController = ShopController.instance;
 
 showJarList(BuildContext context) {
-  return SizedBox(
-    height: heightSize(1070),
-    child: Column(
-      children: [
-        shoptypeAdvert(
-            color1: const Color(0xFFE6A94C),
-            color2: const Color(0xFFD7350B),
-            textColorUsed: const Color(0xFFFBE9CD),
-            type: "Jar",
-            image: "assets/images/Shop/upgradejar.png",
-            context: context),
-        SizedBox(height: heightSize(13)),
-        Expanded(
-          child: MasonryGridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: jarList.value.length,
-              gridDelegate:
-                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of items per row
-              ),
-              mainAxisSpacing: widthSize(13),
-              crossAxisSpacing: heightSize(12),
-              itemBuilder: (context, index) {
-                return gridviewWidget(
-                    jarList.value[index].image,
-                    jarList.value[index].name,
-                    jarList.value[index].amount,
-                    context,
-                    jarList.value[index].isBig, () {
-                  // StartAppAdsClass().loadInterstitialAd();
-                  StartAppAdsClass().loadRewardedVideoAd();
-                  Get.to(() => JarPreviewScreen());
-                });
-              }),
-        ),
-      ],
+  return Padding(
+    padding: EdgeInsets.only(left: widthSize(20), right: widthSize(20)),
+    child: SizedBox(
+      height: heightSize(1070),
+      child: Column(
+        children: [
+          shoptypeAdvert(
+              color1: const Color(0xFFE6A94C),
+              color2: const Color(0xFFD7350B),
+              textColorUsed: const Color(0xFFFBE9CD),
+              type: "Jar",
+              image: "assets/images/Shop/upgradejar.png",
+              context: context),
+          SizedBox(height: heightSize(13)),
+          shopController.jarList.value.isEmpty
+              ? const Center(
+                  child: CText(
+                    text:
+                        "Unable to get the JarList, check internet connection and try again",
+                    size: 12,
+                    color: timeColor,
+                    fontFamily: UsedFonts.poppins,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              : Expanded(
+                  child: MasonryGridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: shopController.jarList.value.length,
+                      gridDelegate:
+                          const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of items per row
+                      ),
+                      mainAxisSpacing: widthSize(13),
+                      crossAxisSpacing: heightSize(12),
+                      itemBuilder: (context, index) {
+                        return gridviewWidget(
+                            context, shopController.jarList.value[index], () {
+                          // StartAppAdsClass().loadInterstitialAd();
+                          StartAppAdsClass().loadRewardedVideoAd();
+                          Get.to(() => JarPreviewScreen(
+                                shopData: shopController.jarList.value[index],
+                              ));
+                        });
+                      }),
+                ),
+        ],
+      ),
     ),
   );
 }

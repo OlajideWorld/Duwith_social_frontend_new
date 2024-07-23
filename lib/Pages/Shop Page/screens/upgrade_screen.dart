@@ -85,8 +85,8 @@ class ShopUpgradeScreen extends StatelessWidget {
                                   "Continue",
                                   textColor,
                                   14,
-                                  () =>
-                                      Get.to(() => const ChestPrevieeScreen()),
+                                  () {},
+                                  // Get.to(() => const ChestPrevieeScreen()),
                                   false,
                                   const Color(0xFF28282C))
                             ],

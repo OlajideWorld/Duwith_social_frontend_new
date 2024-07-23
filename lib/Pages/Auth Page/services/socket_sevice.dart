@@ -5,7 +5,9 @@ import "dart:async";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
+import "package:duwith_social/Pages/Shop%20Page/controller/shop_controller.dart";
 import "package:duwith_social/common/getxmessage.dart";
+import "package:duwith_social/models/games_model.dart";
 import "package:duwith_social/models/questions_model.dart";
 import "package:duwith_social/models/quiz_model.dart";
 import "package:duwith_social/models/comments_model.dart";
@@ -25,6 +27,7 @@ import "../screens/verify_details.dart";
 AuthController authController = AuthController.instance;
 HomeController homeController = HomeController.instance;
 EarnController earnController = EarnController.instance;
+ShopController shopController = ShopController.instance;
 
 class SocketService extends GetxService {
   static SocketService instance = Get.find<SocketService>();
@@ -50,7 +53,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          testUrl,
+          productionUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -710,6 +713,45 @@ class SocketService extends GetxService {
 //
     _socket.on("social_updated", (data) {
       getSuccessSnackBarEdit("Notification", "Task completion, in review");
+    });
+  }
+
+  // Shop Items Route
+  getShopItems(String shopType) {
+    _socket.emit("get_shop_items", shopType);
+//
+    _socket.on("shop_items", (data) {
+      List<ShopModel> shopList = (data as List)
+          .map((item) => ShopModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+      if (shopType == "Dog") {
+        shopController.dogsList.value = shopList;
+        if (shopController.dogsList.value.isEmpty ||
+            shopController.dogsList.value == null) {
+          shopController.shopLoading.value = false;
+          getErrorSnackBar("Not able to get Dog list");
+        } else {
+          shopController.shopLoading.value = false;
+        }
+      } else if (shopType == "Box") {
+        shopController.boxList.value = shopList;
+        if (shopController.boxList.value.isEmpty ||
+            shopController.boxList.value == null) {
+          shopController.shopLoading.value = false;
+          getErrorSnackBar("Not able to get Dog list");
+        } else {
+          shopController.shopLoading.value = false;
+        }
+      } else {
+        shopController.jarList.value = shopList;
+        if (shopController.jarList.value.isEmpty ||
+            shopController.jarList.value == null) {
+          shopController.shopLoading.value = false;
+          getErrorSnackBar("Not able to get Dog list");
+        } else {
+          shopController.shopLoading.value = false;
+        }
+      }
     });
   }
 }

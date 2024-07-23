@@ -109,7 +109,7 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                 ? CachedNetworkImage(
                     imageUrl: widget.newsPost.media.single.url,
                     placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
+                        const Center(child: CircularProgressIndicator()),
                     imageBuilder: (context, imageprovider) {
                       return Container(
                         height: heightSize(400),

@@ -1,23 +1,23 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Pages/Shop%20Page/components/shop_components.dart';
+import 'package:duwith_social/Pages/Shop%20Page/controller/shop_controller.dart';
 import 'package:duwith_social/Pages/Shop%20Page/screens/dog_preview.dart';
-import 'package:duwith_social/Pages/Shop%20Page/screens/upgrade_screen.dart';
-import 'package:duwith_social/Services/Ads%20Service/admob_manager.dart';
 import 'package:duwith_social/Services/Ads%20Service/unity_ads_manager.dart';
 import 'package:duwith_social/common/button-widget.dart';
+import 'package:duwith_social/models/games_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
-import '../../../utils/demo_data.dart';
 import '../../../utils/sizes.dart';
 
 HomeController homeController = HomeController.instance;
+ShopController shopController = ShopController.instance;
 
 showDogList(BuildContext context) {
   return Padding(
@@ -34,43 +34,54 @@ showDogList(BuildContext context) {
               image: "assets/images/Shop/opendog.png",
               context: context),
           SizedBox(height: heightSize(13)),
-          Expanded(
-            child: MasonryGridView.builder(
-                itemCount: dogsList.value.length,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate:
-                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Number of items per row
+          shopController.dogsList.value.isEmpty
+              ? const Center(
+                  child: CText(
+                    text:
+                        "Unable to get the DogsList, check internet connection and try again",
+                    size: 12,
+                    color: timeColor,
+                    fontFamily: UsedFonts.poppins,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              : Expanded(
+                  child: MasonryGridView.builder(
+                      itemCount: shopController.dogsList.value.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of items per row
+                      ),
+                      mainAxisSpacing: widthSize(13),
+                      crossAxisSpacing: heightSize(12),
+                      itemBuilder: (context, index) {
+                        return gridviewWidget(
+                            context, shopController.dogsList.value[index], () {
+                          // AdmobAdsClass().loadRewardedAd(
+                          //     adUnitId: AdmobAdsClass().rewardedAdsId);
+                          homeController
+                              .loadAd(AdManager.rewardedVideoAdPlacementId);
+                          Get.to(() => DogPreviewScreen(
+                                shopData: shopController.dogsList.value[index],
+                              ));
+                        });
+                      }),
                 ),
-                mainAxisSpacing: widthSize(13),
-                crossAxisSpacing: heightSize(12),
-                itemBuilder: (context, index) {
-                  return gridviewWidget(
-                      dogsList.value[index].image,
-                      dogsList.value[index].name,
-                      dogsList.value[index].amount,
-                      context,
-                      dogsList.value[index].isBig, () {
-                    // AdmobAdsClass().loadRewardedAd(
-                    //     adUnitId: AdmobAdsClass().rewardedAdsId);
-                    homeController.loadAd(AdManager.rewardedVideoAdPlacementId);
-                    Get.to(() => DogPreviewScreen());
-                  });
-                }),
-          ),
         ],
       ),
     ),
   );
 }
 
-gridviewWidget(String image, String name, String amount, BuildContext context,
-    bool isBig, VoidCallback onTap) {
+gridviewWidget(BuildContext context, ShopModel shopData, VoidCallback onTap) {
+  var amount = double.parse(shopData.amount.toString());
+  var digitalAmount = homeController.formatNumberWithCommasWithDouble(amount);
   return GestureDetector(
     onTap: onTap,
     child: Container(
       alignment: Alignment.center,
-      height: isBig ? heightSize(300) : heightSize(250),
+      height: shopData.isItemBig ? heightSize(300) : heightSize(250),
       padding: EdgeInsets.symmetric(vertical: heightSize(15)),
       decoration: const BoxDecoration(
           color: Color(0xFF151B2E),
@@ -78,25 +89,32 @@ gridviewWidget(String image, String name, String amount, BuildContext context,
       child: SizedBox(
         child: Column(
           children: [
-            SizedBox(
-              height: heightSize(100),
-              child: Image.asset(image, fit: BoxFit.fitHeight),
+            CachedNetworkImage(
+              imageUrl: shopData.image,
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              imageBuilder: (context, imageprovider) {
+                return Container(
+                  height: heightSize(100),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageprovider, fit: BoxFit.fill)),
+                );
+              },
             ),
             const Spacer(),
             SizedBox(
               height: heightSize(100),
-              width: widthSize(87),
               child: Column(
                 children: [
                   SizedBox(
                     height: heightSize(40),
-                    width: widthSize(90),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CText(
-                          text: name,
+                          text: shopData.shopItemName,
                           color: const Color(0xFFDCDCDC),
                           size: 12,
                           fontFamily: UsedFonts.poppins,
@@ -114,7 +132,7 @@ gridviewWidget(String image, String name, String amount, BuildContext context,
                               ),
                             ),
                             CText(
-                              text: amount,
+                              text: digitalAmount,
                               size: 15,
                               fontFamily: UsedFonts.archivo,
                               fontWeight: FontWeight.w600,
@@ -126,7 +144,7 @@ gridviewWidget(String image, String name, String amount, BuildContext context,
                     ),
                   ),
                   buttonsWidget(context, heightSize(30), widthSize(87), "Buy",
-                      mainColor, 12, () {}, false, textColor)
+                      mainColor, 12, onTap, false, textColor)
                 ],
               ),
             ),

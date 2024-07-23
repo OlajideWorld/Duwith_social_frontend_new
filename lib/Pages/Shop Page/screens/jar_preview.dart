@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:duwith_social/models/games_model.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/gestures.dart';
@@ -12,11 +14,14 @@ import '../../Home Page/controllers/home_controller.dart';
 import '../components/box_list.dart';
 
 class JarPreviewScreen extends StatelessWidget {
-  JarPreviewScreen({super.key});
+  final ShopModel shopData;
+  JarPreviewScreen({super.key, required this.shopData});
   HomeController homeController = HomeController.instance;
 
   @override
   Widget build(BuildContext context) {
+    var amount = double.parse(shopData.amount.toString());
+    var digitalAmount = homeController.formatNumberWithCommasWithDouble(amount);
     return WillPopScope(
       onWillPop: () async {
         // homeController.startInterstitialAd!.show().then((shown) {
@@ -75,14 +80,23 @@ class JarPreviewScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height: heightSize(114),
-                                width: widthSize(116),
-                                child:
-                                    Image.asset("assets/images/Shop/jar3.png"),
+                              CachedNetworkImage(
+                                imageUrl: shopData.image,
+                                placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator()),
+                                imageBuilder: (context, imageprovider) {
+                                  return Container(
+                                    height: heightSize(116.12),
+                                    width: widthSize(161.62),
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: imageprovider,
+                                            fit: BoxFit.fill)),
+                                  );
+                                },
                               ),
-                              const CText(
-                                text: "GRANDMASTER",
+                              CText(
+                                text: shopData.shopItemName,
                                 size: 18,
                                 fontFamily: UsedFonts.poppins,
                                 fontWeight: FontWeight.w500,
@@ -113,7 +127,7 @@ class JarPreviewScreen extends StatelessWidget {
                                         color: Color(0xFFEDDAF9),
                                       ),
                                       shopIconwidget("assets/images/points.png",
-                                          "12,000", 30, 27, 16, textColor)
+                                          digitalAmount, 30, 27, 16, textColor)
                                     ],
                                   ),
                                 ),
@@ -122,8 +136,14 @@ class JarPreviewScreen extends StatelessWidget {
                                   thickness: 1,
                                   color: const Color(0xFF7F219D),
                                 ),
-                                upgradewidget("Commission", "0%", 21, 11, 16,
-                                    const Color(0xFFC8B5D3), textColor),
+                                upgradewidget(
+                                    "Max points",
+                                    shopData.shopReward.toString(),
+                                    21,
+                                    11,
+                                    16,
+                                    const Color(0xFFC8B5D3),
+                                    textColor),
                                 Container(
                                   height: heightSize(40),
                                   decoration: BoxDecoration(
