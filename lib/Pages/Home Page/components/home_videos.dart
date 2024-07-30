@@ -1,4 +1,6 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, library_private_types_in_public_api
+
+import 'dart:io';
 
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,6 +21,8 @@ import '../../Auth Page/controller/auth_controller.dart';
 import '../../Auth Page/services/socket_sevice.dart';
 import '../../View Profile Page/screens/view_profile_screen.dart';
 import '../controllers/home_controller.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../screens/comments_display_video.dart';
 
@@ -88,6 +92,41 @@ class VideosPostWidget extends StatefulWidget {
 
 class _VideosPostWidgetState extends State<VideosPostWidget> {
   RxBool isExpanded = false.obs;
+  RxString thumbnailPath = "".obs;
+
+  static Map<String, String> thumbnailCache = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadThumbnail();
+  }
+
+  Future<void> loadThumbnail() async {
+    // Check if the thumbnail is already in the cache
+    if (thumbnailCache.containsKey(widget.postVideos.media.single.url)) {
+      setState(() {
+        thumbnailPath.value =
+            thumbnailCache[widget.postVideos.media.single.url]!;
+      });
+    } else {
+      final directory = await getTemporaryDirectory();
+      final path = await VideoThumbnail.thumbnailFile(
+        video: widget.postVideos.media.single.url,
+        thumbnailPath: directory.path,
+        imageFormat: ImageFormat.PNG,
+        quality: 75,
+      );
+      // Store the generated thumbnail in the cache
+      if (path != null) {
+        thumbnailCache[widget.postVideos.media.single.url] = path;
+        setState(() {
+          thumbnailPath.value = path;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +144,13 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            postBarTitle(widget.width, widget.postVideos.user.username,
-                widget.postVideos.user.profileImage, context, true),
+            postVidoBarTitle(
+                widget.postVideos.user.id,
+                widget.width,
+                widget.postVideos.user.username,
+                widget.postVideos.user.profileImage,
+                context,
+                true),
             SizedBox(height: heightSize(8)),
             PostContent(
                 isExpanded: isExpanded,
@@ -125,19 +169,32 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
               child: SizedBox(
                 height: heightSize(400),
                 child: Stack(children: [
-                  Container(
-                    height: heightSize(400),
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(widthSize(20)))),
-                    child: BetterPlayer.network(
-                      widget.postVideos.media.single.url,
-                      betterPlayerConfiguration:
-                          const BetterPlayerConfiguration(
-                        aspectRatio: 1,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   height: heightSize(400),
+                  //   decoration: BoxDecoration(
+                  //       borderRadius:
+                  //           BorderRadius.all(Radius.circular(widthSize(20)))),
+                  //   child: BetterPlayer.network(
+                  //     widget.postVideos.media.single.url,
+                  //     betterPlayerConfiguration:
+                  //         const BetterPlayerConfiguration(
+                  //       aspectRatio: 1,
+                  //     ),
+                  //   ),
+                  // ),
+                  if (thumbnailPath.value != "")
+                    Container(
+                      height: heightSize(400),
+                      width: widget.width,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(widthSize(20))),
+                          image: DecorationImage(
+                              image: FileImage(File(thumbnailPath.value)),
+                              fit: BoxFit.cover)),
+                    )
+                  else
+                    const Center(child: CircularProgressIndicator()),
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: widthSize(170), vertical: heightSize(170)),
@@ -283,8 +340,8 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
   }
 }
 
-postBarTitle(double width, String name, String image, BuildContext context,
-    bool showwidget) {
+postVidoBarTitle(String userId, double width, String name, String image,
+    BuildContext context, bool showwidget) {
   return SizedBox(
     width: width,
     height: heightSize(38),
@@ -296,14 +353,14 @@ postBarTitle(double width, String name, String image, BuildContext context,
           child: Row(
             children: [
               GestureDetector(
-                onTap: () => Get.to(() => ViewProfileScreen(
-                    name: name,
-                    image: image,
-                    nickname: "@${name.toLowerCase()}",
-                    description: "Dance like nobody’s watching! 💃",
-                    followers: homeController.engagementShortened(12537689),
-                    following: homeController.engagementShortened(12334),
-                    postNumber: homeController.engagementShortened(123))),
+                onTap: () async {
+                  homeController.loadingProfile.value = true;
+                  await socket.getUserWithId(userId);
+                  await socket.getUserPosts(userId);
+                  await Future.delayed(const Duration(seconds: 2), () {});
+                  homeController.loadingProfile.value = false;
+                  Get.to(() => ViewProfileScreen());
+                },
                 child: CachedNetworkImage(
                   imageUrl: image,
                   placeholder: (context, url) =>

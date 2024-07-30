@@ -5,6 +5,7 @@ import "dart:async";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
 import "package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart";
+import "package:duwith_social/Pages/Profile%20Page/controller/profile_controller.dart";
 import "package:duwith_social/Pages/Shop%20Page/controller/shop_controller.dart";
 import "package:duwith_social/common/getxmessage.dart";
 import "package:duwith_social/models/games_model.dart";
@@ -28,6 +29,7 @@ AuthController authController = AuthController.instance;
 HomeController homeController = HomeController.instance;
 EarnController earnController = EarnController.instance;
 ShopController shopController = ShopController.instance;
+ProfileController profileController = ProfileController.instance;
 
 class SocketService extends GetxService {
   static SocketService instance = Get.find<SocketService>();
@@ -53,7 +55,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          productionUrl,
+          testUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -151,6 +153,7 @@ class SocketService extends GetxService {
     _socket.on('user-updated', (data) {
       if (data != null && data["email"] != null) {
         authController.userdata.value = User.fromJson(data);
+        profileController.viewProfileData.value = User.fromJson(data);
         isloading.value = false;
       } else {
         isloading.value = false;
@@ -754,4 +757,66 @@ class SocketService extends GetxService {
       }
     });
   }
+
+  // Notification
+  storeNotificationId(Map data) async {
+    _socket.emit("store_pushId", data);
+//
+    _socket.on("pushId_stored", (data) {
+      getSuccessSnackBar("Push Id Stored Successfully");
+    });
+  }
+
+  // My Profile
+
+  getUserWithId(String id) {
+    _socket.emit('get_user_Id', id);
+    //
+    _socket.on("user_gotten_Id", (data) {
+      if (data != null && data["email"] != null) {
+        profileController.viewProfileData.value = User.fromJson(data);
+        profileController.profileLoading.value = false;
+        // getErrorSnackBar(
+        //     "Unable to get your details, check internet Connection");
+      } else {
+        profileController.profileLoading.value = false;
+      }
+    });
+  }
+
+  getUserPosts(String id) {
+    _socket.emit("postById", id);
+//
+    _socket.on("postByIdResponse", (data) {
+      List<PostForYou> postList = (data as List)
+          .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
+          .toList();
+      profileController.userPostList.value = postList;
+      if (profileController.userPostList.value.isEmpty || data == null) {
+        getErrorSnackBar("No post data found");
+      } else {
+        getSuccessSnackBar("success");
+      }
+    });
+  }
+
+  getUserVideoPosts(String id) {
+    _socket.emit("postVideoById", id);
+//
+    _socket.on("postVideoByIdResponse", (data) {
+      List<PostForYou> postList = (data as List)
+          .map((item) => PostForYou.fromJson(item as Map<String, dynamic>))
+          .toList();
+      profileController.userVideoList.value = postList;
+      if (profileController.userVideoList.value.isEmpty || data == null) {
+        profileController.profileLoading.value = false;
+        getErrorSnackBar("No post data found");
+      } else {
+        profileController.profileLoading.value = false;
+        getSuccessSnackBar("success");
+      }
+    });
+  }
+
+  // Wallet transaction History
 }

@@ -16,9 +16,9 @@ void main() async {
   await GetStorage.init();
   await Get.putAsync<SocketService>(() => SocketService().init());
 // Onesignal settings
-  // OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  // OneSignal.initialize("c4535f03-7e38-4685-b096-ba5302f40d58");
-  // OneSignal.Notifications.requestPermission(true);
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize("c4535f03-7e38-4685-b096-ba5302f40d58");
+  OneSignal.Notifications.requestPermission(true);
   runApp(const MyApp());
 }
 

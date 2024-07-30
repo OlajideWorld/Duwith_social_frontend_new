@@ -21,6 +21,47 @@ class VideoStreamPage extends StatefulWidget {
 class _VideoStreamPageState extends State<VideoStreamPage> {
   bool isVideoInitialized = false;
 
+  VideoPlayerController? videoPlayerController;
+  ChewieController? chewieController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.url));
+    playVideo();
+    // videoPlayerController.addListener(() {
+    //   setState(() {});
+    // });
+
+    // .then((_) {
+    //   setState(() {
+    //     videoPlayerController.play();
+    //   });
+    // });
+    // ..setVolume(0.0);
+  }
+
+  playVideo() async {
+    await videoPlayerController!.initialize();
+    chewieController = ChewieController(
+      videoPlayerController: videoPlayerController!,
+      autoPlay: true,
+      looping: true,
+      showControls: false,
+      allowFullScreen: true,
+    );
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    videoPlayerController!.dispose();
+    chewieController!.dispose();
+    super.dispose();
+  }
+
   // @override
   // void initState() {
   //   super.initState();
@@ -50,19 +91,22 @@ class _VideoStreamPageState extends State<VideoStreamPage> {
         ),
         backgroundColor: backgroundColor,
       ),
-      body: Center(
-        child: Container(
-          height: heightSize(400),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(widthSize(20)))),
-          child: BetterPlayer.network(
-            widget.url,
-            betterPlayerConfiguration: const BetterPlayerConfiguration(
-              aspectRatio: 1,
-            ),
-          ),
-        ),
-      ),
+      // body: Center(
+      //   child: Container(
+      //     height: heightSize(400),
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.all(Radius.circular(widthSize(20)))),
+      //     child: BetterPlayer.network(
+      //       widget.url,
+      //       betterPlayerConfiguration: const BetterPlayerConfiguration(
+      //         aspectRatio: 1,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      body: chewieController == null
+          ? const Center(child: CircularProgressIndicator())
+          : Chewie(controller: chewieController!),
     );
   }
 }

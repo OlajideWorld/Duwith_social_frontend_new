@@ -14,15 +14,14 @@ import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:duwith_social/models/news_models.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/state_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
+import "package:path_provider/path_provider.dart";
 
 import 'package:intl/intl.dart';
 import 'package:startapp_sdk/startapp.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../Services/Ads Service/admob_manager.dart';
 import '../../../Services/Ads Service/unity_ads_manager.dart';
@@ -168,6 +167,7 @@ class HomeController extends GetxController {
   RxBool homeloading = true.obs;
   RxBool continueLoading = false.obs;
   RxBool postloading = false.obs;
+  RxBool loadingProfile = false.obs;
 
   RxInt viewBarOption = 0.obs;
   RxInt viewprofileslide = 0.obs;
@@ -449,6 +449,16 @@ class HomeController extends GetxController {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<String?> getThumbnail(String videoUrl) async {
+    final thumbnailPath = await VideoThumbnail.thumbnailFile(
+      video: videoUrl,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.JPEG,
+      quality: 75,
+    );
+    return thumbnailPath;
   }
 
   uploadVideos(List<XFile> images) async {

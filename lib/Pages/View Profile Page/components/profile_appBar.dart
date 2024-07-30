@@ -1,3 +1,4 @@
+import "package:cached_network_image/cached_network_image.dart";
 import "package:duwith_social/common/button-widget.dart";
 import "package:duwith_social/common/custom-text.dart";
 import "package:duwith_social/utils/color.dart";
@@ -43,18 +44,39 @@ profileAppBar() {
 profileData(String name, String image, String nickname, String description,
     String followers, String following, String postNumber) {
   return SizedBox(
-    height: heightSize(192),
+    height: heightSize(200),
     width: widthSize(201),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CircleAvatar(
-          backgroundColor: textColor,
-          radius: widthSize(30),
-          child: CircleAvatar(
-            backgroundImage: AssetImage(image),
-            radius: widthSize(28),
-          ),
+        // CircleAvatar(
+        //   backgroundColor: textColor,
+        //   radius: widthSize(30),
+        //   child: CircleAvatar(
+        //     backgroundImage: AssetImage(image),
+        //     radius: widthSize(28),
+        //   ),
+        // ),
+        CachedNetworkImage(
+          imageUrl: image,
+          placeholder: (context, url) =>
+              const Center(child: CircularProgressIndicator()),
+          imageBuilder: (context, imageprovider) {
+            return Container(
+              height: heightSize(62),
+              width: widthSize(62),
+              decoration:
+                  const ShapeDecoration(shape: OvalBorder(), color: textColor),
+              child: Container(
+                height: heightSize(58),
+                width: widthSize(58),
+                decoration: ShapeDecoration(
+                    shape: const OvalBorder(),
+                    image: DecorationImage(
+                        image: imageprovider, fit: BoxFit.fill)),
+              ),
+            );
+          },
         ),
         SizedBox(height: heightSize(8)),
         SizedBox(

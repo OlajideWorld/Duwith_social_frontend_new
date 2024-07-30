@@ -119,6 +119,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
               await pickMultipleImages();
               if (_imageFileList == []) {
                 getSuccessSnackBarEdit("Images picked", "No Images picked");
+                Get.back();
               } else {
                 Get.to(() => PostImageVideosScreen(
                       files: _imageFileList,
@@ -132,6 +133,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
               await pickMultipleVideos();
               if (_imageFileList == []) {
                 getSuccessSnackBarEdit("Videos picked", "No Videos picked");
+                Get.back();
               } else {
                 Get.to(() => PostImageVideosScreen(
                       files: _imageFileList,

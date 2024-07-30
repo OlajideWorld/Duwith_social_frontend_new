@@ -68,7 +68,7 @@ class _InputTextFieldState extends State<InputTextField> {
             fontFamily: UsedFonts.poppins,
             fontWeight: FontWeight.w400,
             color: const Color(0xFFB4B4B4),
-            fontSize: fontSize(13)),
+            fontSize: fontSize(15)),
         controller: widget.controller,
         onChanged: widget.onChanged,
         validator: widget.validator,

@@ -33,7 +33,7 @@ class _CustomNavBarWidgetState extends State<CustomNavBarWidget> {
         Get.to(() => ShoppingMainScreen());
         break;
       case 4:
-        Get.to(() => const ProfileScreen());
+        Get.to(() => ProfileScreen());
         break;
     }
   }

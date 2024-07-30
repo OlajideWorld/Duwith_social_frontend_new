@@ -16,25 +16,29 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
   Rx<User> userdata = User(
-      id: "",
-      username: "",
-      email: "",
-      otp: "",
-      profileImage: "",
-      bio: "",
-      gender: "",
-      dateOfBirth: DateTime.now(),
-      linked: false,
-      phoneNumber: "",
-      mainBalance: 0.0,
-      gemspoint: 0.0,
-      dailyPoints: 0.0,
-      jar: Jar(points: 0, purchased: false, limit: 0, totalEarned: 0),
-      following: [],
-      followers: [],
-      interests: [],
-      socialMediaLinks: SocialMediaLinks(facebook: "", youtube: ""),
-      blockedUsers: []).obs;
+    id: "",
+    username: "",
+    useruniqueId: '',
+    email: "",
+    otp: "",
+    profileImage: "",
+    bio: "",
+    gender: "",
+    dateOfBirth: DateTime.now(),
+    linked: false,
+    phoneNumber: "",
+    mainBalance: 0,
+    gemspoint: 0,
+    dailyPoints: 0,
+    jar: Jar(points: 0, purchased: false, limit: 0, totalEarned: 0),
+    following: [],
+    followers: [],
+    interests: [],
+    socialMediaLinks:
+        SocialMediaLinks(facebook: "", youtube: "", instagram: '', twitter: ''),
+    blockedUsers: [],
+    dog: Dog(dogName: "", dogreward: 0),
+  ).obs;
 
   RxBool isloading = false.obs;
 

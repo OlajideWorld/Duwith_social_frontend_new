@@ -12,6 +12,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../../common/custom-text.dart';
 import '../screens/login_screen.dart';
@@ -137,6 +138,14 @@ class SignUpWithScreen extends StatelessWidget {
                             } else {
                               if (authController.optionUsed.value == 1) {
                                 if (valid == true) {
+                                  final data3 = {
+                                    "createdBy":
+                                        authController.userdata.value.id,
+                                    "push_id":
+                                        OneSignal.User.pushSubscription.id
+                                  };
+                                  await socket.storeNotificationId(data3);
+
                                   socket.isloading.value = true;
                                   var done = await socket.createUser(data);
                                   if (done == false) {

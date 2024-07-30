@@ -1,4 +1,5 @@
 import 'package:duwith_social/Pages/Wallet%20Page/screens/withdraw_screeen.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,7 +48,7 @@ walletBalanceContainer(BuildContext context) {
             color: Color(0xFF848484),
           ),
           const CText(
-            text: "\$10,000 ",
+            text: "\$0 ",
             size: 28,
             fontFamily: UsedFonts.poppins,
             fontWeight: FontWeight.w600,
@@ -56,26 +57,26 @@ walletBalanceContainer(BuildContext context) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buttonsWidget2(
-                  context,
-                  heightSize(29),
-                  widthSize(100),
-                  "Convert",
-                  FontAwesomeIcons.exchange,
-                  textColor,
-                  highlightColor,
-                  () {},
-                  false),
-              buttonsWidget2(
-                  context,
-                  heightSize(29),
-                  widthSize(100),
-                  "Withdraw",
-                  FontAwesomeIcons.wallet,
-                  highlightColor,
-                  textColor,
-                  () => Get.to(() => WalletWithdrawSceen()),
-                  false),
+              // buttonsWidget2(
+              //     context,
+              //     heightSize(29),
+              //     widthSize(100),
+              //     "Convert",
+              //     FontAwesomeIcons.exchange,
+              //     textColor,
+              //     highlightColor,
+              //     () {},
+              //     false),
+              // buttonsWidget2(
+              //     context,
+              //     heightSize(29),
+              //     widthSize(100),
+              //     "Withdraw",
+              //     FontAwesomeIcons.wallet,
+              //     highlightColor,
+              //     textColor,
+              //     () => Get.to(() => WalletWithdrawSceen()),
+              //     false),
               buttonsWidget2(
                   context,
                   heightSize(29),
@@ -84,7 +85,8 @@ walletBalanceContainer(BuildContext context) {
                   FontAwesomeIcons.wallet,
                   backgroundColor,
                   textColor,
-                  () {},
+                  () => getSuccessSnackBarEdit(
+                      "Notification", "Linking to Duwith, Coming soon"),
                   true)
             ],
           ),

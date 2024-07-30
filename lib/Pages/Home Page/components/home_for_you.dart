@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, invalid_use_of_protected_member, library_private_types_in_public_api
 
+import 'dart:io';
+
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
@@ -19,7 +21,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 HomeController homeController = HomeController.instance;
 SocketService socket = SocketService.instance;
@@ -75,37 +79,85 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   RxBool isExpanded = false.obs;
+  RxString thumbnailPath = "".obs;
 
-  late BetterPlayerController betterPlayerController;
-  late BetterPlayerDataSource betterPlayerDataSource;
+  // late BetterPlayerController betterPlayerController;
+  // late BetterPlayerDataSource betterPlayerDataSource;
+
+  // @override
+  // void initState() {
+  //   BetterPlayerConfiguration betterPlayerConfiguration =
+  //       const BetterPlayerConfiguration(
+  //     aspectRatio: 16 / 9,
+  //     fit: BoxFit.contain,
+  //   );
+  //   betterPlayerDataSource = BetterPlayerDataSource(
+  //     BetterPlayerDataSourceType.network,
+  //     widget.postsData.media.single.url,
+  //     cacheConfiguration: const BetterPlayerCacheConfiguration(
+  //       useCache: true,
+  //       preCacheSize: 10 * 1024 * 1024,
+  //       maxCacheSize: 10 * 1024 * 1024,
+  //       maxCacheFileSize: 10 * 1024 * 1024,
+
+  //       ///Android only option to use cached video between app sessions
+  //       key: "testCacheKey",
+  //     ),
+  //   );
+  //   betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
+  //   super.initState();
+  // }
+
+  // Static Map to cache thumbnails
+  static Map<String, String> thumbnailCache = {};
 
   @override
   void initState() {
-    BetterPlayerConfiguration betterPlayerConfiguration =
-        const BetterPlayerConfiguration(
-      aspectRatio: 16 / 9,
-      fit: BoxFit.contain,
-    );
-    betterPlayerDataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.network,
-      widget.postsData.media.single.url,
-      cacheConfiguration: const BetterPlayerCacheConfiguration(
-        useCache: true,
-        preCacheSize: 10 * 1024 * 1024,
-        maxCacheSize: 10 * 1024 * 1024,
-        maxCacheFileSize: 10 * 1024 * 1024,
-
-        ///Android only option to use cached video between app sessions
-        key: "testCacheKey",
-      ),
-    );
-    betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
     super.initState();
+    if (widget.postsData.media.single.type == "video") {
+      loadThumbnail();
+    }
+  }
+
+  // Future<void> generateThumbnail() async {
+  //   final directory = await getTemporaryDirectory();
+  //   final path = await VideoThumbnail.thumbnailFile(
+  //     video: widget.postsData.media.single.url,
+  //     thumbnailPath: directory.path,
+  //     imageFormat: ImageFormat.JPEG,
+  //     quality: 75,
+  //   );
+
+  //   thumbnailPath.value = path!;
+  // }
+
+  Future<void> loadThumbnail() async {
+    // Check if the thumbnail is already in the cache
+    if (thumbnailCache.containsKey(widget.postsData.media.single.url)) {
+      setState(() {
+        thumbnailPath.value =
+            thumbnailCache[widget.postsData.media.single.url]!;
+      });
+    } else {
+      final directory = await getTemporaryDirectory();
+      final path = await VideoThumbnail.thumbnailFile(
+        video: widget.postsData.media.single.url,
+        thumbnailPath: directory.path,
+        imageFormat: ImageFormat.PNG,
+        quality: 75,
+      );
+      // Store the generated thumbnail in the cache
+      if (path != null) {
+        thumbnailCache[widget.postsData.media.single.url] = path;
+        setState(() {
+          thumbnailPath.value = path;
+        });
+      }
+    }
   }
 
   @override
   void dispose() {
-    betterPlayerController.dispose();
     super.dispose();
   }
 
@@ -122,10 +174,6 @@ class _PostWidgetState extends State<PostWidget> {
             ? isExpanded.value
                 ? heightSize(640)
                 : heightSize(540)
-            // : widget.postsData.media.single.type == "video"
-            //     ? isExpanded.value
-            //         ? heightSize(500)
-            //         : heightSize(400)
             : isExpanded.value
                 ? heightSize(260)
                 : heightSize(200),
@@ -136,8 +184,13 @@ class _PostWidgetState extends State<PostWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            postBarTitle(widget.width, widget.postsData.user.username,
-                widget.postsData.user.profileImage, context, true),
+            postBarTitle(
+                widget.postsData.user.id,
+                widget.width,
+                widget.postsData.user.username,
+                widget.postsData.user.profileImage,
+                context,
+                true),
             SizedBox(height: heightSize(8)),
             PostContent(
                 isExpanded: isExpanded,
@@ -175,19 +228,35 @@ class _PostWidgetState extends State<PostWidget> {
                         child: SizedBox(
                           height: heightSize(400),
                           child: Stack(children: [
-                            Container(
-                              height: heightSize(400),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(widthSize(20)))),
-                              child: BetterPlayer.network(
-                                widget.postsData.media.single.url,
-                                betterPlayerConfiguration:
-                                    const BetterPlayerConfiguration(
-                                  aspectRatio: 1,
-                                ),
-                              ),
-                            ),
+                            // vIDEO iNSTANCE
+
+                            // Container(
+                            //   height: heightSize(400),
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.all(
+                            //           Radius.circular(widthSize(20)))),
+                            //   child: BetterPlayer.network(
+                            //     widget.postsData.media.single.url,
+                            //     betterPlayerConfiguration:
+                            //         const BetterPlayerConfiguration(
+                            //       aspectRatio: 1,
+                            //     ),
+                            //   ),
+                            // ),
+                            if (thumbnailPath.value != "")
+                              Container(
+                                height: heightSize(400),
+                                width: widget.width,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(widthSize(20))),
+                                    image: DecorationImage(
+                                        image: FileImage(
+                                            File(thumbnailPath.value)),
+                                        fit: BoxFit.cover)),
+                              )
+                            else
+                              const Center(child: CircularProgressIndicator()),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: widthSize(170),
@@ -327,8 +396,8 @@ class _PostWidgetState extends State<PostWidget> {
   }
 }
 
-postBarTitle(double width, String name, String image, BuildContext context,
-    bool showwidget) {
+postBarTitle(String userId, double width, String name, String image,
+    BuildContext context, bool showwidget) {
   return SizedBox(
     width: width,
     height: heightSize(38),
@@ -340,14 +409,14 @@ postBarTitle(double width, String name, String image, BuildContext context,
           child: Row(
             children: [
               GestureDetector(
-                onTap: () => Get.to(() => ViewProfileScreen(
-                    name: name,
-                    image: image,
-                    nickname: "@${name.toLowerCase()}",
-                    description: "Dance like nobody’s watching! 💃",
-                    followers: homeController.engagementShortened(12537689),
-                    following: homeController.engagementShortened(12334),
-                    postNumber: homeController.engagementShortened(123))),
+                onTap: () async {
+                  homeController.loadingProfile.value = true;
+                  await socket.getUserWithId(userId);
+                  await socket.getUserPosts(userId);
+                  await Future.delayed(const Duration(seconds: 2), () {});
+                  homeController.loadingProfile.value = false;
+                  Get.to(() => ViewProfileScreen());
+                },
                 child: CachedNetworkImage(
                   imageUrl: image,
                   placeholder: (context, url) =>

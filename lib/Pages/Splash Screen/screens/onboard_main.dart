@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:duwith_social/Pages/Auth%20Page/screens/login_screen.dart';
 import 'package:duwith_social/Pages/Splash%20Screen/components/onboard_components.dart';
 import 'package:duwith_social/common/button-widget.dart';

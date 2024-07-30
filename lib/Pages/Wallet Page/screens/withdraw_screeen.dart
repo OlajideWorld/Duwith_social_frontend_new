@@ -10,7 +10,8 @@ import 'package:get/get.dart';
 import '../components/wallet_app_bar.dart';
 
 class WalletWithdrawSceen extends StatelessWidget {
-  const WalletWithdrawSceen({super.key});
+  final String coinSelected;
+  const WalletWithdrawSceen({super.key, required this.coinSelected});
 
   @override
   Widget build(BuildContext context) {
