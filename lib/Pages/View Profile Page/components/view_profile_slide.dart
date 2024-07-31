@@ -1,3 +1,4 @@
+import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Profile%20Page/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ import '../../Home Page/controllers/home_controller.dart';
 
 HomeController homeController = HomeController.instance;
 ProfileController profileController = ProfileController.instance;
+SocketService socketService = SocketService.instance;
 
 selectViewProfile(BuildContext context, double width) {
   return Container(
@@ -27,7 +29,7 @@ selectViewProfile(BuildContext context, double width) {
               onTap: () async {
                 homeController.viewprofileslide.value = 0;
                 profileController.profileLoading.value = true;
-                await socket
+                await socketService
                     .getUserPosts(profileController.viewProfileData.value.id);
                 profileController.profileLoading.value = false;
               },
@@ -104,7 +106,7 @@ selectViewProfile(BuildContext context, double width) {
               onTap: () async {
                 homeController.viewprofileslide.value = 2;
                 profileController.profileLoading.value = true;
-                await socket.getUserVideoPosts(
+                await socketService.getUserVideoPosts(
                     profileController.viewProfileData.value.id);
                 profileController.profileLoading.value = false;
               },

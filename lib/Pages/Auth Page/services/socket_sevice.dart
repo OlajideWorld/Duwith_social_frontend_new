@@ -55,7 +55,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     try {
       _socket = IO.io(
-          testUrl,
+          productionUrl,
           IO.OptionBuilder()
               .setTransports(["websocket"])
               .disableAutoConnect()
@@ -815,6 +815,16 @@ class SocketService extends GetxService {
         profileController.profileLoading.value = false;
         getSuccessSnackBar("success");
       }
+    });
+  }
+
+  // LeaderBoard Timer
+  fetchLeaderBoardTimer() {
+    _socket.emit("getResetDate");
+//
+    _socket.on("postVideoByIdResponse", (data) {
+      final nextReset = DateTime.parse(data);
+      profileController.startTimer(nextReset);
     });
   }
 

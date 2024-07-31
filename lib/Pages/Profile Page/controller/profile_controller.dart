@@ -1,21 +1,24 @@
+import "dart:async";
 import "dart:io";
 
 import "package:cloudinary/cloudinary.dart";
-import "package:flutter/material.dart";
+import "package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart";
 import "package:get/get.dart";
-import "package:image_picker/image_picker.dart";
-import "package:path_provider/path_provider.dart";
-import "package:video_thumbnail/video_thumbnail.dart";
 
 import "../../../common/getxmessage.dart";
 import "../../../models/post-data.dart";
 import "../../../models/user_data.dart";
+
+SocketService socketService = SocketService.instance;
 
 class ProfileController extends GetxController {
   static ProfileController instance = Get.find();
 
   RxBool profileLoading = false.obs;
   RxBool thumbnailLoading = false.obs;
+
+  var timeUntilReset = Duration(days: 30).obs;
+  Timer? timer;
 
   Rx<User> viewProfileData = User(
     id: "",
@@ -80,6 +83,7 @@ class ProfileController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+    timer?.cancel();
   }
 
   String engagementShortened(int number) {
@@ -125,4 +129,16 @@ class ProfileController extends GetxController {
     apiSecret: "8PE5JLnAugyOstV3EPuE7xrmcbQ",
     cloudName: "dm4eqhtyx",
   );
+
+  void startTimer(DateTime nextReset) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      final now = DateTime.now();
+      timeUntilReset.value = nextReset.difference(now);
+
+      if (timeUntilReset.value.isNegative) {
+        timer.cancel();
+        socketService.fetchLeaderBoardTimer();
+      }
+    });
+  }
 }

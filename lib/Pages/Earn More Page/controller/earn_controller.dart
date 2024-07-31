@@ -12,6 +12,7 @@ class EarnController extends GetxController {
   RxDouble width = 0.0.obs;
 
   RxBool earnLoading = false.obs;
+  RxInt chooseType = 0.obs;
 
   GlobalKey<CartIconKey> cartkey = GlobalKey<CartIconKey>();
   Function(GlobalKey)? runAddtoCartAnimation;
@@ -20,6 +21,108 @@ class EarnController extends GetxController {
 // Social Task
   RxList<SocialModel> socialTaskList = <SocialModel>[].obs;
   RxInt type = 0.obs;
+
+  // Daily Task
+  RxList<Map> dailyTaskList = <Map>[
+    {
+      "image": "assets/images/Profile/profile.png",
+      "task": "Read article",
+      "currentValue": 0.0,
+      "limitValue": 3.0,
+      "isComplete": false,
+      "reward": 200
+    },
+    {
+      "image": "assets/images/Profile/profile2.png",
+      "task": "Like a post",
+      "currentValue": 2.0,
+      "limitValue": 2.0,
+      "isComplete": true,
+      "reward": 500
+    },
+    {
+      "image": "assets/images/Profile/profile3.png",
+      "task": "Share a post",
+      "currentValue": 1.0,
+      "limitValue": 3.0,
+      "isComplete": false,
+      "reward": 100
+    },
+    {
+      "image": "assets/images/Profile/profile6.png",
+      "task": "Like a post",
+      "currentValue": 1.0,
+      "limitValue": 3.0,
+      "isComplete": false,
+      "reward": 250
+    },
+    {
+      "image": "assets/images/Profile/profile4.png",
+      "task": "Read article",
+      "currentValue": 0.0,
+      "limitValue": 3.0,
+      "isComplete": false,
+      "reward": 400
+    },
+    {
+      "image": "assets/images/Profile/profile5.png",
+      "task": "Share a post",
+      "currentValue": 2.0,
+      "limitValue": 3.0,
+      "isComplete": false,
+      "reward": 350
+    },
+  ].obs;
+  RxList<Map> streakTaskList = <Map>[
+    {
+      "task": "3 days streak",
+      "remark": "Read article",
+      "currentValue": 4.0,
+      "limitValue": 12.0,
+      "isComplete": false,
+      "reward": 200
+    },
+    {
+      "task": "5 days streak",
+      "remark": "Read article",
+      "currentValue": 4.0,
+      "limitValue": 9.0,
+      "isComplete": false,
+      "reward": 200
+    },
+    {
+      "task": "10 days streak",
+      "remark": "Read article",
+      "currentValue": 2.0,
+      "limitValue": 17.0,
+      "isComplete": false,
+      "reward": 200
+    },
+    {
+      "task": "15 days streak",
+      "remark": "Read article",
+      "currentValue": 0.0,
+      "limitValue": 3.0,
+      "isComplete": false,
+      "reward": 200
+    },
+    {
+      "task": "3 days streak",
+      "remark": "Read article",
+      "currentValue": 0.0,
+      "limitValue": 10.0,
+      "isComplete": false,
+      "reward": 200
+    },
+    {
+      "task": "3 days streak",
+      "remark": "Read article",
+      "currentValue": 12.0,
+      "limitValue": 32.0,
+      "isComplete": false,
+      "reward": 200
+    },
+  ].obs;
 
   @override
   void onInit() {

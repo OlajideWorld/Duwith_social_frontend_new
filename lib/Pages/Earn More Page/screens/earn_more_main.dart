@@ -4,9 +4,13 @@ import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_money_component.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/screens/daily_task.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import '../../../common/custom-text.dart';
 import '../../../utils/sizes.dart';
 
 class EarnMorePage extends StatelessWidget {
@@ -64,7 +68,45 @@ class EarnMorePage extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    earnLuckySpin(constraints.maxWidth),
+                                    SizedBox(
+                                      child: Column(
+                                        children: [
+                                          earnLuckySpin(constraints.maxWidth),
+                                          SizedBox(height: heightSize(20)),
+                                          GestureDetector(
+                                            onTap: () =>
+                                                Get.to(() => DailyTaskScreen()),
+                                            child: SizedBox(
+                                              height: heightSize(60),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  SizedBox(
+                                                      height: heightSize(48),
+                                                      width: widthSize(45),
+                                                      child: Image.asset(
+                                                        "assets/images/dailyimage.png",
+                                                        fit: BoxFit.contain,
+                                                      )),
+                                                  const CText(
+                                                    text: "Daily Task",
+                                                    size: 10,
+                                                    fontFamily:
+                                                        UsedFonts.archivo,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: textColor,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     earnSocialMediaWidget(
                                         context, constraints.maxWidth)
                                   ],

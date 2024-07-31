@@ -10,8 +10,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../common/custom-text.dart';
+import '../../Auth Page/services/socket_sevice.dart';
 
 ProfileController profileController = ProfileController.instance;
+SocketService socketService = SocketService.instance;
 
 myProfileTopWidget(double width, User userdata) {
   return SizedBox(
@@ -158,8 +160,12 @@ selectUserViewTab(BuildContext context, double width) {
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 profileController.viewprofileslide.value = 0;
+                profileController.profileLoading.value = true;
+                await socketService
+                    .getUserPosts(profileController.viewProfileData.value.id);
+                profileController.profileLoading.value = false;
               },
               child: Container(
                 // width: widthSize(176),
@@ -231,8 +237,12 @@ selectUserViewTab(BuildContext context, double width) {
 
           Expanded(
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 profileController.viewprofileslide.value = 2;
+                profileController.profileLoading.value = true;
+                await socketService.getUserVideoPosts(
+                    profileController.viewProfileData.value.id);
+                profileController.profileLoading.value = false;
               },
               child: Container(
                 height: heightSize(50),
