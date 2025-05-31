@@ -1,7 +1,7 @@
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
 
@@ -36,15 +36,16 @@ selectHomeView(BuildContext context, double width) {
                 child: Column(
                   children: [
                     Text(
-                      'For you',
+                      'Feed',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: homeController.viewBarOption.value == 0
                             ? const Color(0xFFECECEC)
                             : textColor3,
-                        fontSize: fontSize(14),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w700,
+                        fontSize: fontSize(15),
+                        fontWeight: homeController.viewBarOption.value == 0
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: heightSize(7)),
@@ -60,13 +61,52 @@ selectHomeView(BuildContext context, double width) {
             ),
           ),
 
-          // Videos sections
+          // My Voice sections
           Expanded(
             flex: 1,
             child: GestureDetector(
               onTap: () {
                 homeController.viewBarOption.value = 1;
-                homeController.fetchvideos();
+                // homeController.fetchvideos();
+              },
+              child: Container(
+                height: heightSize(50),
+                decoration: const BoxDecoration(color: backgroundColor),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: heightSize(18),
+                      width: widthSize(56),
+                      child: Image.asset(
+                        'assets/images/Home/myvoice.png',
+                        fit: BoxFit.contain,
+                        // color: homeController.viewBarOption.value == 1
+                        //     ? const Color(0xFFECECEC)
+                        //     : textColor3,
+                      ),
+                    ),
+                    SizedBox(height: heightSize(7)),
+                    Divider(
+                        height: heightSize(3),
+                        thickness: 2,
+                        color: homeController.viewBarOption.value == 1
+                            ? const Color(0xFFECECEC)
+                            : faintColor),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Forum
+
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () {
+                homeController.viewBarOption.value = 2;
+                homeController.fetchNews();
               },
               child: Container(
                 height: heightSize(50),
@@ -75,22 +115,23 @@ selectHomeView(BuildContext context, double width) {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Video',
+                      'Forum',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: homeController.viewBarOption.value == 1
+                      style: GoogleFonts.poppins(
+                        color: homeController.viewBarOption.value == 2
                             ? const Color(0xFFECECEC)
                             : textColor3,
-                        fontSize: fontSize(14),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w700,
+                        fontSize: fontSize(15),
+                        fontWeight: homeController.viewBarOption.value == 2
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: heightSize(7)),
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
-                        color: homeController.viewBarOption.value == 1
+                        color: homeController.viewBarOption.value == 2
                             ? const Color(0xFFECECEC)
                             : faintColor),
                   ],
@@ -115,13 +156,14 @@ selectHomeView(BuildContext context, double width) {
                     Text(
                       'Quiz',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: homeController.viewBarOption.value == 4
                             ? const Color(0xFFECECEC)
                             : textColor3,
-                        fontSize: fontSize(14),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w700,
+                        fontSize: fontSize(15),
+                        fontWeight: homeController.viewBarOption.value == 4
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: heightSize(7)),
@@ -129,45 +171,6 @@ selectHomeView(BuildContext context, double width) {
                         height: heightSize(3),
                         thickness: 2,
                         color: homeController.viewBarOption.value == 4
-                            ? const Color(0xFFECECEC)
-                            : faintColor),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-// News Sections
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              onTap: () {
-                homeController.viewBarOption.value = 2;
-                homeController.fetchNews();
-              },
-              child: Container(
-                height: heightSize(50),
-                decoration: const BoxDecoration(color: backgroundColor),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'News',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: homeController.viewBarOption.value == 2
-                            ? const Color(0xFFECECEC)
-                            : textColor3,
-                        fontSize: fontSize(14),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: heightSize(7)),
-                    Divider(
-                        height: heightSize(3),
-                        thickness: 2,
-                        color: homeController.viewBarOption.value == 2
                             ? const Color(0xFFECECEC)
                             : faintColor),
                   ],
@@ -191,15 +194,16 @@ selectHomeView(BuildContext context, double width) {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Airdrops',
+                      'Campaign',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: homeController.viewBarOption.value == 3
                             ? const Color(0xFFECECEC)
                             : textColor3,
-                        fontSize: fontSize(14),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w700,
+                        fontSize: fontSize(15),
+                        fontWeight: homeController.viewBarOption.value == 3
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: heightSize(7)),

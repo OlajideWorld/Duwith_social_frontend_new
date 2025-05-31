@@ -52,21 +52,23 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         child: Column(
                           children: [
+                            SizedBox(height: heightSize(10)),
                             homeAppBar(constraints.maxWidth),
+                            SizedBox(height: heightSize(10)),
                             selectHomeView(context, constraints.maxWidth),
-                            SizedBox(height: heightSize(5)),
-                            UnityBannerAd(
-                              placementId: AdManager.bannerAdPlacementId,
-                              onLoad: (placementId) =>
-                                  print('Banner loaded: $placementId'),
-                              onClick: (placementId) =>
-                                  print('Banner clicked: $placementId'),
-                              onShown: (placementId) =>
-                                  print('Banner shown: $placementId'),
-                              onFailed: (placementId, error, message) => print(
-                                  'Banner Ad $placementId failed: $error $message'),
-                            ),
-                            SizedBox(height: heightSize(13)),
+                            // SizedBox(height: heightSize(5)),
+                            // UnityBannerAd(
+                            //   placementId: AdManager.bannerAdPlacementId,
+                            //   onLoad: (placementId) =>
+                            //       print('Banner loaded: $placementId'),
+                            //   onClick: (placementId) =>
+                            //       print('Banner clicked: $placementId'),
+                            //   onShown: (placementId) =>
+                            //       print('Banner shown: $placementId'),
+                            //   onFailed: (placementId, error, message) => print(
+                            //       'Banner Ad $placementId failed: $error $message'),
+                            // ),
+                            // SizedBox(height: heightSize(13)),
                             if (homeController.viewBarOption.value == 0)
                               homeController.homeloading.value == true
                                   ? ShimmerLoadingWidget(
