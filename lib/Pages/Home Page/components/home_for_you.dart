@@ -27,6 +27,7 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../Services/Ads Service/unity_ads_manager.dart';
+import '../screens/posts_View_Page.dart';
 
 HomeController homeController = HomeController.instance;
 SocketService socket = SocketService.instance;
@@ -50,15 +51,12 @@ forYouList(BuildContext context, double width) {
         )
       : Expanded(
           child: ListView.builder(
+              shrinkWrap: true,
               itemCount: homeController.postList.value.length,
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    PostWidget(
-                      postsData: homeController.postList.value[index],
-                      width: width,
-                    ),
-                  ],
+                return PostWidget(
+                  postsData: homeController.postList.value[index],
+                  width: width,
                 );
               }),
         );
@@ -173,9 +171,9 @@ class _PostWidgetState extends State<PostWidget> {
                 widget.postsData.media.single.type == "video"
             ? isExpanded.value
                 ? heightSize(700)
-                : heightSize(650)
+                : heightSize(600)
             : isExpanded.value
-                ? heightSize(260)
+                ? heightSize(320)
                 : heightSize(200),
         width: widget.width,
         decoration: const BoxDecoration(color: Color(0xFF101522)),
@@ -193,13 +191,40 @@ class _PostWidgetState extends State<PostWidget> {
             SizedBox(height: heightSize(8)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-              child: PostContent(
-                  isExpanded: isExpanded,
-                  text: widget.postsData.caption,
-                  size: 10,
-                  color: const Color(0xFFD7D7D7),
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w400),
+              child: widget.postsData.caption.length > 20
+                  ? GestureDetector(
+                      onTap: () => Get.to(
+                          () => PostsViewPage(postsData: widget.postsData)),
+                      child: Row(
+                        children: [
+                          Text(
+                            "${truncate(widget.postsData.caption, length: 15)} .....",
+                            style: GoogleFonts.poppins(
+                              color: const Color(0xFFD7D7D7),
+                              fontSize: fontSize(15),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(width: widthSize(5)),
+                          Text(
+                            "Read More",
+                            style: GoogleFonts.poppins(
+                              color: mainColor,
+                              fontSize: fontSize(15),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Text(
+                      widget.postsData.caption,
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFFD7D7D7),
+                        fontSize: fontSize(15),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
             ),
             SizedBox(height: heightSize(8)),
             widget.postsData.media.single.type == "image" ||
@@ -285,130 +310,130 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                       )
                 : const SizedBox(),
-            SizedBox(height: heightSize(8)),
+            SizedBox(height: heightSize(5)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
               child: Divider(
                   height: heightSize(3), thickness: 2, color: faintColor),
             ),
-            SizedBox(height: heightSize(8)),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-              child: SizedBox(
-                height: heightSize(60),
-                width: widget.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // CText(
-                    //   text: "",
-                    //   color: textColor,
-                    //   size: fontSize(15),
-                    // ),
-                    Text(
-                      "What's your Opinions?",
-                      style: GoogleFonts.plusJakartaSans(
-                        color: textColor,
-                        fontSize: fontSize(14),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: heightSize(30),
-                          width: widthSize(150),
-                          child: Stack(
-                            children: [
-                              SizedBox(
-                                height: heightSize(30),
-                                width: widthSize(150),
-                                child: LinearProgressIndicator(
-                                  backgroundColor: const Color(0xFF292C37),
-                                  value: 0.3,
-                                  valueColor: const AlwaysStoppedAnimation(
-                                      Color(0xFF1C202B)),
-                                  borderRadius:
-                                      BorderRadius.circular(widthSize(20)),
-                                  minHeight: heightSize(30),
-                                ),
-                              ),
-                              SizedBox(
-                                  height: heightSize(30),
-                                  width: widthSize(150),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(widthSize(10)),
-                                    child: const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CText(
-                                          text: "Amazing",
-                                          color: textColor,
-                                          size: 12,
-                                        ),
-                                        CText(
-                                          text: "30%",
-                                          color: textColor,
-                                          size: 12,
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: heightSize(30),
-                          width: widthSize(150),
-                          child: Stack(
-                            children: [
-                              SizedBox(
-                                height: heightSize(30),
-                                width: widthSize(150),
-                                child: LinearProgressIndicator(
-                                  backgroundColor: const Color(0xFF1C202B),
-                                  value: 0.5,
-                                  valueColor: const AlwaysStoppedAnimation(
-                                      Color(0xFF292C37)),
-                                  borderRadius:
-                                      BorderRadius.circular(widthSize(20)),
-                                  minHeight: heightSize(30),
-                                ),
-                              ),
-                              SizedBox(
-                                  height: heightSize(30),
-                                  width: widthSize(150),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(widthSize(10)),
-                                    child: const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CText(
-                                          text: "50%",
-                                          color: textColor,
-                                          size: 12,
-                                        ),
-                                        CText(
-                                          text: "Good",
-                                          color: textColor,
-                                          size: 12,
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            SizedBox(height: heightSize(5)),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+            //   child: SizedBox(
+            //     height: heightSize(60),
+            //     width: widget.width,
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         // CText(
+            //         //   text: "",
+            //         //   color: textColor,
+            //         //   size: fontSize(15),
+            //         // ),
+            //         Text(
+            //           "What's your Opinions?",
+            //           style: GoogleFonts.plusJakartaSans(
+            //             color: textColor,
+            //             fontSize: fontSize(14),
+            //             fontWeight: FontWeight.w500,
+            //           ),
+            //         ),
+            //         Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             SizedBox(
+            //               height: heightSize(30),
+            //               width: widthSize(150),
+            //               child: Stack(
+            //                 children: [
+            //                   SizedBox(
+            //                     height: heightSize(30),
+            //                     width: widthSize(150),
+            //                     child: LinearProgressIndicator(
+            //                       backgroundColor: const Color(0xFF292C37),
+            //                       value: 0.3,
+            //                       valueColor: const AlwaysStoppedAnimation(
+            //                           Color(0xFF1C202B)),
+            //                       borderRadius:
+            //                           BorderRadius.circular(widthSize(20)),
+            //                       minHeight: heightSize(30),
+            //                     ),
+            //                   ),
+            //                   SizedBox(
+            //                       height: heightSize(30),
+            //                       width: widthSize(150),
+            //                       child: Padding(
+            //                         padding: EdgeInsets.all(widthSize(10)),
+            //                         child: const Row(
+            //                           mainAxisAlignment:
+            //                               MainAxisAlignment.spaceBetween,
+            //                           children: [
+            //                             CText(
+            //                               text: "Amazing",
+            //                               color: textColor,
+            //                               size: 12,
+            //                             ),
+            //                             CText(
+            //                               text: "30%",
+            //                               color: textColor,
+            //                               size: 12,
+            //                             ),
+            //                           ],
+            //                         ),
+            //                       ))
+            //                 ],
+            //               ),
+            //             ),
+            //             SizedBox(
+            //               height: heightSize(30),
+            //               width: widthSize(150),
+            //               child: Stack(
+            //                 children: [
+            //                   SizedBox(
+            //                     height: heightSize(30),
+            //                     width: widthSize(150),
+            //                     child: LinearProgressIndicator(
+            //                       backgroundColor: const Color(0xFF1C202B),
+            //                       value: 0.5,
+            //                       valueColor: const AlwaysStoppedAnimation(
+            //                           Color(0xFF292C37)),
+            //                       borderRadius:
+            //                           BorderRadius.circular(widthSize(20)),
+            //                       minHeight: heightSize(30),
+            //                     ),
+            //                   ),
+            //                   SizedBox(
+            //                       height: heightSize(30),
+            //                       width: widthSize(150),
+            //                       child: Padding(
+            //                         padding: EdgeInsets.all(widthSize(10)),
+            //                         child: const Row(
+            //                           mainAxisAlignment:
+            //                               MainAxisAlignment.spaceBetween,
+            //                           children: [
+            //                             CText(
+            //                               text: "50%",
+            //                               color: textColor,
+            //                               size: 12,
+            //                             ),
+            //                             CText(
+            //                               text: "Good",
+            //                               color: textColor,
+            //                               size: 12,
+            //                             ),
+            //                           ],
+            //                         ),
+            //                       ))
+            //                 ],
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: heightSize(20)),
             Padding(
               padding: EdgeInsets.only(
@@ -656,7 +681,7 @@ class _PostWidgetState extends State<PostWidget> {
                 ),
               ),
             ),
-            SizedBox(height: heightSize(15)),
+            SizedBox(height: heightSize(5)),
             Divider(height: heightSize(3), thickness: 2, color: faintColor),
           ],
         ),
@@ -671,12 +696,10 @@ postBarTitle(String userId, double width, String name, String image,
     padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
     child: SizedBox(
       width: width,
-      height: heightSize(38),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            height: heightSize(38),
             child: Row(
               children: [
                 GestureDetector(
@@ -710,21 +733,23 @@ postBarTitle(String userId, double width, String name, String image,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CText(
-                      text: name,
-                      size: 15,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w500,
-                      color: textColor,
+                    Text(
+                      name,
+                      style: GoogleFonts.poppins(
+                        color: textColor,
+                        fontSize: fontSize(15),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     SizedBox(height: heightSize(3)),
-                    const CText(
-                      text: "4 hours ago",
-                      size: 12,
-                      color: timeColor,
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w500,
-                    )
+                    Text(
+                      "4 hours ago",
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF858585),
+                        fontSize: fontSize(10),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 )
               ],

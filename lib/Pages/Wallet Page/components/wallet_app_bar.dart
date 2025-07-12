@@ -1,14 +1,21 @@
+import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
+import 'package:duwith_social/Pages/Wallet%20Page/components/wallet_coin_values.dart';
 import 'package:duwith_social/Pages/Wallet%20Page/screens/withdraw_screeen.dart';
 import 'package:duwith_social/common/getxmessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common/button-widget.dart';
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
 import '../../../utils/sizes.dart';
+import '../../Earn More Page/controller/earn_controller.dart';
+
+AuthController authController = AuthController.instance;
+EarnController earnController = EarnController.instance;
 
 walletAppBar() {
   return Padding(
@@ -16,15 +23,30 @@ walletAppBar() {
     child: SizedBox(
       height: heightSize(32),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           backbutton(onTap: () => Get.back()),
-          SizedBox(width: widthSize(127)),
-          const CText(
-            text: "Wallet",
-            size: 12,
-            fontFamily: UsedFonts.poppins,
-            fontWeight: FontWeight.w500,
-          ),
+          // const CText(
+          //   text: "Wallet",
+          //   size: 12,
+          //   fontFamily: UsedFonts.poppins,
+          //   fontWeight: FontWeight.w500,
+          // ),
+          Container(
+            height: heightSize(30),
+            width: widthSize(30),
+            padding: EdgeInsets.all(widthSize(10)),
+            decoration: BoxDecoration(
+              color: Color(0xFF262a34),
+              borderRadius: BorderRadius.circular(widthSize(10)),
+            ),
+            child: Center(
+              child: Image.asset(
+                "assets/images/qrcode.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
         ],
       ),
     ),
@@ -35,61 +57,43 @@ walletBalanceContainer(BuildContext context) {
   return Padding(
     padding: EdgeInsets.only(left: widthSize(20), right: widthSize(30)),
     child: SizedBox(
-      height: heightSize(90),
+      height: heightSize(50),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const CText(
-            text: "Total amount (USD)",
-            size: 10,
-            fontFamily: UsedFonts.poppins,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF848484),
+          Text(
+            "@${authController.userdata.value.username}",
+            style: GoogleFonts.inter(
+              color: Color(0xFF1380FF),
+              fontSize: fontSize(11),
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          const CText(
-            text: "\$0 ",
-            size: 28,
-            fontFamily: UsedFonts.poppins,
-            fontWeight: FontWeight.w600,
-            color: textColor,
+          Text(
+            "${earnController.formatNumberWithCommas(authController.userdata.value.mainBalance)}\$",
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: fontSize(30),
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // buttonsWidget2(
-              //     context,
-              //     heightSize(29),
-              //     widthSize(100),
-              //     "Convert",
-              //     FontAwesomeIcons.exchange,
-              //     textColor,
-              //     highlightColor,
-              //     () {},
-              //     false),
-              // buttonsWidget2(
-              //     context,
-              //     heightSize(29),
-              //     widthSize(100),
-              //     "Withdraw",
-              //     FontAwesomeIcons.wallet,
-              //     highlightColor,
-              //     textColor,
-              //     () => Get.to(() => WalletWithdrawSceen()),
-              //     false),
-              buttonsWidget2(
-                  context,
-                  heightSize(29),
-                  widthSize(100),
-                  "Link wallet",
-                  FontAwesomeIcons.wallet,
-                  backgroundColor,
-                  textColor,
-                  () => getSuccessSnackBarEdit(
-                      "Notification", "Linking to Duwith, Coming soon"),
-                  true)
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     buttonsWidget2(
+          //         context,
+          //         heightSize(29),
+          //         widthSize(100),
+          //         "Link wallet",
+          //         FontAwesomeIcons.wallet,
+          //         backgroundColor,
+          //         textColor,
+          //         () => getSuccessSnackBarEdit(
+          //             "Notification", "Linking to Duwith, Coming soon"),
+          //         true)
+          //   ],
+          // ),
         ],
       ),
     ),

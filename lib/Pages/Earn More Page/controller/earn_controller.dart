@@ -5,7 +5,9 @@ import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:duwith_social/models/social_task_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EarnController extends GetxController {
   static EarnController instance = Get.find();
@@ -13,6 +15,14 @@ class EarnController extends GetxController {
 
   RxBool earnLoading = false.obs;
   RxInt chooseType = 0.obs;
+  RxInt walletType = 0.obs; // 0 for social, 1 for daily, 2 for streak
+
+  // Earnning rate
+  double ratePerSec = 2; // coins earned per second
+  double maxCoins = 50.0;
+
+  late DateTime resetTime; // when counting started or was last reset
+  Timer? timer;
 
   GlobalKey<CartIconKey> cartkey = GlobalKey<CartIconKey>();
   Function(GlobalKey)? runAddtoCartAnimation;
@@ -135,6 +145,60 @@ class EarnController extends GetxController {
     // TODO: implement onReady
     super.onReady();
   }
+
+  // format with string
+  String formatNumberWithCommas(int number) {
+    String formattedNumber = NumberFormat.decimalPattern().format(number);
+    return formattedNumber;
+  }
+
+  // Earn Mechanism functions
+  Future<void> loadFromPrefs() async {
+    earnLoading.value = true;
+    final prefs = await SharedPreferences.getInstance();
+
+    // load rate & max if you previously saved them; otherwise keep defaults:
+    ratePerSec = prefs.getDouble('ratePerSec') ?? ratePerSec;
+    maxCoins = prefs.getDouble('maxCoins') ?? maxCoins;
+
+    final resetMillis = prefs.getInt('resetTime');
+    if (resetMillis != null) {
+      resetTime = DateTime.fromMillisecondsSinceEpoch(resetMillis);
+    } else {
+      // first run: set now as resetTime
+      resetTime = DateTime.now();
+      await prefs.setInt('resetTime', resetTime.millisecondsSinceEpoch);
+    }
+    earnLoading.value = false;
+  }
+
+  final earningPageRowDetails = [
+    {
+      "title": "9 POINTS",
+      "subtitle": "For every friend you invited",
+      "button": "Get point",
+    },
+    {
+      "title": "100k POINTS",
+      "subtitle": "Be the top earner on the leaderboard and get rewqrded",
+      "button": "Climb Now",
+    },
+    {
+      "title": "0/7 Claimed",
+      "subtitle": "Claim your daily rewarded tasks ",
+      "button": "Claim",
+    },
+    {
+      "title": "9 POINTS",
+      "subtitle": "For every friend you invited",
+      "button": "Get point",
+    },
+    {
+      "title": "0/7 Claimed",
+      "subtitle": "Claim your daily rewarded tasks ",
+      "button": "Claim",
+    },
+  ];
 
 // Social Link task
   Future<void> launchInBrowser(Uri url) async {

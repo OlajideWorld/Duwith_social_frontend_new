@@ -126,7 +126,7 @@ class AirdropDesign extends StatelessWidget {
       return GestureDetector(
         onTap: () async {
           homeController.airdropDetails.value = airdropDetails;
-          Get.to(() => AirdropDetailsScreen());
+          // Get.to(() => AirdropDetailsScreen());
           await socket.getCommentByAirdropId(airdropDetails.id);
           // debugPrint(airdropDetails.id);
         },

@@ -6,7 +6,9 @@ import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../utils/sizes.dart';
 
@@ -43,37 +45,53 @@ class OnboardScreen extends StatelessWidget {
                             children: [
                               backgroundImageOnboard(),
                               SizedBox(height: heightSize(38)),
-                              const CText(
-                                text: "Start Your Journey with Us!",
-                                fontFamily: UsedFonts.poppins,
-                                fontWeight: FontWeight.w400,
-                                size: 20,
-                                color: textColor,
+                              Text(
+                                "Start Your Journey with Us!",
+                                style: GoogleFonts.daysOne(
+                                  color: textColor,
+                                  fontSize: fontSize(23),
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                               SizedBox(height: heightSize(8)),
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: widthSize(29)),
-                                child: const CText(
-                                  text:
-                                      "Sign up now and be part of a vibrant, engaging Web3 social network",
+                                    horizontal: widthSize(30)),
+                                child: Text(
+                                  "Sign up now and be part of a vibrant, engaging Web3 social network",
                                   textAlign: TextAlign.center,
-                                  fontFamily: UsedFonts.poppins,
-                                  fontWeight: FontWeight.w400,
-                                  size: 12,
-                                  color: Color(0xFF9291A4),
+                                  style: GoogleFonts.poppins(
+                                    color: Color(0xFF9291A4),
+                                    fontSize: fontSize(12),
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: heightSize(20)),
-                              buttonsWidget(
-                                  context,
-                                  heightSize(45),
-                                  constraints.maxWidth,
-                                  "Get started",
-                                  mainColor,
-                                  14, () {
-                                Get.to(() => LoginScreen());
-                              }, false, textColor)
+                              GestureDetector(
+                                onTap: () => Get.to(() => LoginScreen()),
+                                child: Container(
+                                  height: heightSize(50),
+                                  width: widthSize(264),
+                                  decoration: BoxDecoration(
+                                    color: mainColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(widthSize(25)),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      " Get started",
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.poppins(
+                                        color: textColor,
+                                        fontSize: fontSize(12),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

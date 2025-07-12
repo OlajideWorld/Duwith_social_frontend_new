@@ -53,7 +53,7 @@ backgroundImageOnboard() {
         ),
         Center(
           child: SizedBox(
-            height: heightSize(330),
+            height: heightSize(350),
             width: widthSize(225),
             child: Image.asset(
               "assets/images/Onboard/onboard3.png",

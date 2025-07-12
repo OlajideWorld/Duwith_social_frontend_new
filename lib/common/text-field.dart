@@ -3,6 +3,7 @@
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/sizes.dart';
 
@@ -85,10 +86,9 @@ class _InputTextFieldState extends State<InputTextField> {
           hintText: widget.showPrefixIcon
               ? widget.hintText
               : "      ${widget.hintText}",
-          hintStyle: TextStyle(
+          hintStyle: GoogleFonts.poppins(
               fontSize: fontSize(13),
               fontWeight: FontWeight.w400,
-              fontFamily: UsedFonts.poppins,
               color: textColor3),
           prefixIcon: widget.showPrefixIcon
               ? Icon(
@@ -99,7 +99,7 @@ class _InputTextFieldState extends State<InputTextField> {
               : null,
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: widget.innerColor),
-              borderRadius: BorderRadius.circular(16)),
+              borderRadius: BorderRadius.circular(25)),
           suffixIcon: widget.password
               ? IconButton(
                   icon: _passwordVisible
@@ -123,7 +123,7 @@ class _InputTextFieldState extends State<InputTextField> {
           contentPadding:
               EdgeInsets.only(left: widthSize(5), top: heightSize(4)),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(25),
             borderSide: BorderSide(color: widget.innerColor),
           ),
         ),

@@ -27,9 +27,11 @@ class WalletScreen extends StatelessWidget {
                     children: [
                       SizedBox(height: heightSize(30)),
                       walletAppBar(),
-                      SizedBox(height: heightSize(30)),
+                      SizedBox(height: heightSize(10)),
                       walletBalanceContainer(context),
-                      SizedBox(height: heightSize(26)),
+                      SizedBox(height: heightSize(15)),
+                      walletScreenSelectOption(context, constraints.maxWidth),
+                      SizedBox(height: heightSize(30)),
                       walletCoinList(),
                       SizedBox(height: heightSize(3)),
                       Container(

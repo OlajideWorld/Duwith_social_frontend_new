@@ -91,7 +91,7 @@ RxList<PostsData> comments = [
 RxList<PostsData> searchgridList = [
   PostsData(
       name: "Entertainment",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search9.png",
       content: "",
       postType: 1,
       likes: 12346576,
@@ -99,7 +99,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Workout",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search1.png",
       content: "",
       postType: 2,
       likes: 12346576,
@@ -107,7 +107,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Music",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search2.png",
       content: "",
       postType: 2,
       likes: 12346576,
@@ -115,7 +115,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Education",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search3.png",
       content: "",
       postType: 2,
       likes: 12346576,
@@ -123,7 +123,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Health",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search4.png",
       content: "",
       postType: 2,
       likes: 12346576,
@@ -131,7 +131,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Financial market",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search5.png",
       content: "",
       postType: 2,
       likes: 12346576,
@@ -139,7 +139,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Investment",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search6.png",
       content: "",
       postType: 3,
       likes: 12346576,
@@ -147,7 +147,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Power",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search7.png",
       content: "",
       postType: 1,
       likes: 12346576,
@@ -155,7 +155,7 @@ RxList<PostsData> searchgridList = [
       comment: 1234),
   PostsData(
       name: "Movies",
-      image: "assets/images/post2.png",
+      image: "assets/images/Search/search8.png",
       content: "",
       postType: 3,
       likes: 12346576,

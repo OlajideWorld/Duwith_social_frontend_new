@@ -1,26 +1,104 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:async';
+import 'dart:math';
+
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/components/daily_target_widget.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_money_component.dart';
+import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_points_Widget.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widget.dart';
 import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart';
-import 'package:duwith_social/Pages/Earn%20More%20Page/screens/daily_task.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import '../../../common/custom-text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/sizes.dart';
+import '../../Auth Page/controller/auth_controller.dart';
+import '../../Auth Page/services/socket_sevice.dart';
 
-class EarnMorePage extends StatelessWidget {
-  EarnMorePage({super.key});
+class EarnMorePage extends StatefulWidget {
+  const EarnMorePage({super.key});
 
+  @override
+  State<EarnMorePage> createState() => _EarnMorePageState();
+}
+
+class _EarnMorePageState extends State<EarnMorePage> {
   EarnController earnController = EarnController.instance;
+  SocketService socket = SocketService.instance;
+  AuthController authController = AuthController.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    earnController.loadFromPrefs().then((_) {
+      setState(() {});
+      _maybeStartTimer();
+    });
+  }
+
+  void _maybeStartTimer() {
+    // if they haven’t hit the cap yet, start ticking each second
+    if (_currentRawCoins < earnController.maxCoins) {
+      earnController.timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        setState(() {
+          // will recompute currentCoins on next build
+        });
+        if (_currentRawCoins >= earnController.maxCoins) {
+          earnController.timer?.cancel();
+        }
+      });
+    }
+  }
+
+  double get _currentRawCoins {
+    final secs = DateTime.now().difference(earnController.resetTime).inSeconds;
+    return earnController.ratePerSec * secs;
+  }
+
+  double get currentCoins => min(earnController.maxCoins, _currentRawCoins);
+
+  double get progress => (earnController.maxCoins > 0)
+      ? (currentCoins / earnController.maxCoins)
+      : 0;
+
+  Future<void> resetCounter() async {
+    final now = DateTime.now();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('resetTime', now.millisecondsSinceEpoch);
+    setState(() {
+      earnController.resetTime = now;
+    });
+    earnController.timer?.cancel();
+    _maybeStartTimer();
+  }
+
+  Future<void> updateRateAndMax(double newRate, double newMax) async {
+    final prefs = await SharedPreferences.getInstance();
+    earnController.ratePerSec = newRate;
+    earnController.maxCoins = newMax;
+    await prefs.setDouble('ratePerSec', earnController.ratePerSec);
+    await prefs.setDouble('maxCoins', earnController.maxCoins);
+    setState(() {});
+    // (re)start timer if needed
+    earnController.timer?.cancel();
+    _maybeStartTimer();
+  }
+
+  @override
+  void dispose() {
+    earnController.timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     earnController.width.value = MediaQuery.of(context).size.width;
+    final earned = currentCoins;
+    final pct = progress;
     return AddToCartAnimation(
       cartKey: earnController.cartkey,
       createAddToCartAnimation: (addtoCart) {
@@ -55,95 +133,105 @@ class EarnMorePage extends StatelessWidget {
                         padding: EdgeInsets.only(
                             left: widthSize(10),
                             right: widthSize(10),
-                            top: heightSize(73),
+                            top: heightSize(20),
                             bottom: heightSize(30)),
                         child: SizedBox(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              earnMoreMainPageTopBar(),
+                              SizedBox(height: heightSize(50)),
                               earnBalanceWidget(),
-                              SizedBox(height: heightSize(200)),
-                              SizedBox(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      child: Column(
-                                        children: [
-                                          earnLuckySpin(constraints.maxWidth),
-                                          SizedBox(height: heightSize(20)),
-                                          GestureDetector(
-                                            onTap: () =>
-                                                Get.to(() => DailyTaskScreen()),
-                                            child: SizedBox(
-                                              height: heightSize(60),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  SizedBox(
-                                                      height: heightSize(48),
-                                                      width: widthSize(45),
-                                                      child: Image.asset(
-                                                        "assets/images/dailyimage.png",
-                                                        fit: BoxFit.contain,
-                                                      )),
-                                                  const CText(
-                                                    text: "Daily Task",
-                                                    size: 10,
-                                                    fontFamily:
-                                                        UsedFonts.archivo,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: textColor,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    earnSocialMediaWidget(
-                                        context, constraints.maxWidth)
-                                  ],
-                                ),
+                              SizedBox(height: heightSize(30)),
+                              // SizedBox(
+                              //   child: Row(
+                              //     mainAxisAlignment:
+                              //         MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       SizedBox(
+                              //         child: Column(
+                              //           children: [
+                              //             earnLuckySpin(constraints.maxWidth),
+                              //             SizedBox(height: heightSize(20)),
+                              //             GestureDetector(
+                              //               onTap: () =>
+                              //                   Get.to(() => DailyTaskScreen()),
+                              //               child: SizedBox(
+                              //                 height: heightSize(60),
+                              //                 child: Column(
+                              //                   crossAxisAlignment:
+                              //                       CrossAxisAlignment.center,
+                              //                   mainAxisAlignment:
+                              //                       MainAxisAlignment
+                              //                           .spaceBetween,
+                              //                   children: [
+                              //                     SizedBox(
+                              //                         height: heightSize(48),
+                              //                         width: widthSize(45),
+                              //                         child: Image.asset(
+                              //                           "assets/images/dailyimage.png",
+                              //                           fit: BoxFit.contain,
+                              //                         )),
+                              //                     const CText(
+                              //                       text: "Daily Task",
+                              //                       size: 10,
+                              //                       fontFamily:
+                              //                           UsedFonts.archivo,
+                              //                       fontWeight: FontWeight.w500,
+                              //                       color: textColor,
+                              //                     ),
+                              //                   ],
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //       earnSocialMediaWidget(
+                              //           context, constraints.maxWidth)
+                              // earnMoreExtraWidget(
+                              //         const Color(0xFFEB7F15),
+                              //         "Enjoy 25,000 points daily",
+                              //         "Offer walls",
+                              //         "Do more offer to earn cash",
+                              //         "assets/images/Earn/earn_more2.png",
+                              //         "Offer"),
+                              //     ],
+                              //   ),
+                              // ),
+                              EarnTapWidget(
+                                  key: UniqueKey(),
+                                  addtoCartClick: addtoCartClick,
+                                  width: constraints.maxWidth),
+                              earnButtonContainer(
+                                context,
+                                constraints.maxWidth,
+                                pct,
+                                earned,
+                                () {
+                                  showEarnedBottomSheet(
+                                      context: context,
+                                      width: constraints.maxWidth,
+                                      earned: earned,
+                                      onpressed: () async {
+                                        Get.back();
+                                        resetCounter();
+
+                                        var finalEarned = authController
+                                                .userdata.value.mainBalance +
+                                            earned.toInt();
+                                        final model = {
+                                          "mainBalance": finalEarned
+                                        };
+                                        await socket.updateUser(
+                                            authController.userdata.value.email,
+                                            model);
+                                      });
+                                },
                               ),
-                              SizedBox(
-                                height: heightSize(350),
-                                width: constraints.maxWidth,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    EarnTapWidget(
-                                        key: UniqueKey(),
-                                        addtoCartClick: addtoCartClick,
-                                        width: constraints.maxWidth),
-                                    Row(
-                                      children: [
-                                        earnMoreExtraWidget(
-                                            const Color(0xFFEB7F15),
-                                            "Enjoy 25,000 points daily",
-                                            "Offer walls",
-                                            "Do more offer to earn cash",
-                                            "assets/images/Earn/earn_more2.png",
-                                            "Offer"),
-                                        earnMoreExtraWidget(
-                                            const Color(0xFF07A9B4),
-                                            "Earn 50x higher",
-                                            "Play games",
-                                            "Play games and earn golds",
-                                            "assets/images/Earn/game2.png",
-                                            "Games")
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              )
+                              SizedBox(height: heightSize(50)),
+                              earningPageRowWidgets(
+                                  context, constraints.maxWidth),
                             ],
                           ),
                         ),
@@ -161,6 +249,7 @@ class EarnMorePage extends StatelessWidget {
         ),
       ),
     );
+    ;
   }
 
   void addtoCartClick(GlobalKey widgetKey) async {

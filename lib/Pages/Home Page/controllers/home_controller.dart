@@ -13,6 +13,7 @@ import 'package:duwith_social/models/quiz_model.dart';
 import 'package:duwith_social/models/airdrop_model.dart';
 import 'package:duwith_social/models/news_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
@@ -72,6 +73,22 @@ class HomeController extends GetxController {
     accountnumber.dispose();
     postCaption.dispose();
   }
+
+// Search Page variables
+  TextEditingController searchtexts = TextEditingController();
+
+  // Post Airdrop features
+  TextEditingController enterquantity = TextEditingController();
+  TextEditingController enterDistribution = TextEditingController();
+
+  // Media Page
+  RxInt mediaOption = 0.obs;
+  RxBool mediapageisLoading = false.obs;
+
+  // For you Main page Loader
+  RxBool foryouisLoading = false.obs;
+  RxInt forYouOption = 0.obs;
+  RxBool isExpanded = false.obs;
 
   // Quiz Model
   RxList<MainQuizModel> mainquizList = <MainQuizModel>[].obs;
@@ -182,8 +199,10 @@ class HomeController extends GetxController {
   TextEditingController accountnumber = TextEditingController();
 
   // Posts objects
+  RxBool ispostingtext = false.obs;
   RxList<String> postcategories = <String>[].obs;
   TextEditingController postCaption = TextEditingController();
+  TextEditingController postText = TextEditingController();
   final commentingOpton = ValueNotifier<bool>(true);
   final showCaption = ValueNotifier<bool>(true);
   final hideLike = ValueNotifier<bool>(true);
@@ -284,7 +303,8 @@ class HomeController extends GetxController {
   }
 
   fetchvideos() async {
-    homeloading.value = true;
+    //  homeloading.value = true;
+    foryouisLoading.value = true;
     await Future.delayed(const Duration(seconds: 2), () {});
     if (authController.userdata.value.email == "") {
       // getErrorSnackBar("Unable to get your details, check internet Connection");
@@ -321,7 +341,8 @@ class HomeController extends GetxController {
       };
       await socket.getVideos(data);
       await Future.delayed(const Duration(seconds: 2), () {});
-      homeloading.value = false;
+      // homeloading.value = false;
+      foryouisLoading.value = false;
       // videopage.value++;
     }
   }

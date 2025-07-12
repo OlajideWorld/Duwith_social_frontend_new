@@ -1,12 +1,17 @@
+import 'package:duwith_social/Pages/Home%20Page/components/search_screen_componenets.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/search_widgets.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common/text-field.dart';
+import '../controllers/home_controller.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  SearchScreen({super.key});
+
+  HomeController homeController = HomeController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +26,33 @@ class SearchScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: heightSize(30)),
-                    const InputTextField(
-                        showPrefixIcon: true,
-                        prefixIcon: Icons.search,
-                        obscureText: false,
-                        innerColor: buttonColor2,
-                        hintText: "Search",
-                        textColor: textColor,
-                        differentiate: 1),
+                    searchFunction(
+                        controller: homeController.searchtexts,
+                        onChanged: (val) {
+                          print("Search text: $val");
+                        }),
                     SizedBox(height: heightSize(30)),
+                    Text(
+                      "Friends Suggestion",
+                      style: GoogleFonts.poppins(
+                        color: textColor,
+                        fontSize: fontSize(14),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: heightSize(20)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        friendsOption(),
+                        friendsOption(),
+                        friendsOption()
+                      ],
+                    ),
+                    SizedBox(height: heightSize(40)),
                     Row(
                       children: [
                         searchTrends("assets/images/Trends/firetrend.png",

@@ -10,9 +10,9 @@ HomeController homeController = HomeController.instance;
 selectHomeView(BuildContext context, double width) {
   return Container(
     width: width,
-    height: heightSize(50),
-    padding:
-        EdgeInsets.symmetric(horizontal: widthSize(6), vertical: heightSize(6)),
+    height: heightSize(30),
+    // padding:
+    //     EdgeInsets.symmetric(horizontal: widthSize(6), vertical: heightSize(6)),
     decoration: const BoxDecoration(
       color: backgroundColor,
     ),
@@ -30,10 +30,11 @@ selectHomeView(BuildContext context, double width) {
               },
               child: Container(
                 // width: widthSize(176),
-                height: heightSize(50),
+                height: heightSize(30),
 
                 decoration: const BoxDecoration(color: backgroundColor),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Feed',
@@ -42,13 +43,13 @@ selectHomeView(BuildContext context, double width) {
                         color: homeController.viewBarOption.value == 0
                             ? const Color(0xFFECECEC)
                             : textColor3,
-                        fontSize: fontSize(15),
+                      fontSize: fontSize(15),
                         fontWeight: homeController.viewBarOption.value == 0
                             ? FontWeight.w600
                             : FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: heightSize(7)),
+                    // SizedBox(height: heightSize(7)),
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
@@ -67,13 +68,14 @@ selectHomeView(BuildContext context, double width) {
             child: GestureDetector(
               onTap: () {
                 homeController.viewBarOption.value = 1;
-                // homeController.fetchvideos();
+                homeController.fetchvideos();
               },
               child: Container(
-                height: heightSize(50),
+                height: heightSize(30),
                 decoration: const BoxDecoration(color: backgroundColor),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
                       height: heightSize(18),
@@ -86,7 +88,7 @@ selectHomeView(BuildContext context, double width) {
                         //     : textColor3,
                       ),
                     ),
-                    SizedBox(height: heightSize(7)),
+                    // SizedBox(height: heightSize(7)),
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
@@ -109,10 +111,11 @@ selectHomeView(BuildContext context, double width) {
                 homeController.fetchNews();
               },
               child: Container(
-                height: heightSize(50),
+                height: heightSize(30),
                 decoration: const BoxDecoration(color: backgroundColor),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Forum',
@@ -127,7 +130,7 @@ selectHomeView(BuildContext context, double width) {
                             : FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: heightSize(7)),
+                    // SizedBox(height: heightSize(7)),
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
@@ -148,10 +151,10 @@ selectHomeView(BuildContext context, double width) {
                 homeController.fetchMainQuizList();
               },
               child: Container(
-                height: heightSize(50),
+                height: heightSize(30),
                 decoration: const BoxDecoration(color: backgroundColor),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Quiz',
@@ -166,7 +169,7 @@ selectHomeView(BuildContext context, double width) {
                             : FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: heightSize(7)),
+                    // SizedBox(height: heightSize(7)),
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
@@ -188,10 +191,10 @@ selectHomeView(BuildContext context, double width) {
                 homeController.fetchAirdrops();
               },
               child: Container(
-                height: heightSize(50),
+                height: heightSize(30),
                 decoration: const BoxDecoration(color: backgroundColor),
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Campaign',
@@ -206,7 +209,7 @@ selectHomeView(BuildContext context, double width) {
                             : FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: heightSize(7)),
+                    // SizedBox(height: heightSize(7)),
                     Divider(
                         height: heightSize(3),
                         thickness: 2,
@@ -217,7 +220,8 @@ selectHomeView(BuildContext context, double width) {
                 ),
               ),
             ),
-          )
+          ),
+          SizedBox(width: widthSize(5))
         ]),
   );
 }

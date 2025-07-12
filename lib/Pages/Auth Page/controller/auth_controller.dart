@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Splash%20Screen/screens/onboard_main.dart';
+import 'package:duwith_social/models/chat_model.dart';
+import 'package:duwith_social/models/message_model.dart';
 import 'package:duwith_social/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,6 +48,10 @@ class AuthController extends GetxController {
 
   RxString userEmail = "".obs;
   RxString userId = "".obs;
+
+  // Chat Value
+  RxList<ChatModel> chats = <ChatModel>[].obs;
+  RxList<MessageModel> messages = <MessageModel>[].obs;
 
   // Sign Up values
   RxString hintText = "".obs;

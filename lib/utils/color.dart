@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const backgroundColor = Color(0xFF0e121e);
+const gamifybackgroundColor = Color(0xFF0e121e);
 const mainColor = Color(0xFF0062D6);
 const navbarColor2 = Color(0xFF21293F);
 const highlightColor = Color(0xFF1380FF);

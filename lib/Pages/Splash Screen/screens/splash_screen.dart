@@ -2,6 +2,7 @@ import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -19,16 +20,19 @@ class SplashScreen extends StatelessWidget {
             width: constraints.maxWidth,
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(top: constraints.maxHeight * 0.4, bottom: heightSize(57)),
+                padding: EdgeInsets.only(
+                    top: constraints.maxHeight * 0.4, bottom: heightSize(57)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const CText(
-                      text: "DUWITH SOCIAL",
-                      size: 15,
-                      fontFamily: UsedFonts.stalinistOne,
-                      fontWeight: FontWeight.w700,
+                    Text(
+                      "DUWITH SOCIAL",
+                      style: GoogleFonts.stalinistOne(
+                        color: textColor,
+                        fontSize: fontSize(18),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     Spacer(),
                     SizedBox(

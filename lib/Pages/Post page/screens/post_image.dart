@@ -215,6 +215,7 @@ class PostImageVideosScreen extends StatelessWidget {
                                           SelectTags(name: "Travels"),
                                           SelectTags(name: "Pest & Animals"),
                                           SelectTags(name: "Events"),
+                                          SelectTags(name: "Events"),
                                           SelectTags(name: "Quotes"),
                                           SelectTags(name: "Books"),
                                           SelectTags(name: "Music"),

@@ -4,11 +4,12 @@ import "package:duwith_social/common/custom-text.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
 
 buttonsWidget(
     BuildContext context,
     double height,
-    double width,
+    double? width,
     String text,
     Color colorused,
     double fontsize,
@@ -27,18 +28,17 @@ buttonsWidget(
           side: showBorderColor
               ? const BorderSide(color: textColor3)
               : BorderSide(color: colorused),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(30),
         ),
       ),
       child: Center(
         child: Text(
           text,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             color: fontColor,
             fontSize: fontSize(fontsize),
-            fontFamily: UsedFonts.poppins,
             fontWeight: FontWeight.w600,
-            height: 2.33,
+            // height: 2.33,
           ),
         ),
       ),
@@ -49,7 +49,7 @@ buttonsWidget(
 buttonsWidget2(
     BuildContext context,
     double height,
-    double width,
+    double? width,
     String text,
     IconData icon,
     Color color,
@@ -85,7 +85,7 @@ buttonsWidget2(
               text,
               style: TextStyle(
                 color: textColorused,
-                fontSize: fontSize(12),
+                fontSize: fontSize(14),
                 fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w500,
                 height: 2.33,
@@ -104,7 +104,7 @@ backbutton({required VoidCallback onTap}) {
     child: Container(
       height: heightSize(32),
       width: widthSize(36),
-      padding: EdgeInsets.only(left: widthSize(2)),
+      padding: EdgeInsets.only(left: widthSize(5)),
       decoration: BoxDecoration(
           color: Colors.transparent,
           border: Border.all(color: const Color(0xFF717171)),

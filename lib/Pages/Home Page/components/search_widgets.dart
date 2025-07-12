@@ -5,6 +5,7 @@ import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../utils/demo_data.dart';
 
@@ -26,13 +27,14 @@ searchTrends(String image, String name, Color colorUsed) {
             child: Image.asset(image),
           ),
           SizedBox(width: widthSize(4)),
-          CText(
-            text: name,
-            size: 12,
-            fontFamily: UsedFonts.poppins,
-            fontWeight: FontWeight.w400,
-            color: textColor,
-          )
+          Text(
+            name,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: fontSize(12),
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ],
       ),
     ),
@@ -63,6 +65,7 @@ searchTrendsList(BuildContext context, double width) {
 popularTrends(String image, String value) {
   return Container(
     height: heightSize(112),
+    width: widthSize(112),
     decoration: BoxDecoration(
         color: const Color(0xFF383840),
         borderRadius: BorderRadius.all(Radius.circular(widthSize(10)))),
@@ -71,6 +74,7 @@ popularTrends(String image, String value) {
       children: [
         Container(
           height: heightSize(86),
+          width: widthSize(112),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(widthSize(10)),
@@ -78,12 +82,13 @@ popularTrends(String image, String value) {
               image: DecorationImage(image: AssetImage(image))),
         ),
         SizedBox(height: heightSize(5)),
-        CText(
-          text: value,
-          color: textColor,
-          size: 9,
-          fontFamily: UsedFonts.poppins,
-          fontWeight: FontWeight.w400,
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+            color: textColor,
+            fontSize: fontSize(12),
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     ),

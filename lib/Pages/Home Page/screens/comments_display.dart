@@ -61,6 +61,7 @@ class _CommentsDisplayBottomSheetState
   @override
   void dispose() {
     _focusNode.dispose();
+    
     super.dispose();
   }
 
@@ -210,6 +211,7 @@ class _CommentsDisplayBottomSheetState
                             await socketService.addComment(data);
                             await socketService.getCommentByPostId(
                                 widget.postId, 1);
+
                             homeController.commentsText.text = "";
                           }
                         },

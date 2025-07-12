@@ -9,7 +9,9 @@ import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 
 import '../../../common/button-widget.dart';
@@ -45,15 +47,14 @@ class LoginWithScreen extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: backbutton(onTap: () => Get.back()),
                         ),
-                        SizedBox(height: heightSize(17)),
+                        SizedBox(height: heightSize(30)),
                         const CText(
                           text: "DUWITH SOCIAL",
                           size: 15,
                           fontFamily: UsedFonts.stalinistOne,
                           fontWeight: FontWeight.w400,
                         ),
-                        SizedBox(height: heightSize(39)),
-                        selectLoginOption(context, constraints.maxWidth),
+                        // selectLoginOption(context, constraints.maxWidth),
                         SizedBox(height: heightSize(55)),
                         Padding(
                           padding:
@@ -66,7 +67,7 @@ class LoginWithScreen extends StatelessWidget {
                               controller: authController.isEmail.value == true
                                   ? authController.email
                                   : authController.phoneNumber,
-                              innerColor: buttonColor2,
+                              innerColor: Color(0xFF212940),
                               hintText: authController.loginhint.value,
                               textColor: textColor,
                               differentiate: 1),
@@ -118,7 +119,7 @@ class LoginWithScreen extends StatelessWidget {
                               constraints.maxWidth,
                               "Continue",
                               mainColor,
-                              12, () async {
+                              14, () async {
                             if (authController.email.text.trim() == "" &&
                                 authController.phoneNumber.text.trim() == "") {
                               getErrorSnackBar(
@@ -167,30 +168,40 @@ class LoginWithScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const CText(
-                              text: "Don’t have an account?",
-                              fontFamily: UsedFonts.poppins,
-                              fontWeight: FontWeight.w400,
-                              size: 12,
-                              color: textColor,
+                            Text(
+                              "Don’t have an account?",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                color: textColor,
+                                fontSize: fontSize(12),
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                            CText(
-                              onClick: () => Get.to(() => SignUpScreen()),
-                              text: "Sign up",
-                              fontFamily: UsedFonts.poppins,
-                              fontWeight: FontWeight.w600,
-                              size: 12,
-                              color: mainColor,
+                            GestureDetector(
+                              onTap: () => Get.to(() => SignUpScreen()),
+                              child: Text(
+                                " Sign up",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  color: mainColor,
+                                  fontSize: fontSize(12),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ],
                         ),
                         const Spacer(),
-                        const CText(
-                          text: "Powered by DUWITH",
-                          fontFamily: UsedFonts.poppins,
-                          fontWeight: FontWeight.w400,
-                          size: 11,
-                          color: textColor3,
+                        Center(
+                          child: Text(
+                            "Powered By DUWITH",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              color: textColor3,
+                              fontSize: fontSize(13),
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ),
                       ],
                     ),

@@ -7,11 +7,13 @@ import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../common/custom-text.dart';
-
 import '../../../utils/color.dart';
+import '../../Auth Page/controller/auth_controller.dart';
 
 EarnController earnController = EarnController.instance;
+AuthController authController = AuthController.instance;
 
 earnMoreExtraWidget(Color box1, String headline, String body, String tagline,
     String image, String namegiven) {
@@ -103,4 +105,62 @@ earnspinActivity(double width) {
       width: width,
     );
   });
+}
+
+earnMoreMainPageTopBar() {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+    child: SizedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            // onTap: () => Get.to(() => const WalletScreen()),
+            child: Container(
+              height: heightSize(40),
+              width: widthSize(40),
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: Color(0xFF222631),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: CText(
+                text: authController.userdata.value.username.trim()[0],
+                size: fontSize(23),
+                fontFamily: UsedFonts.archivo,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFFFA2CD7),
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+                vertical: heightSize(10), horizontal: widthSize(8)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Color.fromARGB(255, 60, 60, 60)),
+                borderRadius: BorderRadius.all(Radius.circular(widthSize(10))),
+                color: Colors.transparent),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  "assets/images/Earn/thunder2.png",
+                  height: heightSize(17),
+                  width: widthSize(15),
+                ),
+                Text(
+                  "7 day Streak",
+                  style: GoogleFonts.poppins(
+                    fontSize: fontSize(12),
+                    fontWeight: FontWeight.w400,
+                    color: textColor,
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

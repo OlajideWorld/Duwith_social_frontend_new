@@ -5,6 +5,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/sizes.dart';
 
@@ -128,9 +129,8 @@ class _PostContentState extends State<PostContent> {
           Text(
             displayText,
             textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: widget.size,
-              fontFamily: widget.fontFamily,
+            style: GoogleFonts.poppins(
+              fontSize: fontSize(widget.size),
               fontWeight: widget.fontWeight,
               color: widget.color,
             ),
@@ -138,9 +138,8 @@ class _PostContentState extends State<PostContent> {
           if (showReadMore)
             Text(
               widget.isExpanded.value ? "Read less" : "Read more",
-              style: TextStyle(
-                fontSize: widget.size,
-                fontFamily: widget.fontFamily,
+              style: GoogleFonts.poppins(
+                fontSize: fontSize(widget.size),
                 fontWeight: widget.fontWeight,
                 color: Colors.blue,
               ),

@@ -9,6 +9,7 @@ import 'package:duwith_social/utils/get_user_key.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../common/button-widget.dart';
@@ -63,29 +64,35 @@ class VerifyCredentials extends StatelessWidget {
                     ),
                     SizedBox(height: heightSize(40)),
                     SizedBox(
-                      height: heightSize(102),
-                      width: widthSize(102),
+                      height: heightSize(150),
+                      width: widthSize(150),
                       child: Image.asset(
                         "assets/images/social-message.png",
                         fit: BoxFit.contain,
                       ),
                     ),
                     SizedBox(height: heightSize(29)),
-                    const CText(
-                      text: "Verify your account",
-                      fontFamily: UsedFonts.poppins,
-                      size: 17,
-                      fontWeight: FontWeight.w600,
+                    Text(
+                      "Verify your account",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        color: textColor,
+                        fontSize: fontSize(21),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(height: heightSize(10)),
-                    const CText(
-                      text:
-                          "Input the code sent to your email address for confirmation of your account",
-                      fontFamily: UsedFonts.poppins,
-                      textAlign: TextAlign.center,
-                      color: textColor3,
-                      size: 12,
-                      fontWeight: FontWeight.w400,
+                    SizedBox(
+                      width: widthSize(314),
+                      child: Text(
+                        "Input the code sent to your email address for confirmation of your account",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: textColor3,
+                          fontSize: fontSize(13),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                     SizedBox(height: heightSize(50)),
                     Center(
@@ -170,12 +177,16 @@ class VerifyCredentials extends StatelessWidget {
                       }, false, Colors.white),
                     ),
                     const Spacer(),
-                    const CText(
-                      text: "Powered by DUWITH",
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w400,
-                      size: 11,
-                      color: textColor3,
+                    Center(
+                      child: Text(
+                        "Powered By DUWITH",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: textColor3,
+                          fontSize: fontSize(13),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ],
                 ),

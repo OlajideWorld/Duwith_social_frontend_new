@@ -9,6 +9,7 @@ import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +26,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: false,
+      // bottomNavigationBar:
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(
@@ -37,7 +39,7 @@ class LoginScreen extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(
                         bottom: heightSize(20),
-                        top: constraints.maxHeight * 0.2,
+                        top: constraints.maxHeight * 0.1,
                         left: widthSize(65),
                         right: widthSize(65)),
                     child: Column(
@@ -50,86 +52,151 @@ class LoginScreen extends StatelessWidget {
                           fontFamily: UsedFonts.stalinistOne,
                           fontWeight: FontWeight.w400,
                         ),
-                        SizedBox(height: heightSize(55)),
+                        SizedBox(height: heightSize(150)),
                         SizedBox(
                           height: heightSize(58),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const CText(
-                                text: "Let's Get You Back In!",
-                                fontFamily: UsedFonts.poppins,
-                                size: 18,
-                                fontWeight: FontWeight.w600,
+                              Text(
+                                "Let's Get You Back In!",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  color: textColor,
+                                  fontSize: fontSize(18),
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               SizedBox(
                                 width: widthSize(200),
-                                child: const CText(
-                                  text:
-                                      "Log in to reconnect with your friends and discover new content.",
-                                  fontFamily: UsedFonts.poppins,
+                                child: Text(
+                                  "Log in to reconnect with your friends and discover new content.",
                                   textAlign: TextAlign.center,
-                                  size: 13,
-                                  color: textColor3,
-                                  fontWeight: FontWeight.w400,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: fontSize(12),
+                                    color: textColor3,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: heightSize(46)),
                         SizedBox(height: heightSize(24)),
                         buttonsWidget2(
                             context,
                             heightSize(55),
                             constraints.maxWidth,
-                            "Sign in with Email and phone",
-                            Icons.email_rounded,
+                            "Login",
+                            Icons.email_outlined,
                             mainColor,
                             Colors.white, () async {
                           Get.to(() => LoginWithScreen());
                         }, false),
                         SizedBox(height: heightSize(16)),
+                        GestureDetector(
+                          onTap: () {
+                            getSuccessSnackBarEdit(
+                                "Notification", "commig soon");
+                          },
+                          child: Container(
+                            height: heightSize(55),
+                            width: widthSize(300),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF212940),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(widthSize(25)),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/googleImage.png",
+                                  height: heightSize(14),
+                                  width: widthSize(14),
+                                  fit: BoxFit.fill,
+                                ),
+                                SizedBox(width: widthSize(5)),
+                                Text(
+                                  "Continue with Google",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                    color: textColor,
+                                    fontSize: fontSize(12),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: heightSize(20)),
                         buttonsWidget2(
                             context,
                             heightSize(55),
                             constraints.maxWidth,
-                            "Sign up with wallet",
+                            "Sign up",
                             Icons.wallet_outlined,
-                            buttonColor2,
+                            Color(0xFF212940),
                             textColor,
-                            () => getSuccessSnackBarEdit(
-                                "Notification", "commig soon"),
+                            () => Get.to(() => SignUpScreen()),
                             false),
-                        SizedBox(height: heightSize(20)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CText(
-                              text: "Don’t have an account?",
-                              fontFamily: UsedFonts.poppins,
-                              fontWeight: FontWeight.w600,
-                              size: 12,
-                              color: textColor,
+                        SizedBox(height: heightSize(150)),
+                        SizedBox(
+                          width: widthSize(307),
+                          child: RichText(
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: fontSize(12),
+                                  color: textColor3),
+                              children: const [
+                                TextSpan(
+                                    text:
+                                        'By continuing you’ve agreed with our'),
+                                TextSpan(
+                                  text:
+                                      ' Terms of Use, Privacy Policy, Risk Disclosure',
+                                  style: TextStyle(color: mainColor),
+                                ),
+                                TextSpan(text: ' and'),
+                                TextSpan(
+                                  text: ' Community Guideline.',
+                                  style: TextStyle(
+                                    color: mainColor,
+                                  ),
+                                ),
+                                // TextSpan(text: '. You can also click on '),
+                                // TextSpan(
+                                //   text: 'this link',
+                                //   style: TextStyle(
+                                //       color: Colors.purple,
+                                //       decoration: TextDecoration.underline),
+                                //   recognizer: TapGestureRecognizer()
+                                //     ..onTap = () {
+                                //       _launchUrl('https://flutter.dev');
+                                //     },
+                                // ),
+                                // TextSpan(text: ' to visit Flutter’s website.'),
+                              ],
                             ),
-                            CText(
-                              onClick: () => Get.to(() => SignUpScreen()),
-                              text: "Sign up",
-                              fontFamily: UsedFonts.poppins,
-                              fontWeight: FontWeight.w400,
-                              size: 12,
-                              color: mainColor,
-                            ),
-                          ],
+                          ),
                         ),
                         const Spacer(),
-                        const CText(
-                          text: "Powered by DUWITH",
-                          fontFamily: UsedFonts.poppins,
-                          fontWeight: FontWeight.w400,
-                          size: 11,
-                          color: textColor3,
+                        Center(
+                          child: Text(
+                            "Powered By DUWITH",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              color: textColor3,
+                              fontSize: fontSize(13),
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ),
                       ],
                     ),
