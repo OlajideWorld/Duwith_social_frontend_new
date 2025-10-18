@@ -7,10 +7,10 @@ getSuccessSnackBar(String message) {
     "Success",
     message,
     snackPosition: SnackPosition.TOP,
-    backgroundColor: mainColor,
+    // backgroundColor: mainColor,
     colorText: Colors.white,
-    borderRadius: 10,
-    margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+    // borderRadius: 10,
+    // margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
   );
 }
 
@@ -31,9 +31,9 @@ getSuccessSnackBarEdit(String headline, String message) {
     headline,
     message,
     snackPosition: SnackPosition.TOP,
-    backgroundColor: mainColor,
+    // backgroundColor: mainColor,
     colorText: Colors.white,
-    borderRadius: 10,
-    margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+    // borderRadius: 10,
+    // margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
   );
 }

@@ -12,8 +12,8 @@ import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controlle
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/sizes.dart';
 import '../../Auth Page/controller/auth_controller.dart';
@@ -116,7 +116,7 @@ class _EarnMorePageState extends State<EarnMorePage> {
               child: Stack(
                 children: [
                   SizedBox(
-                    height: constraints.maxHeight,
+                    height: constraints.maxHeight * 0.7,
                     width: constraints.maxWidth,
                     child: Opacity(
                       opacity: 0.8,
@@ -142,7 +142,36 @@ class _EarnMorePageState extends State<EarnMorePage> {
                               earnMoreMainPageTopBar(),
                               SizedBox(height: heightSize(50)),
                               earnBalanceWidget(),
-                              SizedBox(height: heightSize(30)),
+                              SizedBox(height: heightSize(10)),
+                              SizedBox(
+                                width: widthSize(244),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Hold for 4s",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: fontSize(12),
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Obx(() {
+                                      return Text(
+                                        "Remain (${3 - earnController.holdCount.value})",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: fontSize(12),
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    })
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: heightSize(20)),
+
                               // SizedBox(
                               //   child: Row(
                               //     mainAxisAlignment:
@@ -203,6 +232,8 @@ class _EarnMorePageState extends State<EarnMorePage> {
                                   key: UniqueKey(),
                                   addtoCartClick: addtoCartClick,
                                   width: constraints.maxWidth),
+
+                              SizedBox(height: heightSize(20)),
                               earnButtonContainer(
                                 context,
                                 constraints.maxWidth,
@@ -229,7 +260,7 @@ class _EarnMorePageState extends State<EarnMorePage> {
                                       });
                                 },
                               ),
-                              SizedBox(height: heightSize(50)),
+                              SizedBox(height: heightSize(30)),
                               earningPageRowWidgets(
                                   context, constraints.maxWidth),
                             ],

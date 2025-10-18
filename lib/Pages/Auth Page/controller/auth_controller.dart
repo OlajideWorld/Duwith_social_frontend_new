@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
 import 'package:duwith_social/Pages/Splash%20Screen/screens/onboard_main.dart';
+import 'package:duwith_social/common/getxmessage.dart';
 import 'package:duwith_social/models/chat_model.dart';
 import 'package:duwith_social/models/message_model.dart';
 import 'package:duwith_social/models/user_data.dart';
@@ -71,17 +72,17 @@ class AuthController extends GetxController {
   final box = GetStorage();
 
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
     super.onInit();
+    await Future.delayed(const Duration(seconds: 2), () {});
+    await checkStatus();
   }
 
   @override
   void onReady() async {
     // TODO: implement onReady
     super.onReady();
-    await Future.delayed(const Duration(seconds: 5), () {});
-    checkStatus();
   }
 
   checkStatus() async {
@@ -92,8 +93,19 @@ class AuthController extends GetxController {
       // Get.to(() => SignUpScreen());
       userEmail.value = box.read(userdataEmail);
       userId.value = box.read(userdataid);
+      debugPrint("User Email: ${userEmail.value}");
+      debugPrint("User Id: ${userId.value}");
       await socket.getUserData2(userEmail.value);
-      Get.toNamed(MyRoutes.homeScreen);
+      Future.delayed(const Duration(seconds: 5), () {
+        if (authController.userdata.value.email == "") {
+          getErrorSnackBar(
+              "Unable to get your details, check internet Connection");
+          return;
+        } else {
+          getSuccessSnackBar("successfully logged in");
+          Get.toNamed(MyRoutes.homeScreen);
+        }
+      });
     }
   }
 

@@ -14,6 +14,7 @@ EarnController earnController = EarnController.instance;
 viewDailyTaskList(BuildContext context, double width) {
   return Expanded(
       child: ListView.builder(
+          shrinkWrap: true,
           itemCount: earnController.dailyTaskList.value.length,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
@@ -138,22 +139,20 @@ viewDailyTaskWidget(var data, double width) {
 }
 
 viewStreakTaskList(BuildContext context, double width) {
-  return SizedBox(
-    height: heightSize(700),
-    child: Expanded(
-        child: ListView.builder(
-            itemCount: earnController.streakTaskList.value.length,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  viewStreakTaskWidget(
-                      earnController.streakTaskList.value[index], width),
-                  SizedBox(height: heightSize(20)),
-                ],
-              );
-            })),
-  );
+  return Expanded(
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: earnController.streakTaskList.value.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                viewStreakTaskWidget(
+                    earnController.streakTaskList.value[index], width),
+                SizedBox(height: heightSize(20)),
+              ],
+            );
+          }));
 }
 
 viewStreakTaskWidget(var data, double width) {

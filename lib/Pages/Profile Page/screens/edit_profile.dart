@@ -7,6 +7,7 @@ import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 
 import '../../../common/custom-text.dart';
@@ -121,17 +122,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     },
                                   ),
                                   SizedBox(height: heightSize(15)),
-                                  const Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: CText(
-                                      text: "Date of Birth",
-                                      size: 13,
-                                      color: Color(0xFF939393),
-                                      fontFamily: UsedFonts.poppins,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: heightSize(7)),
                                   PickDateWidget(width: constraints.maxWidth),
                                   SizedBox(height: heightSize(15)),
                                   profileParameters(
@@ -220,30 +210,61 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       {required String name,
       required TextEditingController parsedValue,
       required Function(String?)? onChanged}) {
-    return SizedBox(
-      height: heightSize(75),
+    return Container(
+      height: heightSize(70),
+      padding: EdgeInsets.symmetric(
+          vertical: heightSize(10), horizontal: widthSize(10)),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: textColor),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CText(
-            text: name,
-            size: 13,
-            color: const Color(0xFF939393),
-            fontFamily: UsedFonts.poppins,
-            fontWeight: FontWeight.w500,
+          Text(
+            name,
+            style: GoogleFonts.poppins(
+              fontSize: widthSize(13),
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-            child: InputTextField(
-                obscureText: false,
-                textInputAction: true,
-                showPrefixIcon: false,
-                controller: parsedValue,
-                innerColor: buttonColor2,
-                onChanged: onChanged,
-                textColor: textColor,
-                differentiate: 1),
+          Expanded(
+            child: TextField(
+              style: TextStyle(
+                  fontFamily: UsedFonts.poppins,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFFB4B4B4),
+                  fontSize: fontSize(14)),
+              maxLines: 5,
+              onChanged: onChanged,
+              controller: parsedValue,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                hintText: "Enter $name",
+                hintStyle: const TextStyle(color: Color(0xFF918F99)),
+                filled: true,
+                fillColor: backgroundColor,
+                border: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: backgroundColor,
+                    ),
+                    borderRadius: BorderRadius.circular(16)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: backgroundColor,
+                    ),
+                    borderRadius: BorderRadius.circular(16)),
+                contentPadding: EdgeInsets.only(
+                    left: widthSize(10),
+                    top: heightSize(5),
+                    right: widthSize(5),
+                    bottom: heightSize(5)),
+              ),
+            ),
           ),
         ],
       ),

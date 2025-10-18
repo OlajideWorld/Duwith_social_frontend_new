@@ -32,3 +32,23 @@ class SizeConfig {
     log(_blockWidth.toString());
   }
 }
+
+class InverseDiagonalClipper extends CustomClipper<Path> {
+  final double inset;
+
+  const InverseDiagonalClipper({this.inset = 20});
+
+  @override
+  Path getClip(Size size) {
+    final Path path = Path();
+    path.moveTo(0, 0); // top-left
+    path.lineTo(size.width, 0); // top-right (full width)
+    path.lineTo(size.width - inset, size.height); // bottom-right inset to left
+    path.lineTo(0, size.height); // bottom-left
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
+}

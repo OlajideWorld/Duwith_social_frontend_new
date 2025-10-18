@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class SocialModel {
   String id;
   String socialLink;
@@ -28,4 +30,16 @@ class SocialModel {
         "completedBy": List<dynamic>.from(completedBy.map((x) => x)),
         "__v": v,
       };
+}
+
+class PageEarnItem {
+  final String title;
+  final String subtitle;
+  final String button;
+  final Widget page;
+  PageEarnItem(
+      {required this.title,
+      required this.subtitle,
+      required this.button,
+      required this.page});
 }

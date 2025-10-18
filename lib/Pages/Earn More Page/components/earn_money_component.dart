@@ -6,6 +6,7 @@ import "package:duwith_social/Pages/Earn%20More%20Page/components/earn_tap_widge
 import "package:duwith_social/Pages/Earn%20More%20Page/components/holdablle_wdget.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/components/social_bottom_sheet.dart";
 import "package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controller.dart";
+import "package:duwith_social/Pages/Wallet%20Page/screens/new_wallet_screen.dart";
 import "package:duwith_social/Pages/Wallet%20Page/screens/wallet_screen.dart";
 
 import "package:flutter/cupertino.dart";
@@ -19,14 +20,17 @@ import "package:google_fonts/google_fonts.dart";
 import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";
 import "../../../utils/sizes.dart";
+import "../../Auth Page/services/socket_sevice.dart";
 
 EarnController earnController = EarnController.instance;
 AuthController authController = AuthController.instance;
+SocketService socket = SocketService.instance;
 
 earnBalanceWidget() {
   return Obx(() {
     return GestureDetector(
-      onTap: () => Get.to(() => const WalletScreen()),
+      // onTap: () => Get.to(() => const WalletScreen()),
+      onTap: () => Get.to(() => NewWalletMainScreenPage()),
       child: SizedBox(
         height: heightSize(62),
         child: Stack(
@@ -43,8 +47,8 @@ earnBalanceWidget() {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
+                  Padding(
+                    padding: EdgeInsets.only(right: widthSize(20)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -56,11 +60,12 @@ earnBalanceWidget() {
                             fit: BoxFit.fitHeight,
                           ),
                         ),
-                        SizedBox(width: widthSize(10)),
+                        // SizedBox(width: widthSize(10)),
                         Text(
                           earnController.formatNumberWithCommas(
                               authController.userdata.value.mainBalance),
-                          style: GoogleFonts.archivo(
+                          // "1,120,536",
+                          style: GoogleFonts.archivoBlack(
                             color: textColor,
                             fontSize: fontSize(30),
                             fontWeight: FontWeight.w400,
@@ -81,7 +86,7 @@ earnBalanceWidget() {
 
 earnLuckySpin(double width) {
   return GestureDetector(
-    onTap: () => earnspinActivity(width),
+    // onTap: () => earnspinActivity(width),
     child: SizedBox(
       height: heightSize(60),
       child: Column(
@@ -208,11 +213,8 @@ class EarnTapWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return HoldableWidget(
       holdDuration: const Duration(seconds: 4), // e.g. 4s threshold
-      onLongHold: () async {
-        var finalEarned = authController.userdata.value.mainBalance + 20;
-        final model = {"mainBalance": finalEarned};
-        await socket.updateUser(authController.userdata.value.email, model);
-      },
+      onLongHold: () => earnController.onHoldAction(),
+
       child: SizedBox(
         height: heightSize(218),
         width: width,

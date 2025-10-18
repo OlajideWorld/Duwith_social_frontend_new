@@ -12,12 +12,11 @@ import 'package:get/get.dart';
 import '../../../common/custom-text.dart';
 
 class DailyTaskScreen extends StatelessWidget {
-  DailyTaskScreen({super.key});
-
-  EarnController earnController = EarnController.instance;
+  const DailyTaskScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    EarnController earnController = EarnController.instance;
     return Scaffold(
       backgroundColor: backgroundColor,
       body: LayoutBuilder(
@@ -25,80 +24,29 @@ class DailyTaskScreen extends StatelessWidget {
           return SizedBox(
             height: constraints.maxHeight,
             width: constraints.maxWidth,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
+            child: SafeArea(
               child: Obx(() {
                 return Padding(
                   padding: EdgeInsets.only(
                       top: heightSize(30),
                       left: widthSize(30),
                       right: widthSize(30)),
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        dailyTaskAppBar(),
-                        SizedBox(height: heightSize(33)),
-                        dailyTaskChooseType(),
-                        SizedBox(height: heightSize(18)),
-                        //
-                        if (earnController.chooseType.value == 0)
-                          SizedBox(
-                            child: Column(
-                              children: [
-                                dailytaskAdvert(
-                                    color1: const Color(0xFF8B11A9),
-                                    color2: const Color(0xFFA408A7),
-                                    textColorUsed: const Color(0xFFFEABDA),
-                                    image: "assets/images/dailyimage.png",
-                                    context: context),
-                                SizedBox(height: heightSize(16)),
-                                Container(
-                                  height: heightSize(500),
-                                  width: constraints.maxWidth,
-                                  padding: EdgeInsets.only(
-                                      top: heightSize(19),
-                                      left: widthSize(20),
-                                      right: widthSize(20),
-                                      bottom: heightSize(27)),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(widthSize(10))),
-                                      color: Color.fromARGB(255, 20, 30, 56)),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: CText(
-                                          text: "Daily task",
-                                          size: 14,
-                                          color: Color.fromARGB(
-                                              255, 191, 187, 187),
-                                          fontFamily: UsedFonts.poppins,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      viewDailyTaskList(
-                                          context, constraints.maxWidth),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                        //
-                        //
-                        if (earnController.chooseType.value == 1)
-                          SizedBox(
-                              child: Column(
-                            children: [
-                              SizedBox(height: heightSize(3)),
-                              viewStreakTaskList(context, constraints.maxWidth)
-                            ],
-                          )),
-                      ],
+                  child: SizedBox(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          dailyTaskAppBar(),
+                          SizedBox(height: heightSize(33)),
+                          dailyTaskChooseType(),
+                          SizedBox(height: heightSize(18)),
+                          //
+                         
+                          //
+                          //
+                         
+                        ],
+                      ),
                     ),
                   ),
                 );

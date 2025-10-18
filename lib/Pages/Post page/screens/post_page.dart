@@ -14,8 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../common/button-widget.dart';
-import '../../../common/custom-nav-bar.dart';
-import '../../../common/custom-text.dart';
 import '../../../common/getxmessage.dart';
 import '../../../utils/sizes.dart';
 import '../../Auth Page/controller/auth_controller.dart';
@@ -274,7 +272,7 @@ class _PostContentPageState extends State<PostContentPage> {
                                       "Lifestyles"
                                     ],
                                     "commentsEnabled":
-                                         homeController.commentingOpton.value,
+                                        homeController.commentingOpton.value,
                                     "showCaption":
                                         homeController.showCaption.value,
                                     "showLikes": homeController.hideLike.value,

@@ -21,13 +21,21 @@ earningPageRowWidgets(
         scrollDirection: Axis.horizontal,
         itemCount: earnController.earningPageRowDetails.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(left: widthSize(20)),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      earnController.earningPageRowDetails[index].page,
+                ),
+              );
+            },
             child: eariningPageRowContainer(
               context,
-              earnController.earningPageRowDetails[index]['title']!,
-              earnController.earningPageRowDetails[index]['subtitle']!,
-              earnController.earningPageRowDetails[index]['button']!,
+              earnController.earningPageRowDetails[index].title,
+              earnController.earningPageRowDetails[index].subtitle,
+              earnController.earningPageRowDetails[index].button,
             ),
           );
         }),
@@ -36,39 +44,46 @@ earningPageRowWidgets(
 
 eariningPageRowContainer(
     BuildContext context, String text1, String text2, String text3) {
-  return Container(
-    width: widthSize(120),
-    padding: EdgeInsets.all(widthSize(10)),
-    decoration: BoxDecoration(
-      color: Color(0xFF292933),
-      border: Border.all(color: Color(0xFF07A9B4)),
-      borderRadius: BorderRadius.all(Radius.circular(widthSize(15))),
-    ),
-    child: Column(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
+  return SizedBox(
+    child: Row(
       children: [
-        Text(
-          text1,
-          style: GoogleFonts.poppins(
-            fontSize: widthSize(15),
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
+        Container(
+          width: widthSize(120),
+          padding: EdgeInsets.all(widthSize(10)),
+          decoration: BoxDecoration(
+            color: Color(0xFF292933),
+            border: Border.all(color: Color(0xFF07A9B4)),
+            borderRadius: BorderRadius.all(Radius.circular(widthSize(15))),
+          ),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                text1,
+                style: GoogleFonts.poppins(
+                  fontSize: widthSize(15),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: heightSize(3)),
+              Text(
+                text2,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  fontSize: widthSize(11),
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: heightSize(5)),
+              buttonsWidget(context, heightSize(20), widthSize(60), text3,
+                  const Color(0xFF8C0798), 9, () {}, false, textColor)
+            ],
           ),
         ),
-        SizedBox(height: heightSize(8)),
-        Text(
-          text2,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-            fontSize: widthSize(11),
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(height: heightSize(8)),
-        buttonsWidget(context, heightSize(15), widthSize(50), text3,
-            const Color(0xFF8C0798), 9, () {}, false, textColor)
+        SizedBox(width: widthSize(20)),
       ],
     ),
   );

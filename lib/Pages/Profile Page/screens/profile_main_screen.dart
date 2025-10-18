@@ -82,7 +82,8 @@ class ProfileScreen extends StatelessWidget {
                                       const Duration(seconds: 2), () {});
                                   profileController.profileLoading.value =
                                       false;
-                                  Get.to(() => ViewUserProfileScreen());
+                                  Get.to(
+                                      () => ViewUserProfileScreen(isyou: true));
                                 }, true),
                                 SizedBox(height: heightSize(12)),
                                 profileWidget(

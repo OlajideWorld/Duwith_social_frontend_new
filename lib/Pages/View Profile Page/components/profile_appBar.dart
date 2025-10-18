@@ -5,6 +5,7 @@ import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 
 profileAppBar() {
   return SizedBox(
@@ -159,22 +160,56 @@ profileData(String name, String image, String nickname, String description,
 
 numbersWidget(String text1, String text2) {
   return SizedBox(
-    height: heightSize(31),
+    height: heightSize(50),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CText(
-          text: text1,
-          size: 15,
-          fontFamily: UsedFonts.poppins,
-          fontWeight: FontWeight.w600,
+        Text(
+          text1,
+          style: GoogleFonts.poppins(
+            fontSize: widthSize(15),
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
         ),
-        CText(
-          text: text2,
-          size: 11,
-          fontFamily: UsedFonts.poppins,
-          fontWeight: FontWeight.w500,
-        )
+        Text(
+          text2,
+          style: GoogleFonts.poppins(
+            fontSize: widthSize(15),
+            fontWeight: FontWeight.w600,
+            color: textColor3,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+numbersWidget2(String text1, String text2) {
+  return SizedBox(
+    height: heightSize(50),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          text2,
+          style: GoogleFonts.poppins(
+            fontSize: widthSize(15),
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(width: widthSize(10)),
+        Text(
+          text1,
+          style: GoogleFonts.poppins(
+            fontSize: widthSize(15),
+            fontWeight: FontWeight.w600,
+            color: textColor3,
+          ),
+        ),
       ],
     ),
   );

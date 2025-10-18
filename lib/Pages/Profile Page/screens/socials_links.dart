@@ -8,8 +8,10 @@ import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 
 import '../../../common/custom-text.dart';
@@ -41,6 +43,28 @@ class _SocialLinkBindingPageState extends State<SocialLinkBindingPage> {
   TextEditingController twitter = TextEditingController(
       text: authController.userdata.value.socialMediaLinks.twitter);
 
+  Future<void> _handlePaste(int type) async {
+    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data != null && data.text != null) {
+      if (type == 1) {
+        facebook.text = data.text!;
+      } else if (type == 2) {
+        instagram.text = data.text!;
+      } else if (type == 3) {
+        youtube.text = data.text!;
+      } else if (type == 4) {
+        twitter.text = data.text!;
+      }
+      // setState(() {
+      //   _controller.text = data.text!;
+      // });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Clipboard is empty!')),
+      );
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -58,7 +82,7 @@ class _SocialLinkBindingPageState extends State<SocialLinkBindingPage> {
         padding: EdgeInsets.symmetric(
             vertical: heightSize(10), horizontal: widthSize(20)),
         child: buttonsWidget(
-            context, heightSize(40), widthSize(200), "Bind Data", mainColor, 18,
+            context, heightSize(50), widthSize(100), "Bind Data", mainColor, 18,
             () async {
           profileController.profileLoading.value = true;
           final profiledata = {
@@ -92,73 +116,83 @@ class _SocialLinkBindingPageState extends State<SocialLinkBindingPage> {
                       physics: const BouncingScrollPhysics(),
                       child: SizedBox(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             socialBindingAppBar(),
                             SizedBox(height: heightSize(35)),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFFA3ABBB)),
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(widthSize(10)))),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: heightSize(14),
-                                  horizontal: widthSize(11)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const CText(
-                                    text: "Know how much  📢🍋😊 ",
-                                    size: 15,
-                                    color: textColor,
-                                    fontFamily: UsedFonts.poppins,
-                                    fontWeight: FontWeight.w600,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Verify your socials to start earning ",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: widthSize(20),
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
                                   ),
-                                  SizedBox(height: heightSize(5)),
-                                  const CText(
-                                    text:
-                                        "Your opinions shape our community! Whether it’s a stunning photo, a captivating video, or a compelling story, we want to hear from you. Express yourself, inspire others, and make your voice heard. Join the conversation and let your creativity! ",
-                                    size: 12,
-                                    color: Color(0XFFA3ABBB),
-                                    fontFamily: UsedFonts.poppins,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ],
+                                ),
+                                Icon(
+                                  Icons.verified, // built-in verified badge
+                                  color: Colors
+                                      .blue, // Instagram/Twitter-style blue
+                                  size: heightSize(18),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: heightSize(5)),
+                            Text(
+                              "Lets discover some great places today",
+                              style: GoogleFonts.poppins(
+                                fontSize: widthSize(15),
+                                fontWeight: FontWeight.w500,
+                                color: textColor3,
                               ),
                             ),
                             SizedBox(height: heightSize(20)),
                             socialParameters(
                                 image: "assets/images/Earn/facebook.png",
-                                name: "Facebook",
+                                name: "Facebook.com/",
                                 parsedValue: facebook,
                                 onchanged: (val) {
                                   profileController.facebookStored.value = val!;
-                                }),
+                                },
+                                onTap: () => _handlePaste(1)),
                             SizedBox(height: heightSize(10)),
                             socialParameters(
                                 image: "assets/images/Earn/instagram.png",
-                                name: "Instagram",
+                                name: "Instagram.com",
                                 parsedValue: instagram,
                                 onchanged: (val) {
                                   profileController.instagramStored.value =
                                       val!;
-                                }),
+                                },
+                                onTap: () => _handlePaste(2)),
                             SizedBox(height: heightSize(10)),
                             socialParameters(
                                 image: "assets/images/Earn/youtube.png",
-                                name: "Youtube",
+                                name: "Youtube.com/",
                                 parsedValue: youtube,
                                 onchanged: (val) {
                                   profileController.youtubeStored.value = val!;
-                                }),
+                                },
+                                onTap: () => _handlePaste(3)),
                             SizedBox(height: heightSize(10)),
                             socialParameters(
                                 image: "assets/images/Earn/twitter.png",
-                                name: "Twitter",
+                                name: "x.com/",
                                 parsedValue: twitter,
                                 onchanged: (val) {
                                   profileController.twitterStored.value = val!;
-                                }),
+                                },
+                                onTap: () => _handlePaste(4)),
+                            // SizedBox(height: heightSize(10)),
+                            // socialParameters(
+                            //     image: "assets/images/Earn/Telegram.png",
+                            //     name: "x.com/",
+                            //     parsedValue: twitter,
+                            //     onchanged: (val) {
+                            //       // profileController.twitterStored.value = val!;
+                            //     }),
                           ],
                         ),
                       ),
@@ -177,53 +211,85 @@ class _SocialLinkBindingPageState extends State<SocialLinkBindingPage> {
       {required String image,
       required String name,
       required TextEditingController parsedValue,
-      required Function(String?)? onchanged}) {
-    return SizedBox(
-      height: heightSize(120),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      required Function(String?)? onchanged,
+      required VoidCallback onTap}) {
+    return Container(
+      height: heightSize(60),
+      padding: EdgeInsets.symmetric(
+          horizontal: widthSize(15), vertical: heightSize(10)),
+      decoration: ShapeDecoration(
+        color: Color(0xFF151B2E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: heightSize(36),
-                width: widthSize(36),
-                decoration: BoxDecoration(
-                    color: const Color(0xFF343232),
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(widthSize(19.5)))),
-                child: Padding(
-                  padding: EdgeInsets.all(widthSize(9)),
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.fill,
-                  ),
-                ),
+          Container(
+            height: heightSize(36),
+            width: widthSize(36),
+            decoration: BoxDecoration(
+                color: const Color(0xFF343232),
+                borderRadius:
+                    BorderRadius.all(Radius.circular(widthSize(19.5)))),
+            child: Padding(
+              padding: EdgeInsets.all(widthSize(9)),
+              child: Image.asset(
+                image,
+                fit: BoxFit.fill,
               ),
-              SizedBox(width: widthSize(8)),
-              Padding(
-                padding: EdgeInsets.only(top: heightSize(10)),
-                child: CText(
-                  text: name,
-                  size: 13,
-                  color: const Color(0xFF939393),
+            ),
+          ),
+          SizedBox(width: widthSize(10)),
+          Expanded(
+            child: TextField(
+              style: TextStyle(
                   fontFamily: UsedFonts.poppins,
                   fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          InputTextField(
-              obscureText: false,
-              textInputAction: true,
-              showPrefixIcon: false,
-              controller: parsedValue,
-              innerColor: buttonColor2,
+                  color: const Color(0xFFB4B4B4),
+                  fontSize: fontSize(14)),
+              maxLines: 5,
               onChanged: onchanged,
-              textColor: textColor,
-              differentiate: 1),
+              controller: parsedValue,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                hintText: "https://$name",
+                hintStyle: const TextStyle(color: Color(0xFF918F99)),
+                filled: true,
+                fillColor: Color(0xFF151B2E),
+                border: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xFF151B2E),
+                    ),
+                    borderRadius: BorderRadius.circular(16)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xFF151B2E),
+                    ),
+                    borderRadius: BorderRadius.circular(16)),
+                contentPadding: EdgeInsets.only(
+                    left: widthSize(10),
+                    top: heightSize(5),
+                    right: widthSize(5),
+                    bottom: heightSize(5)),
+              ),
+            ),
+          ),
+          SizedBox(width: widthSize(10)),
+          GestureDetector(
+            onTap: onTap,
+            child: Text(
+              "Paste",
+              style: GoogleFonts.inter(
+                fontSize: widthSize(15),
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
+            ),
+          ),
         ],
       ),
     );

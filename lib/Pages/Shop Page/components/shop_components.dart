@@ -125,9 +125,9 @@ shoptypeAdvert(
   return GestureDetector(
     onTap: () => Get.to(() => const ShopUpgradeScreen()),
     child: Container(
-      height: heightSize(118),
+      height: heightSize(80),
       padding: EdgeInsets.symmetric(
-        vertical: heightSize(16),
+        vertical: heightSize(10),
         horizontal: widthSize(31),
       ),
       decoration: BoxDecoration(
@@ -143,14 +143,14 @@ shoptypeAdvert(
               children: [
                 CText(
                   text: "Upgrade $type",
-                  size: 22,
+                  size: 15,
                   fontFamily: UsedFonts.rammetto,
                   fontWeight: FontWeight.w400,
                   color: textColor,
                 ),
                 CText(
                   text: "Increase earnings",
-                  size: 13,
+                  size: 8,
                   fontFamily: UsedFonts.poppins,
                   fontWeight: FontWeight.w600,
                   color: textColorUsed,

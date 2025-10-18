@@ -6,9 +6,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart';
 import 'package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart';
+import 'package:duwith_social/Pages/Home%20Page/components/comments_replies_display.dart';
+import 'package:duwith_social/Pages/Home%20Page/components/time_reveal.dart';
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/Pages/Home%20Page/screens/comments_display.dart';
 import 'package:duwith_social/Pages/View%20Profile%20Page/screens/view_profile_screen.dart';
+import 'package:duwith_social/common/button-widget.dart';
 
 import 'package:duwith_social/common/custom-text.dart';
 import 'package:duwith_social/common/stream_video.dart';
@@ -21,12 +24,14 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../Services/Ads Service/unity_ads_manager.dart';
+import '../../Profile Page/screens/view_myprofile_screen.dart';
 import '../screens/posts_View_Page.dart';
 
 HomeController homeController = HomeController.instance;
@@ -54,9 +59,16 @@ forYouList(BuildContext context, double width) {
               shrinkWrap: true,
               itemCount: homeController.postList.value.length,
               itemBuilder: (context, index) {
-                return PostWidget(
-                  postsData: homeController.postList.value[index],
-                  width: width,
+                return Column(
+                  children: [
+                    PostWidget(
+                      postsData: homeController.postList.value[index],
+                      width: width,
+                    ),
+                    SizedBox(
+                      height: heightSize(10),
+                    ),
+                  ],
                 );
               }),
         );
@@ -108,10 +120,26 @@ class _PostWidgetState extends State<PostWidget> {
 
   // Static Map to cache thumbnails
   static Map<String, String> thumbnailCache = {};
+  BannerAd? _bannerAd;
+  bool _isLoaded = false;
+
+  final fixedBanner = "ca-app-pub-3940256099942544/6300978111";
 
   @override
   void initState() {
     super.initState();
+    _bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: fixedBanner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) => setState(() => _isLoaded = true),
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+          // optionally retry or fallback
+        },
+      ),
+      request: AdRequest(),
+    )..load();
     if (widget.postsData.media.single.type == "video") {
       loadThumbnail();
     }
@@ -156,6 +184,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   void dispose() {
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -165,18 +194,18 @@ class _PostWidgetState extends State<PostWidget> {
         (interaction) => interaction.user == authController.userdata.value.id);
     bool userDisliked = widget.postsData.dislikes.any(
         (interaction) => interaction.user == authController.userdata.value.id);
-    return Obx(() {
-      return Container(
-        height: widget.postsData.media.single.type == "image" ||
-                widget.postsData.media.single.type == "video"
-            ? isExpanded.value
-                ? heightSize(700)
-                : heightSize(600)
-            : isExpanded.value
-                ? heightSize(320)
-                : heightSize(200),
-        width: widget.width,
-        decoration: const BoxDecoration(color: Color(0xFF101522)),
+    final adSize = _bannerAd!.size;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Color(0xFF0e121e),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(widthSize(10)),
+            topRight: Radius.circular(widthSize(10)),
+          ),
+        ),
         padding: EdgeInsets.only(top: heightSize(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,512 +215,524 @@ class _PostWidgetState extends State<PostWidget> {
                 widget.width,
                 widget.postsData.user.username,
                 widget.postsData.user.profileImage,
+                widget.postsData,
                 context,
                 true),
-            SizedBox(height: heightSize(8)),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-              child: widget.postsData.caption.length > 20
-                  ? GestureDetector(
-                      onTap: () => Get.to(
-                          () => PostsViewPage(postsData: widget.postsData)),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${truncate(widget.postsData.caption, length: 15)} .....",
-                            style: GoogleFonts.poppins(
-                              color: const Color(0xFFD7D7D7),
-                              fontSize: fontSize(15),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: widthSize(5)),
-                          Text(
-                            "Read More",
-                            style: GoogleFonts.poppins(
-                              color: mainColor,
-                              fontSize: fontSize(15),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Text(
-                      widget.postsData.caption,
-                      style: GoogleFonts.poppins(
-                        color: const Color(0xFFD7D7D7),
-                        fontSize: fontSize(15),
-                        fontWeight: FontWeight.w500,
+            SizedBox(height: heightSize(5)),
+
+            widget.postsData.media.single.type == "text"
+                ? GestureDetector(
+                    onTap: () => Get.to(
+                        () => PostsViewPage(postsData: widget.postsData)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+                      child: UserTextItem(
+                        text: widget.postsData.caption,
+                        isExpanded: isExpanded,
+                        width: widget.width,
                       ),
                     ),
-            ),
-            SizedBox(height: heightSize(8)),
+                  )
+                : SizedBox(),
+
+            // Post media section
             widget.postsData.media.single.type == "image" ||
                     widget.postsData.media.single.type == "video"
                 ? widget.postsData.media.single.type == "image"
-                    ? Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: widthSize(10)),
-                        child: CachedNetworkImage(
-                          imageUrl: widget.postsData.media.single.url,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          imageBuilder: (context, imageprovider) {
-                            return Container(
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: widthSize(10)),
+                            child: GestureDetector(
+                              onTap: () => Get.to(() =>
+                                  PostsViewPage(postsData: widget.postsData)),
+                              child: PostContent(
+                                  isExpanded: isExpanded,
+                                  text: widget.postsData.caption,
+                                  size: 14,
+                                  color: textColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          SizedBox(height: heightSize(8)),
+                          Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: widthSize(10)),
+                            child: Container(
                               height: heightSize(400),
                               width: widget.width,
                               decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  image: DecorationImage(
-                                      image: imageprovider, fit: BoxFit.fill)),
-                            );
-                          },
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          Get.to(() => VideoStreamPage(
-                                url: widget.postsData.media.single.url,
-                              ));
-                        },
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: widthSize(10)),
-                          child: SizedBox(
-                            height: heightSize(400),
-                            child: Stack(children: [
-                              // vIDEO iNSTANCE
-                              // where is that noted
-
-                              // Container(
-                              //   height: heightSize(400),
-                              //   decoration: BoxDecoration(
-                              //       borderRadius: BorderRadius.all(
-                              //           Radius.circular(widthSize(20)))),
-                              //   child: BetterPlayer.network(
-                              //     widget.postsData.media.single.url,
-                              //     betterPlayerConfiguration:
-                              //         const BetterPlayerConfiguration(
-                              //       aspectRatio: 1,
-                              //     ),
-                              //   ),
-                              // ),
-                              if (thumbnailPath.value != "")
-                                Container(
-                                  height: heightSize(400),
-                                  width: widget.width,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(widthSize(20))),
-                                      image: DecorationImage(
-                                          image: FileImage(
-                                              File(thumbnailPath.value)),
-                                          fit: BoxFit.cover)),
-                                )
-                              else
-                                const Center(
-                                    child: CircularProgressIndicator()),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widthSize(170),
-                                    vertical: heightSize(170)),
-                                child: SizedBox(
-                                    height: heightSize(52),
-                                    width: widthSize(52),
-                                    child: Image.asset(
-                                      "assets/images/playsymbols.png",
-                                      fit: BoxFit.contain,
-                                    )),
-                              )
-                            ]),
+                                color: Colors
+                                    .grey[200], // background while loading
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.postsData.media.single.url,
+                                fit: BoxFit.contain,
+                                placeholder: (context, url) => const Center(
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.broken_image),
+                              ),
+                            ),
                           ),
+                        ],
+                      )
+                    : Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: widthSize(10)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () => Get.to(() =>
+                                  PostsViewPage(postsData: widget.postsData)),
+                              child: PostContent(
+                                  isExpanded: isExpanded,
+                                  text: widget.postsData.caption,
+                                  size: 14,
+                                  color: const Color(0xFFD7D7D7),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: heightSize(8)),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => VideoStreamPage(
+                                      url: widget.postsData.media.single.url,
+                                    ));
+                              },
+                              child: Stack(children: [
+                                // vIDEO iNSTANCE
+                                // where is that noted
+
+                                // Container(
+                                //   height: heightSize(400),
+                                //   decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.all(
+                                //           Radius.circular(widthSize(20)))),
+                                //   child: BetterPlayer.network(
+                                //     widget.postsData.media.single.url,
+                                //     betterPlayerConfiguration:
+                                //         const BetterPlayerConfiguration(
+                                //       aspectRatio: 1,
+                                //     ),
+                                //   ),
+                                // ),
+                                if (thumbnailPath.value != "")
+                                  Container(
+                                    height: heightSize(400),
+                                    width: widget.width,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(widthSize(20))),
+                                        image: DecorationImage(
+                                            image: FileImage(
+                                                File(thumbnailPath.value)),
+                                            fit: BoxFit.cover)),
+                                  )
+                                else
+                                  const Center(
+                                      child: CircularProgressIndicator()),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: widthSize(170),
+                                      vertical: heightSize(170)),
+                                  child: SizedBox(
+                                      height: heightSize(52),
+                                      width: widthSize(52),
+                                      child: Image.asset(
+                                        "assets/images/playsymbols.png",
+                                        fit: BoxFit.contain,
+                                      )),
+                                )
+                              ]),
+                            ),
+                          ],
                         ),
                       )
                 : const SizedBox(),
-            SizedBox(height: heightSize(5)),
+            SizedBox(height: heightSize(10)),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
               child: Divider(
                   height: heightSize(3), thickness: 2, color: faintColor),
             ),
-            SizedBox(height: heightSize(5)),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
-            //   child: SizedBox(
-            //     height: heightSize(60),
-            //     width: widget.width,
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         // CText(
-            //         //   text: "",
-            //         //   color: textColor,
-            //         //   size: fontSize(15),
-            //         // ),
-            //         Text(
-            //           "What's your Opinions?",
-            //           style: GoogleFonts.plusJakartaSans(
-            //             color: textColor,
-            //             fontSize: fontSize(14),
-            //             fontWeight: FontWeight.w500,
-            //           ),
-            //         ),
-            //         Row(
-            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //           children: [
-            //             SizedBox(
-            //               height: heightSize(30),
-            //               width: widthSize(150),
-            //               child: Stack(
-            //                 children: [
-            //                   SizedBox(
-            //                     height: heightSize(30),
-            //                     width: widthSize(150),
-            //                     child: LinearProgressIndicator(
-            //                       backgroundColor: const Color(0xFF292C37),
-            //                       value: 0.3,
-            //                       valueColor: const AlwaysStoppedAnimation(
-            //                           Color(0xFF1C202B)),
-            //                       borderRadius:
-            //                           BorderRadius.circular(widthSize(20)),
-            //                       minHeight: heightSize(30),
-            //                     ),
-            //                   ),
-            //                   SizedBox(
-            //                       height: heightSize(30),
-            //                       width: widthSize(150),
-            //                       child: Padding(
-            //                         padding: EdgeInsets.all(widthSize(10)),
-            //                         child: const Row(
-            //                           mainAxisAlignment:
-            //                               MainAxisAlignment.spaceBetween,
-            //                           children: [
-            //                             CText(
-            //                               text: "Amazing",
-            //                               color: textColor,
-            //                               size: 12,
-            //                             ),
-            //                             CText(
-            //                               text: "30%",
-            //                               color: textColor,
-            //                               size: 12,
-            //                             ),
-            //                           ],
-            //                         ),
-            //                       ))
-            //                 ],
-            //               ),
-            //             ),
-            //             SizedBox(
-            //               height: heightSize(30),
-            //               width: widthSize(150),
-            //               child: Stack(
-            //                 children: [
-            //                   SizedBox(
-            //                     height: heightSize(30),
-            //                     width: widthSize(150),
-            //                     child: LinearProgressIndicator(
-            //                       backgroundColor: const Color(0xFF1C202B),
-            //                       value: 0.5,
-            //                       valueColor: const AlwaysStoppedAnimation(
-            //                           Color(0xFF292C37)),
-            //                       borderRadius:
-            //                           BorderRadius.circular(widthSize(20)),
-            //                       minHeight: heightSize(30),
-            //                     ),
-            //                   ),
-            //                   SizedBox(
-            //                       height: heightSize(30),
-            //                       width: widthSize(150),
-            //                       child: Padding(
-            //                         padding: EdgeInsets.all(widthSize(10)),
-            //                         child: const Row(
-            //                           mainAxisAlignment:
-            //                               MainAxisAlignment.spaceBetween,
-            //                           children: [
-            //                             CText(
-            //                               text: "50%",
-            //                               color: textColor,
-            //                               size: 12,
-            //                             ),
-            //                             CText(
-            //                               text: "Good",
-            //                               color: textColor,
-            //                               size: 12,
-            //                             ),
-            //                           ],
-            //                         ),
-            //                       ))
-            //                 ],
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            SizedBox(height: heightSize(20)),
+            SizedBox(height: heightSize(10)),
             Padding(
-              padding: EdgeInsets.only(
-                left: widthSize(11),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
               child: SizedBox(
-                height: heightSize(40),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: heightSize(60),
+                width: widget.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: heightSize(30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Likes
-                          GestureDetector(
-                            onTap: () async {
-                              await socket.likePost(widget.postsData.id,
-                                  authController.userdata.value.id, 1);
-                            },
-                            child: SizedBox(
-                              height: heightSize(30),
-                              width: widthSize(62),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    userLiked == true
-                                        ? CupertinoIcons.heart_fill
-                                        : FontAwesomeIcons.heart,
-                                    size: heightSize(25),
-                                    color: userLiked ? mainColor : textColor,
-                                  ),
-                                  SizedBox(width: widthSize(2)),
-                                  CText(
-                                    text: homeController.engagementShortened(
-                                        widget.postsData.likes.length),
-                                    size: 20,
-                                    color: Color(0xFF8A8A8A),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          // dislikes
-                          // GestureDetector(
-                          //   onTap: () async {
-                          //     await socket.dislikePost(widget.postsData.id,
-                          //         authController.userdata.value.id, 1);
-                          //   },
-                          //   child: SizedBox(
-                          //     height: heightSize(30),
-                          //     width: widthSize(40),
-                          //     child: Row(
-                          //       mainAxisAlignment:
-                          //           MainAxisAlignment.spaceBetween,
-                          //       children: [
-                          //         Icon(
-                          //           userDisliked == true
-                          //               ? Icons.thumb_down_rounded
-                          //               : FontAwesomeIcons.thumbsDown,
-                          //           size: heightSize(20),
-                          //           color: userDisliked == true
-                          //               ? Colors.red
-                          //               : textColor,
-                          //         ),
-                          //         CText(
-                          //           text: homeController.engagementShortened(
-                          //               widget.postsData.dislikes.length),
-                          //           size: 15,
-                          //           color: Color(0xFF8A8A8A),
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          // comment
-                          GestureDetector(
-                            onTap: () async {
-                              homeController.loadingComment.value = true;
-                              // debugPrint(widget.postsData.id);
-                              showComments(
-                                  context: context,
-                                  postId: widget.postsData.id);
-                              await socket.getCommentByPostId(
-                                  widget.postsData.id, 1);
-                            },
-                            child: SizedBox(
-                              height: heightSize(30),
-                              width: widthSize(62),
-                              child: Row(
-                                children: [
-                                  // Icon(
-                                  //   FontAwesomeIcons.comment,
-                                  //   size: heightSize(25),
-                                  //   color: textColor,
-                                  // ),
-                                  SizedBox(
-                                    height: heightSize(25),
-                                    width: widthSize(25),
-                                    child: Image.asset(
-                                      'assets/images/Home/chatIcon.png',
-                                      fit: BoxFit.contain,
-                                      // color: homeController.viewBarOption.value == 1
-                                      //     ? const Color(0xFFECECEC)
-                                      //     : textColor3,
-                                    ),
-                                  ),
-                                  SizedBox(width: widthSize(2)),
-                                  CText(
-                                    text: homeController.engagementShortened(
-                                        widget.postsData.comments),
-                                    size: 20,
-                                    color: Color(0xFF8A8A8A),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          // Share
-                          SizedBox(
-                            height: heightSize(25),
-                            width: widthSize(62),
-                            child: Row(
-                              children: [
-                                // Icon(
-                                //   FontAwesomeIcons.share,
-                                //   size: heightSize(25),
-                                //   color: textColor,
-                                // ),
-                                SizedBox(
-                                  height: heightSize(25),
-                                  width: widthSize(25),
-                                  child: Image.asset(
-                                    'assets/images/Home/shareIcon.png',
-                                    fit: BoxFit.contain,
-                                    // color: homeController.viewBarOption.value == 1
-                                    //     ? const Color(0xFFECECEC)
-                                    //     : textColor3,
-                                  ),
-                                ),
-                                SizedBox(width: widthSize(2)),
-                                CText(
-                                  text: homeController.engagementShortened(
-                                      widget.postsData.comments),
-                                  size: 20,
-                                  color: Color(0xFF8A8A8A),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          // send
-                          SizedBox(
-                            height: heightSize(30),
-                            width: widthSize(62),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  height: heightSize(25),
-                                  width: widthSize(25),
-                                  child: Image.asset(
-                                    'assets/images/Home/sendIcon.png',
-                                    fit: BoxFit.contain,
-                                    // color: homeController.viewBarOption.value == 1
-                                    //     ? const Color(0xFFECECEC)
-                                    //     : textColor3,
-                                  ),
-                                ),
-                                SizedBox(width: widthSize(2)),
-                                CText(
-                                  text: homeController.engagementShortened(
-                                      widget.postsData.comments),
-                                  size: 20,
-                                  color: Color(0xFF8A8A8A),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          // details
-                          SizedBox(
-                            height: heightSize(25),
-                            width: widthSize(62),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  height: heightSize(25),
-                                  width: widthSize(25),
-                                  child: Image.asset(
-                                    'assets/images/Home/detailsIcon.png',
-                                    fit: BoxFit.contain,
-                                    // color: homeController.viewBarOption.value == 1
-                                    //     ? const Color(0xFFECECEC)
-                                    //     : textColor3,
-                                  ),
-                                ),
-                                SizedBox(width: widthSize(2)),
-                                CText(
-                                  text: homeController.engagementShortened(
-                                      widget.postsData.comments),
-                                  size: 20,
-                                  color: Color(0xFF8A8A8A),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          // gift
-                          SizedBox(
-                            height: heightSize(30),
-                            width: widthSize(83),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  height: heightSize(25),
-                                  width: widthSize(25),
-                                  child: Image.asset(
-                                    'assets/images/Home/dotIcon.png',
-                                    fit: BoxFit.contain,
-                                    // color: homeController.viewBarOption.value == 1
-                                    //     ? const Color(0xFFECECEC)
-                                    //     : textColor3,
-                                  ),
-                                ),
-                                SizedBox(width: widthSize(2)),
-                                const CText(
-                                  text: "100DOT",
-                                  size: 17,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                    Text(
+                      "What's your Opinions?",
+                      style: GoogleFonts.plusJakartaSans(
+                        color: textColor,
+                        fontSize: fontSize(14),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    // SizedBox(
-                    //   height: heightSize(20),
-                    //   width: widthSize(20),
-                    //   child: Image.asset("assets/images/gift.png"),
-                    // )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: heightSize(30),
+                          width: widthSize(150),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: heightSize(40),
+                                width: widthSize(150),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: textColor),
+                                  borderRadius:
+                                      BorderRadius.circular(widthSize(20)),
+                                ),
+                                child: LinearProgressIndicator(
+                                  backgroundColor: Colors.transparent,
+                                  value: 0.3,
+                                  valueColor:
+                                      const AlwaysStoppedAnimation(mainColor),
+                                  borderRadius:
+                                      BorderRadius.circular(widthSize(20)),
+                                  minHeight: heightSize(40),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: widthSize(5)),
+                                child: SizedBox(
+                                    height: heightSize(30),
+                                    width: widthSize(150),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Amazing',
+                                          style: GoogleFonts.poppins(
+                                            color: textColor,
+                                            fontSize: fontSize(12),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          '30%',
+                                          style: GoogleFonts.poppins(
+                                            color: textColor,
+                                            fontSize: fontSize(12),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: heightSize(30),
+                          width: widthSize(150),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: heightSize(40),
+                                width: widthSize(150),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: textColor),
+                                  borderRadius:
+                                      BorderRadius.circular(widthSize(20)),
+                                ),
+                                child: LinearProgressIndicator(
+                                  backgroundColor: Colors.transparent,
+                                  value: 0.5,
+                                  valueColor:
+                                      const AlwaysStoppedAnimation(mainColor),
+                                  borderRadius:
+                                      BorderRadius.circular(widthSize(20)),
+                                  minHeight: heightSize(40),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: widthSize(5)),
+                                child: SizedBox(
+                                    height: heightSize(30),
+                                    width: widthSize(150),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '50%',
+                                          style: GoogleFonts.poppins(
+                                            color: textColor,
+                                            fontSize: fontSize(12),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Good',
+                                          style: GoogleFonts.poppins(
+                                            color: textColor,
+                                            fontSize: fontSize(12),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: heightSize(5)),
-            Divider(height: heightSize(3), thickness: 2, color: faintColor),
+            SizedBox(height: heightSize(25)),
+            if (_isLoaded || _bannerAd != null)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: widthSize(15)),
+                child: SizedBox(
+                  width: adSize.width.toDouble(),
+                  height: adSize.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
+              ),
+            SizedBox(height: heightSize(20)),
+            SizedBox(
+              height: heightSize(40),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: heightSize(30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(width: widthSize(10)),
+                        // Likes
+                        GestureDetector(
+                          onTap: () async {
+                            await socket.likePost(widget.postsData.id,
+                                authController.userdata.value.id, 1);
+                          },
+                          child: SizedBox(
+                            height: heightSize(30),
+                            width: widthSize(60),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  userLiked == true
+                                      ? CupertinoIcons.heart_fill
+                                      : FontAwesomeIcons.heart,
+                                  size: heightSize(20),
+                                  color: userLiked ? mainColor : textColor,
+                                ),
+                                SizedBox(width: widthSize(5)),
+                                CText(
+                                  text: homeController.engagementShortened(
+                                      widget.postsData.likes.length),
+                                  size: 20,
+                                  color: Color(0xFF8A8A8A),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () async {
+                            homeController.loadingComment.value = true;
+                            // debugPrint(widget.postsData.id);
+                            showComments(
+                                context: context,
+                                postId: widget.postsData.id,
+                                userImage: widget.postsData.user.profileImage,
+                                postUserName: widget.postsData.user.username);
+                            await socket.getCommentByPostId(
+                                widget.postsData.id, 1);
+                          },
+                          child: SizedBox(
+                            height: heightSize(30),
+                            width: widthSize(60),
+                            child: Row(
+                              children: [
+                                // Icon(
+                                //   FontAwesomeIcons.comment,
+                                //   size: heightSize(25),
+                                //   color: textColor,
+                                // ),
+                                SizedBox(
+                                  height: heightSize(20),
+                                  width: widthSize(20),
+                                  child: Image.asset(
+                                    'assets/images/Home/chatIcon.png',
+                                    fit: BoxFit.contain,
+                                    // color: homeController.viewBarOption.value == 1
+                                    //     ? const Color(0xFFECECEC)
+                                    //     : textColor3,
+                                  ),
+                                ),
+                                SizedBox(width: widthSize(5)),
+                                CText(
+                                  text: homeController.engagementShortened(
+                                      widget.postsData.comments),
+                                  size: 20,
+                                  color: Color(0xFF8A8A8A),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Share
+                        SizedBox(
+                          height: heightSize(25),
+                          width: widthSize(60),
+                          child: Row(
+                            children: [
+                              // Icon(
+                              //   FontAwesomeIcons.share,
+                              //   size: heightSize(25),
+                              //   color: textColor,
+                              // ),
+                              SizedBox(
+                                height: heightSize(20),
+                                width: widthSize(20),
+                                child: Image.asset(
+                                  'assets/images/Home/shareIcon.png',
+                                  fit: BoxFit.contain,
+                                  // color: homeController.viewBarOption.value == 1
+                                  //     ? const Color(0xFFECECEC)
+                                  //     : textColor3,
+                                ),
+                              ),
+                              SizedBox(width: widthSize(5)),
+                              CText(
+                                text: homeController.engagementShortened(
+                                    widget.postsData.comments),
+                                size: 20,
+                                color: Color(0xFF8A8A8A),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        // send
+                        SizedBox(
+                          height: heightSize(30),
+                          width: widthSize(60),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: heightSize(20),
+                                width: widthSize(20),
+                                child: Image.asset(
+                                  'assets/images/Home/sendIcon.png',
+                                  fit: BoxFit.contain,
+                                  // color: homeController.viewBarOption.value == 1
+                                  //     ? const Color(0xFFECECEC)
+                                  //     : textColor3,
+                                ),
+                              ),
+                              SizedBox(width: widthSize(5)),
+                              CText(
+                                text: homeController.engagementShortened(
+                                    widget.postsData.comments),
+                                size: 20,
+                                color: Color(0xFF8A8A8A),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        // details
+                        SizedBox(
+                          height: heightSize(25),
+                          width: widthSize(60),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: heightSize(20),
+                                width: widthSize(20),
+                                child: Image.asset(
+                                  'assets/images/Home/detailsIcon.png',
+                                  fit: BoxFit.contain,
+                                  // color: homeController.viewBarOption.value == 1
+                                  //     ? const Color(0xFFECECEC)
+                                  //     : textColor3,
+                                ),
+                              ),
+                              SizedBox(width: widthSize(5)),
+                              CText(
+                                text: homeController.engagementShortened(
+                                    widget.postsData.comments),
+                                size: 20,
+                                color: Color(0xFF8A8A8A),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        // gift
+                        SizedBox(
+                          height: heightSize(30),
+                          width: widthSize(83),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                height: heightSize(20),
+                                width: widthSize(20),
+                                child: Image.asset(
+                                  'assets/images/Home/dotIcon.png',
+                                  fit: BoxFit.contain,
+                                  // color: homeController.viewBarOption.value == 1
+                                  //     ? const Color(0xFFECECEC)
+                                  //     : textColor3,
+                                ),
+                              ),
+                              // SizedBox(width: widthSize(2)),
+                              const CText(
+                                text: "100DOT",
+                                size: 17,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: heightSize(20),
+                  //   width: widthSize(20),
+                  //   child: Image.asset("assets/images/gift.png"),
+                  // )
+                ],
+              ),
+            ),
+            SizedBox(height: heightSize(20)),
           ],
         ),
-      );
-    });
+      ),
+    );
   }
 }
 
 postBarTitle(String userId, double width, String name, String image,
-    BuildContext context, bool showwidget) {
+    PostForYou post, BuildContext context, bool showwidget) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
     child: SizedBox(
@@ -709,7 +750,9 @@ postBarTitle(String userId, double width, String name, String image,
                     await socket.getUserPosts(userId);
                     await Future.delayed(const Duration(seconds: 2), () {});
                     homeController.loadingProfile.value = false;
-                    Get.to(() => ViewProfileScreen());
+                    Get.to(() => ViewUserProfileScreen(
+                          isyou: false,
+                        ));
                   },
                   child: CachedNetworkImage(
                     imageUrl: image,
@@ -719,11 +762,17 @@ postBarTitle(String userId, double width, String name, String image,
                       return Container(
                         height: heightSize(50),
                         width: widthSize(50),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            image: DecorationImage(
-                                image: imageprovider, fit: BoxFit.fill)),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(widthSize(2)),
+                          child: Image(
+                            image: imageprovider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -731,19 +780,19 @@ postBarTitle(String userId, double width, String name, String image,
                 SizedBox(width: widthSize(10)),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       name,
                       style: GoogleFonts.poppins(
                         color: textColor,
-                        fontSize: fontSize(15),
-                        fontWeight: FontWeight.w500,
+                        fontSize: fontSize(18),
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(height: heightSize(3)),
                     Text(
-                      "4 hours ago",
+                      timeAgo(post.createdAt),
                       style: GoogleFonts.poppins(
                         color: const Color(0xFF858585),
                         fontSize: fontSize(10),
@@ -755,29 +804,55 @@ postBarTitle(String userId, double width, String name, String image,
               ],
             ),
           ),
-          // showwidget
-          //     ? SizedBox(
-          //         height: heightSize(25),
-          //         width: widthSize(80),
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //           children: [
-          //             buttonsWidget(context, heightSize(25), widthSize(52),
-          //                 "Follow", mainColor, 8, () {}, false, Colors.white),
-          //             Icon(
-          //               Icons.more_vert,
-          //               size: heightSize(16),
-          //               color: textColor,
-          //             )
-          //           ],
-          //         ),
-          //       )
-          //     : const SizedBox(),
-          Icon(
-            Icons.more_vert,
-            size: heightSize(20),
-            color: textColor,
-          )
+          Row(children: [
+            if (authController.userdata.value.id != userId) ...[
+              if (!authController.userdata.value.following.contains(userId))
+                GestureDetector(
+                  onTap: () async {
+                    await socket.followUser(
+                      authController.userdata.value.id,
+                      userId,
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: widthSize(14),
+                    backgroundColor: mainColor,
+                    child: Icon(
+                      Icons.add,
+                      color: textColor,
+                      size: heightSize(20),
+                    ),
+                  ),
+                ),
+              if (authController.userdata.value.following.contains(userId))
+                SizedBox(
+                  width: widthSize(3),
+                ),
+              // buttonsWidget(
+              //   context,
+              //   heightSize(30),
+              //   widthSize(60),
+              //   "Unfollow",
+              //   mainColor,
+              //   12,
+              //   () async {
+              //     await socket.unfollowUser(
+              //       authController.userdata.value.id,
+              //       userId,
+              //     );
+              //   },
+              //   false,
+              //   textColor,
+              // ),
+            ],
+            SizedBox(width: widthSize(10)),
+            if (authController.userdata.value.id == userId)
+              Icon(
+                Icons.more_vert,
+                size: heightSize(30),
+                color: textColor,
+              ),
+          ])
         ],
       ),
     ),

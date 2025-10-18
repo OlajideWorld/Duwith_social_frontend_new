@@ -1,11 +1,14 @@
 // ignore_for_file: invalid_use_of_protected_member, must_be_immutabl, must_be_immutable
+import "package:cached_network_image/cached_network_image.dart";
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart";
 import "package:duwith_social/common/comments_loading.dart";
 import "package:duwith_social/common/getxmessage.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 import "package:google_mobile_ads/google_mobile_ads.dart";
 
 import "../../../common/custom-text.dart";
@@ -14,22 +17,32 @@ import "../../../utils/sizes.dart";
 import "../components/comments_replies_display.dart";
 import "../controllers/home_controller.dart";
 
-showComments({required BuildContext context, required String postId}) {
+showComments(
+    {required BuildContext context,
+    required String postId,
+    required String userImage,
+    required String postUserName}) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return CommentsDisplayBottomSheet(
           postId: postId,
+          userImage: userImage,
+          postUsername: postUserName,
         );
       });
 }
 
 class CommentsDisplayBottomSheet extends StatefulWidget {
   final String postId;
+  final String userImage;
+  final String postUsername;
   const CommentsDisplayBottomSheet({
     super.key,
     required this.postId,
+    required this.userImage,
+    required this.postUsername,
   });
 
   @override
@@ -61,7 +74,7 @@ class _CommentsDisplayBottomSheetState
   @override
   void dispose() {
     _focusNode.dispose();
-    
+
     super.dispose();
   }
 
@@ -71,12 +84,13 @@ class _CommentsDisplayBottomSheetState
     return Container(
       height: heightSize(700),
       padding: EdgeInsets.only(
-          top: heightSize(15),
+          top: heightSize(10),
           left: widthSize(20),
           right: widthSize(20),
           bottom: heightSize(20)),
       decoration: BoxDecoration(
         color: const Color(0xFF151B2E),
+        border: const Border(top: BorderSide(color: textColor3)),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(widthSize(15)),
             topRight: Radius.circular(widthSize(15))),
@@ -89,28 +103,66 @@ class _CommentsDisplayBottomSheetState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    height: heightSize(3),
+                    height: heightSize(5),
                     width: widthSize(127),
                     decoration: BoxDecoration(
                         color: textColor,
                         borderRadius:
                             BorderRadius.all(Radius.circular(widthSize(5)))),
                   ),
-                  SizedBox(height: heightSize(21)),
+                  SizedBox(height: heightSize(15)),
                   homeController.bannerAd != null
                       ? SizedBox(
                           height: heightSize(100),
                           width: maxWidth,
                           child: AdWidget(ad: homeController.bannerAd!))
                       : SizedBox(),
-                  CText(
-                    text: "${homeController.commentsList.length} Comments",
-                    size: 18,
-                    color: const Color(0xFFBEBEBE),
-                    fontFamily: UsedFonts.poppins,
-                    fontWeight: FontWeight.w500,
-                  ),
 
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: widthSize(30), right: widthSize(10)),
+                    child: SizedBox(
+                      width: maxWidth,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Replies (${homeController.engagementShortened(homeController.commentsList.length)})",
+                            style: GoogleFonts.plusJakartaSans(
+                              color: textColor,
+                              fontSize: fontSize(13),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(
+                            width: widthSize(80),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Top",
+                                  style: GoogleFonts.plusJakartaSans(
+                                    color: mainColor,
+                                    fontSize: fontSize(13),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(width: widthSize(10)),
+                                Text(
+                                  "Latest",
+                                  style: GoogleFonts.plusJakartaSans(
+                                    color: const Color(0xFF858585),
+                                    fontSize: fontSize(13),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: heightSize(15)),
                   homeController.loadingComment.value == true
                       ? const CommentShimmerLoading()
                       : homeController.commentsList.isEmpty
@@ -150,17 +202,41 @@ class _CommentsDisplayBottomSheetState
                 height: heightSize(60),
                 width: maxWidth,
                 decoration: BoxDecoration(
-                    color: const Color(0xFF151B2E),
-                    border: Border.all(color: buttonColor2),
+                    color: const Color(0xFF23293b),
                     borderRadius:
                         BorderRadius.all(Radius.circular(widthSize(20)))),
                 padding: EdgeInsets.symmetric(
-                    vertical: heightSize(5), horizontal: widthSize(8)),
+                    vertical: heightSize(5), horizontal: widthSize(10)),
                 child: Row(
                   children: [
+                    CachedNetworkImage(
+                      imageUrl: widget.userImage,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      imageBuilder: (context, imageprovider) {
+                        return Container(
+                          height: heightSize(30),
+                          width: widthSize(35),
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(widthSize(2)),
+                            child: Image(
+                              image: imageprovider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(width: widthSize(5)),
                     Expanded(
                       child: TextField(
                         focusNode: _focusNode,
+                        textAlign: TextAlign.left, // Keep text on the left
+                        textAlignVertical: TextAlignVertical.center, //
                         style: TextStyle(
                             fontFamily: UsedFonts.poppins,
                             fontWeight: FontWeight.w500,
@@ -170,76 +246,78 @@ class _CommentsDisplayBottomSheetState
                         controller: homeController.commentsText,
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
-                          hintText: "Add Comments",
+                          hintText: "Reply to @${widget.postUsername}",
                           hintStyle: const TextStyle(color: Color(0xFF918F99)),
                           filled: true,
-                          fillColor: Color(0xFF151B2E),
+                          fillColor: Color(0xFF23293b),
                           border: InputBorder.none,
                           focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF1F2138)),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF23293b),
+                              ),
                               borderRadius: BorderRadius.circular(16)),
                           enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF1F2138)),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF23293b),
+                              ),
                               borderRadius: BorderRadius.circular(16)),
                           contentPadding: EdgeInsets.only(
                               left: widthSize(15),
-                              top: heightSize(4),
-                              right: widthSize(4),
+                              top: heightSize(20),
+                              right: widthSize(10),
                               bottom: heightSize(5)),
                         ),
                       ),
                     ),
                     SizedBox(width: widthSize(10)),
+                    Icon(
+                      Icons.add_circle_outline,
+                      size: widthSize(20),
+                      color: textColor,
+                    ),
+                    SizedBox(width: widthSize(10)),
                     GestureDetector(
-                        onTap: () async {
-                          if (homeController.commentsText.text.trim() == "") {
-                            getErrorSnackBar(
-                                "you have to input a message to comment");
-                          } else {
-                            homeController.isCommenting.value = true;
-                            final data = {
-                              "post": widget.postId,
-                              "user": authController.userdata.value.id,
-                              "content":
-                                  homeController.commentsText.text.trim(),
-                              "parentComment": homeController.isReply.value
-                                  ? homeController.parentCommentId.value
-                                  : null,
-                            };
-                            await socketService.addComment(data);
-                            await socketService.getCommentByPostId(
-                                widget.postId, 1);
+                      onTap: () async {
+                        if (homeController.commentsText.text.trim() == "") {
+                          getErrorSnackBar(
+                              "you have to input a message to comment");
+                        } else {
+                          homeController.isCommenting.value = true;
+                          final data = {
+                            "post": widget.postId,
+                            "user": authController.userdata.value.id,
+                            "content": homeController.commentsText.text.trim(),
+                            "parentComment": homeController.isReply.value
+                                ? homeController.parentCommentId.value
+                                : null,
+                          };
+                          await socketService.addComment(data);
+                          await socketService.getCommentByPostId(
+                              widget.postId, 1);
 
-                            homeController.commentsText.text = "";
-                          }
-                        },
-                        child: homeController.isCommenting.value == true
-                            ? Container(
-                                height: heightSize(50),
-                                width: widthSize(50),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widthSize(10),
-                                    vertical: heightSize(10)),
-                                alignment: Alignment.center,
-                                decoration: const ShapeDecoration(
-                                    shape: OvalBorder(), color: mainColor),
-                                child: const CircularProgressIndicator(
-                                  color: textColor,
-                                ))
-                            : Container(
-                                height: heightSize(50),
-                                width: widthSize(50),
-                                alignment: Alignment.center,
-                                decoration: const ShapeDecoration(
-                                    shape: OvalBorder(), color: mainColor),
-                                child: Icon(
-                                  Icons.send,
-                                  size: heightSize(30),
-                                  color: textColor,
-                                ),
-                              )),
+                          homeController.commentsText.text = "";
+                        }
+                      },
+                      child: homeController.isCommenting.value == true
+                          ? Container(
+                              height: heightSize(20),
+                              width: widthSize(20),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthSize(8),
+                                  vertical: heightSize(8)),
+                              alignment: Alignment.center,
+                              decoration: const ShapeDecoration(
+                                  shape: OvalBorder(), color: mainColor),
+                              child: const CircularProgressIndicator(
+                                color: textColor,
+                              ))
+                          : SvgPicture.asset(
+                              "assets/images/Vector.svg",
+                              height: heightSize(20),
+                              width: widthSize(20),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                   ],
                 ),
               ),

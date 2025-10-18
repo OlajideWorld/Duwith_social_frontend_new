@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../common/custom-text.dart';
 import '../../../models/comments_model.dart';
 import '../../../utils/color.dart';
@@ -41,9 +42,10 @@ commentsListView(BuildContext context, double width, List<CommentModel> replies,
                     const CircularProgressIndicator(),
                 imageBuilder: (context, imageprovider) {
                   return Container(
-                    height: heightSize(26),
-                    width: widthSize(26),
+                    height: heightSize(34),
+                    width: widthSize(34),
                     decoration: BoxDecoration(
+                        color: Colors.black,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                         image: DecorationImage(
@@ -58,34 +60,38 @@ commentsListView(BuildContext context, double width, List<CommentModel> replies,
                 children: [
                   Row(
                     children: [
-                      CText(
-                        text: commentsdata.user.username,
-                        size: 15,
-                        color: textColor,
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w500,
+                      Text(
+                        commentsdata.user.username,
+                        style: GoogleFonts.poppins(
+                          color: textColor,
+                          fontSize: fontSize(16),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       SizedBox(width: widthSize(8)),
-                      const CText(
-                        text: "06-21",
-                        size: 11,
-                        color: Color(0xFFB0AAAA),
-                        fontFamily: UsedFonts.poppins,
-                        fontWeight: FontWeight.w500,
+                      Text(
+                        "06-21",
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFFB0AAAA),
+                          fontSize: fontSize(12),
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ],
                   ),
                   SizedBox(height: heightSize(8)),
                   SizedBox(
                     width: widthSize(238),
-                    child: CText(
-                      text: commentsdata.content,
-                      size: 12,
-                      color: const Color(0xFFC3C9DA),
-                      fontFamily: UsedFonts.poppins,
-                      fontWeight: FontWeight.w400,
+                    child: Text(
+                      commentsdata.content,
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFFC3C9DA),
+                        fontSize: fontSize(13),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
+
                   SizedBox(height: heightSize(8)),
                   replies.length == 0 || replies.isEmpty
                       ? Container(
@@ -151,47 +157,158 @@ commentsListView(BuildContext context, double width, List<CommentModel> replies,
                             ],
                           ),
                         )
-                      : const CText(
-                          text: "Reply",
-                          size: 14,
-                          color: Color(0xFF7D8399),
-                          fontFamily: UsedFonts.poppins,
-                          fontWeight: FontWeight.w500,
+                      : SizedBox(
+                          height: heightSize(40),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                height: heightSize(30),
+                                child: Row(
+                                  children: [
+                                    // Likes
+                                    GestureDetector(
+                                      onTap: onTap,
+                                      child: SizedBox(
+                                        height: heightSize(30),
+                                        width: widthSize(50),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              commentsdata.likes.isNotEmpty
+                                                  ? CupertinoIcons.heart_fill
+                                                  : FontAwesomeIcons.heart,
+                                              size: heightSize(20),
+                                              color:
+                                                  commentsdata.likes.isNotEmpty
+                                                      ? Colors.red
+                                                      : textColor,
+                                            ),
+                                            SizedBox(width: widthSize(5)),
+                                            CText(
+                                              text: commentsdata
+                                                      .likes.isNotEmpty
+                                                  ? "${commentsdata.likes.length}"
+                                                  : "0",
+                                              size: 20,
+                                              color: Color(0xFF8A8A8A),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    GestureDetector(
+                                      onTap: () async {},
+                                      child: SizedBox(
+                                        height: heightSize(30),
+                                        width: widthSize(60),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              height: heightSize(20),
+                                              width: widthSize(20),
+                                              child: Image.asset(
+                                                'assets/images/Home/chatIcon.png',
+                                                fit: BoxFit.contain,
+                                                // color: homeController.viewBarOption.value == 1
+                                                //     ? const Color(0xFFECECEC)
+                                                //     : textColor3,
+                                              ),
+                                            ),
+                                            SizedBox(width: widthSize(5)),
+                                            CText(
+                                              text: "100",
+                                              size: 20,
+                                              color: Color(0xFF8A8A8A),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: widthSize(7)),
+                                    // Share
+                                    SizedBox(
+                                      height: heightSize(25),
+                                      width: widthSize(60),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            height: heightSize(20),
+                                            width: widthSize(20),
+                                            child: Image.asset(
+                                              'assets/images/Home/shareIcon.png',
+                                              fit: BoxFit.contain,
+                                              // color: homeController.viewBarOption.value == 1
+                                              //     ? const Color(0xFFECECEC)
+                                              //     : textColor3,
+                                            ),
+                                          ),
+                                          SizedBox(width: widthSize(5)),
+                                          CText(
+                                            text: "100",
+                                            size: 20,
+                                            color: Color(0xFF8A8A8A),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: widthSize(7)),
+                                    // send
+                                    SizedBox(
+                                      height: heightSize(30),
+                                      width: widthSize(60),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            height: heightSize(20),
+                                            width: widthSize(20),
+                                            child: Image.asset(
+                                              'assets/images/Home/sendIcon.png',
+                                              fit: BoxFit.contain,
+                                              // color: homeController.viewBarOption.value == 1
+                                              //     ? const Color(0xFFECECEC)
+                                              //     : textColor3,
+                                            ),
+                                          ),
+                                          SizedBox(width: widthSize(5)),
+                                          CText(
+                                            text: "100",
+                                            size: 20,
+                                            color: Color(0xFF8A8A8A),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // SizedBox(
+                              //   height: heightSize(20),
+                              //   width: widthSize(20),
+                              //   child: Image.asset("assets/images/gift.png"),
+                              // )
+                            ],
+                          ),
                         ),
+
+                  // const CText(
+                  //     text: "Reply",
+                  //     size: 14,
+                  //     color: Color(0xFF7D8399),
+                  //     fontFamily: UsedFonts.poppins,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
                 ],
               ),
               //
             ],
           ),
         ),
-        GestureDetector(
-          onTap: onTap,
-          child: SizedBox(
-            height: heightSize(40),
-            width: widthSize(40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  commentsdata.likes.isNotEmpty
-                      ? CupertinoIcons.heart_fill
-                      : FontAwesomeIcons.heart,
-                  size: widthSize(16),
-                  color: commentsdata.likes.isNotEmpty ? Colors.red : textColor,
-                ),
-                CText(
-                  text: commentsdata.likes.isNotEmpty
-                      ? "${commentsdata.likes.length}"
-                      : "",
-                  size: 14,
-                  color: Color(0xFFBEBEBE),
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w500,
-                ),
-              ],
-            ),
-          ),
+        Icon(
+          Icons.more_vert,
+          size: heightSize(20),
+          color: textColor,
         )
       ],
     ),
@@ -312,6 +429,108 @@ commentsRepliesListView(BuildContext context, double width) {
               ),
             );
           }),
+    ),
+  );
+}
+
+recentComment(String userId, double width, String name, String image,
+    BuildContext context, bool showwidget) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
+    child: Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: widthSize(10), vertical: heightSize(10)),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(
+          color: const Color(0xFF1A2137),
+          width: widthSize(1),
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(widthSize(10))),
+      ),
+      child: SizedBox(
+        width: width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              child: Row(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: image,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    imageBuilder: (context, imageprovider) {
+                      return Container(
+                        height: heightSize(30),
+                        width: widthSize(30),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(widthSize(2)),
+                          child: Image(
+                            image: imageprovider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(width: widthSize(10)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: GoogleFonts.poppins(
+                          color: textColor,
+                          fontSize: fontSize(15),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: heightSize(3)),
+                      Text(
+                        "Hello !!!!!!",
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF858585),
+                          fontSize: fontSize(10),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            // showwidget
+            //     ? SizedBox(
+            //         height: heightSize(25),
+            //         width: widthSize(80),
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             buttonsWidget(context, heightSize(25), widthSize(52),
+            //                 "Follow", mainColor, 8, () {}, false, Colors.white),
+            //             Icon(
+            //               Icons.more_vert,
+            //               size: heightSize(16),
+            //               color: textColor,
+            //             )
+            //           ],
+            //         ),
+            //       )
+            //     : const SizedBox(),
+            CircleAvatar(
+              radius: widthSize(14),
+              backgroundColor: mainColor,
+              child: Icon(Icons.add, color: textColor, size: heightSize(20)),
+            )
+          ],
+        ),
+      ),
     ),
   );
 }

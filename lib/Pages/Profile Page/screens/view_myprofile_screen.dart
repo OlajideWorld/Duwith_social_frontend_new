@@ -5,21 +5,27 @@ import "package:duwith_social/Pages/Profile%20Page/components/profile_top_widget
 import "package:duwith_social/Pages/Profile%20Page/controller/profile_controller.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:duwith_social/utils/sizes.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 
 import "../../../common/custom-text.dart";
+import "../../Post page/screens/post_page.dart";
 import "../../View Profile Page/components/profile_appBar.dart";
+import "../../Wallet Page/screens/new_wallet_screen.dart";
 
 class ViewUserProfileScreen extends StatelessWidget {
-  ViewUserProfileScreen({super.key});
+  final bool isyou;
+  ViewUserProfileScreen({super.key, required this.isyou});
 
   ProfileController profileController = ProfileController.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: const Color(0xFF161925),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(
@@ -29,60 +35,104 @@ class ViewUserProfileScreen extends StatelessWidget {
               child: Obx(() {
                 return SizedBox(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      myProfileTopWidget(constraints.maxWidth,
-                          profileController.viewProfileData.value),
-                      SizedBox(height: heightSize(15)),
-                      SizedBox(
-                        child: CText(
-                          text: profileController.viewProfileData.value.bio,
-                          size: 15,
-                          textAlign: TextAlign.center,
-                          color: const Color(0xFFDBDBDB),
-                          fontFamily: UsedFonts.poppins,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      myProfileTopWidget(context, constraints.maxWidth,
+                          profileController.viewProfileData.value, isyou),
+                      SizedBox(height: heightSize(10)),
+                      isyou == true
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthSize(10)),
+                              child: Container(
+                                height: heightSize(50),
+                                width: constraints.maxWidth,
+                                padding: EdgeInsets.only(
+                                    left: widthSize(15), right: widthSize(10)),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF0e121e),
+                                    border: Border.all(color: mainColor),
+                                    borderRadius:
+                                        BorderRadius.circular(widthSize(15))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Get.to(
+                                          () => NewWalletMainScreenPage()),
+                                      child: SizedBox(
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.wallet,
+                                              size: heightSize(15),
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: widthSize(5),
+                                            ),
+                                            Text(
+                                              "Wallet",
+                                              style: GoogleFonts.poppins(
+                                                color: textColor,
+                                                fontSize: fontSize(14),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () =>
+                                          Get.to(() => PostContentPage()),
+                                      child: CircleAvatar(
+                                        backgroundColor: mainColor,
+                                        radius: widthSize(18),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: heightSize(25),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.public,
+                                            size: heightSize(15),
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: widthSize(5),
+                                          ),
+                                          Text(
+                                            "Connections",
+                                            style: GoogleFonts.poppins(
+                                              color: textColor,
+                                              fontSize: fontSize(14),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      isyou == true
+                          ? SizedBox(height: heightSize(10))
+                          : SizedBox(),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: widthSize(20)),
+                        child: selectUserViewTab(context, constraints.maxWidth),
                       ),
-                      SizedBox(height: heightSize(15)),
-                      SizedBox(
-                        height: heightSize(49),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            numbersWidget(
-                                profileController.engagementShortened(
-                                    profileController.viewProfileData.value
-                                        .followers.length),
-                                "Followers"),
-                            SizedBox(width: widthSize(20)),
-                            VerticalDivider(
-                              width: widthSize(2),
-                              color: const Color(0xFF317ACF),
-                            ),
-                            SizedBox(width: widthSize(20)),
-                            numbersWidget(
-                                profileController.engagementShortened(
-                                    profileController.viewProfileData.value
-                                        .following.length),
-                                "Following"),
-                            SizedBox(width: widthSize(20)),
-                            VerticalDivider(
-                              width: widthSize(2),
-                              color: const Color(0xFF317ACF),
-                            ),
-                            SizedBox(width: widthSize(20)),
-                            numbersWidget(
-                                profileController.engagementShortened(
-                                    profileController
-                                        .userPostList.value.length),
-                                "Posts")
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: heightSize(20)),
-                      selectUserViewTab(context, constraints.maxWidth),
-                      SizedBox(height: heightSize(15)),
+                      SizedBox(height: heightSize(10)),
                       profileController.viewprofileslide.value == 0
                           ? profileController.profileLoading.value == true
                               ? const Center(
@@ -90,27 +140,36 @@ class ViewUserProfileScreen extends StatelessWidget {
                                     color: mainColor,
                                   ),
                                 )
-                              : myProfileViewPosts(
-                                  context, constraints.maxWidth, 2)
-                          : profileController.viewprofileslide.value == 2
+                              : viewUserPostList(context, constraints.maxWidth)
+                          : profileController.viewprofileslide.value == 1
                               ? profileController.profileLoading.value == true
                                   ? const Center(
                                       child: CircularProgressIndicator(
                                         color: mainColor,
                                       ),
                                     )
-                                  : myProfileViewVideos(
+                                  : myProfileViewPosts(
                                       context, constraints.maxWidth, 2)
-                              : const Center(
-                                  child: CText(
-                                    text:
-                                        "Opps unable to fetch data at this points, try again",
-                                    size: 15,
-                                    color: Color(0xFFA3A2A2),
-                                    fontFamily: UsedFonts.poppins,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                )
+                              : profileController.viewprofileslide.value == 2
+                                  ? profileController.profileLoading.value ==
+                                          true
+                                      ? const Center(
+                                          child: CircularProgressIndicator(
+                                            color: mainColor,
+                                          ),
+                                        )
+                                      : myProfileViewVideos(
+                                          context, constraints.maxWidth, 2)
+                                  : const Center(
+                                      child: CText(
+                                        text:
+                                            "Opps, Incoming Page will soon be released",
+                                        size: 15,
+                                        color: Color(0xFFA3A2A2),
+                                        fontFamily: UsedFonts.poppins,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
                     ],
                   ),
                 );

@@ -119,36 +119,40 @@ class _WalletFaqWidgetState extends State<WalletFaqWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String displayText = widget.answer;
-    bool showReadMore = widget.answer.length > 40;
-
-    if (!isExpanded.value && showReadMore) {
-      displayText = '${widget.answer.substring(0, 40)}... ';
-    }
     return Obx(() {
       return GestureDetector(
         onTap: () {
-          if (showReadMore) {
-            setState(() {
-              isExpanded.value = !isExpanded.value;
-            });
-          }
+          setState(() {
+            isExpanded.value = !isExpanded.value;
+          });
         },
-        child: SizedBox(
-          height: isExpanded.value ? heightSize(100) : heightSize(40),
+        child: Container(
+          height: isExpanded.value ? heightSize(110) : heightSize(60),
           width: widget.width,
+          padding: EdgeInsets.symmetric(
+              horizontal: widthSize(10), vertical: heightSize(10)),
+          decoration: BoxDecoration(
+              color: Color(0xFF151B2E),
+              border: Border.all(color: Color(0xFF1F2138)),
+              borderRadius: BorderRadius.circular(widthSize(10))),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CText(
-                    text: widget.question,
-                    size: 13,
-                    fontFamily: UsedFonts.poppins,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
+                  SizedBox(
+                    width: widthSize(315),
+                    child: Text(
+                      widget.question,
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: widthSize(13),
+                        fontWeight: FontWeight.w500,
+                        color: textColor,
+                      ),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {},
@@ -157,35 +161,43 @@ class _WalletFaqWidgetState extends State<WalletFaqWidget> {
                         width: widthSize(16),
                         child: isExpanded.value
                             ? const Icon(
-                                Icons.keyboard_arrow_up,
+                                Icons.remove,
                                 size: 14,
                                 color: textColor,
                               )
                             : const Icon(
-                                Icons.keyboard_arrow_down,
+                                Icons.add,
                                 size: 14,
                                 color: textColor,
                               )),
                   )
                 ],
               ),
-              SizedBox(
-                width: widthSize(315),
-                child: Text(
-                  displayText,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: UsedFonts.poppins,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF8D8D8D),
-                  ),
-                ),
-              ),
-              Divider(
-                height: heightSize(3),
-                thickness: 1,
-                color: const Color(0xFF3C3C3C),
-              ),
+              isExpanded.value
+                  ? SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Divider(
+                            height: heightSize(3),
+                            thickness: 1,
+                            color: const Color(0xFF3C3C3C),
+                          ),
+                          SizedBox(
+                            width: widthSize(315),
+                            child: Text(
+                              widget.answer,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: fontSize(13),
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFFB1B1B1),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const Spacer()
             ],
           ),
         ),

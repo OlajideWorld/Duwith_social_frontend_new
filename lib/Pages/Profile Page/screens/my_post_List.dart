@@ -174,6 +174,7 @@ class _MyProfilePostScreenSectionState
                       widget.width,
                       widget.postVideos.user.username,
                       widget.postVideos.user.profileImage,
+                      widget.postVideos,
                       context,
                       true),
                   SizedBox(height: heightSize(8)),
@@ -182,7 +183,6 @@ class _MyProfilePostScreenSectionState
                       text: widget.postVideos.caption,
                       size: 10,
                       color: const Color(0xFFD7D7D7),
-                      fontFamily: UsedFonts.poppins,
                       fontWeight: FontWeight.w400),
                   SizedBox(height: heightSize(8)),
                   widget.postVideos.media.single.type == "image" ||

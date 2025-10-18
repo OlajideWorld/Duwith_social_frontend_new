@@ -26,6 +26,7 @@ class PostForYou {
   final bool showLikes;
   final Earnings earnings;
   final Withdrawal withdrawal;
+  final DateTime createdAt;
   final List<Media> media;
   final String caption;
   List<Interaction> likes;
@@ -40,6 +41,7 @@ class PostForYou {
     required this.showLikes,
     required this.earnings,
     required this.withdrawal,
+    required this.createdAt,
     required this.media,
     required this.caption,
     required this.likes,
@@ -56,6 +58,7 @@ class PostForYou {
       showLikes: json['showLikes'],
       earnings: Earnings.fromJson(json['earnings']),
       withdrawal: Withdrawal.fromJson(json['withdrawal']),
+      createdAt: DateTime.parse(json['createdAt']),
       media: List<Media>.from(json["media"].map((x) => Media.fromJson(x))),
       caption: json['caption'],
       likes:

@@ -23,7 +23,7 @@ int bannerHeight(int height) {
 
 // This below is to cut down the length of Text characters
 String truncate(String text, {required int length}) {
-  String omission = " ";
+  String omission = "...";
   if (text.length > length) {
     return text.replaceRange(length, text.length, omission);
   }

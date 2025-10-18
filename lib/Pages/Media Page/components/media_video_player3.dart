@@ -119,7 +119,7 @@ class _MediaVideoPlayerWidget2State extends State<MediaVideoPlayerWidget3> {
               text: widget.post.caption,
               size: 15,
               color: const Color(0xFFD7D7D7),
-              fontFamily: UsedFonts.poppins,
+            
               fontWeight: FontWeight.w400),
           SizedBox(height: heightSize(5)),
           Text(

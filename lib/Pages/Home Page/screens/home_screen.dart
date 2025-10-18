@@ -1,12 +1,9 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use, invalid_use_of_protected_member
 
-import 'package:duwith_social/Pages/Home%20Page/components/home_airdrop.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_appBar.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_components.dart';
 import 'package:duwith_social/Pages/Home%20Page/components/home_for_you.dart';
-import 'package:duwith_social/Pages/Home%20Page/components/home_news.dart';
-import 'package:duwith_social/Pages/Home%20Page/components/home_quiz.dart';
-import 'package:duwith_social/Pages/Home%20Page/components/home_videos.dart';
+
 import 'package:duwith_social/Pages/Home%20Page/controllers/home_controller.dart';
 import 'package:duwith_social/common/custom-nav-bar.dart';
 import 'package:duwith_social/common/shimmer_loading_widget.dart';
@@ -16,11 +13,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay_pro/loading_overlay_pro.dart';
 import '../../../common/custom-text.dart';
+import '../../Auth Page/controller/auth_controller.dart';
+import '../../Auth Page/services/socket_sevice.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   HomeController homeController = HomeController.instance;
+  SocketService socket = SocketService.instance;
+  AuthController authController = AuthController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: const Color(0xFF161925),
         bottomNavigationBar: const CustomNavBarWidget(),
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -41,19 +42,28 @@ class HomeScreen extends StatelessWidget {
                   return RefreshIndicator(
                     onRefresh: () async {
                       await homeController.fetchPosts();
-                      await homeController.fetchNews();
+                      await socket.getUserData2(authController.userEmail.value);
+                      // await homeController.fetchNews();
                       await homeController.fetchvideos();
                       await homeController.fetchAirdrops();
                     },
                     child: LoadingOverlayPro(
-                      isLoading: homeController.loadingProfile.value,
+                      isLoading: homeController.homeloading.value,
                       child: SizedBox(
                         child: Column(
                           children: [
-                            SizedBox(height: heightSize(10)),
                             homeAppBar(constraints.maxWidth),
-                            SizedBox(height: heightSize(10)),
+                            Container(
+                              width: constraints.maxWidth,
+                              height: heightSize(20),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthSize(9)),
+                              decoration: const BoxDecoration(
+                                color: backgroundColor,
+                              ),
+                            ),
                             selectHomeView(context, constraints.maxWidth),
+                            SizedBox(height: heightSize(10)),
                             // SizedBox(height: heightSize(5)),
                             // UnityBannerAd(
                             //   placementId: AdManager.bannerAdPlacementId,

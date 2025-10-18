@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, must_be_immutabl, must_be_immutable
 import "package:duwith_social/Pages/Auth%20Page/controller/auth_controller.dart";
 import "package:duwith_social/Pages/Auth%20Page/services/socket_sevice.dart";
+import "package:duwith_social/Services/BannerAds_custom/bannerAds.dart";
 import "package:duwith_social/common/comments_loading.dart";
 import "package:duwith_social/common/getxmessage.dart";
 import "package:flutter/cupertino.dart";
@@ -95,13 +96,9 @@ class _CommentsDisplayBottomSheetState
                         borderRadius:
                             BorderRadius.all(Radius.circular(widthSize(5)))),
                   ),
-                  SizedBox(height: heightSize(21)),
-                  homeController.bannerAd != null
-                      ? SizedBox(
-                          height: heightSize(100),
-                          width: maxWidth,
-                          child: AdWidget(ad: homeController.bannerAd!))
-                      : const SizedBox(),
+
+                  const ItemWithBanner(someItemId: "Custom Banner"),
+
                   CText(
                     text: "${homeController.commentsListVideo.length} Comments",
                     size: 18,

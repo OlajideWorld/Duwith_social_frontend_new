@@ -157,7 +157,6 @@ class _VideosPostWidgetState extends State<VideosPostWidget> {
                 text: widget.postVideos.caption,
                 size: 10,
                 color: const Color(0xFFD7D7D7),
-                fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
             GestureDetector(

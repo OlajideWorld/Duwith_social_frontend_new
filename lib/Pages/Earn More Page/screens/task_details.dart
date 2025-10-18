@@ -9,6 +9,7 @@ import 'package:duwith_social/models/social_task_model.dart';
 import 'package:duwith_social/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
@@ -41,22 +42,51 @@ class _SocialTaskDetailsScreenState extends State<SocialTaskDetailsScreen> {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Obx(() {
-            return SizedBox(
+            return Container(
               height: constraints.maxHeight,
               width: constraints.maxWidth,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/Earn/socialBG.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
               child: SafeArea(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthSize(30), vertical: heightSize(30)),
+                  padding: EdgeInsets.only(
+                      top: heightSize(80),
+                      right: widthSize(20),
+                      left: widthSize(20)),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CText(
-                        text: "${widget.taskName} Task",
-                        color: const Color(0xFFD6D6E4),
-                        size: 18,
-                        fontFamily: UsedFonts.stalinistOne,
-                        fontWeight: FontWeight.w500,
+                      SizedBox(
+                        width: widthSize(305),
+                        child: Center(
+                          child: Stack(
+                            children: [
+                              // Border (stroke)
+                              Text(
+                                "follow us on ${widget.taskName} to win your price",
+                                style: GoogleFonts.podkova(
+                                  fontSize: fontSize(24),
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 4
+                                    ..color = Color(0xFF038E92), // border color
+                                ),
+                              ),
+                              // Fill (inside color)
+                              Text(
+                                "follow us on ${widget.taskName} to win your price",
+                                style: GoogleFonts.podkova(
+                                  fontSize: fontSize(24),
+                                  color: Colors.white, // text fill color
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                       SizedBox(height: heightSize(20)),
                       Expanded(
@@ -69,7 +99,6 @@ class _SocialTaskDetailsScreenState extends State<SocialTaskDetailsScreen> {
                                     socialWidgetListTask(
                                       context,
                                       constraints.maxWidth,
-                                      widget.taskImage,
                                       "${widget.taskName} Task ${index + 1} ",
                                       () async {
                                         var data = {
@@ -92,7 +121,7 @@ class _SocialTaskDetailsScreenState extends State<SocialTaskDetailsScreen> {
                                                   .socialTaskList
                                                   .value[index]
                                                   .socialLink));
-                                          await socket.getSocialTask(
+                                          await socketService.getSocialTask(
                                               earnController.type.value);
                                           // setState(() {});
                                         }

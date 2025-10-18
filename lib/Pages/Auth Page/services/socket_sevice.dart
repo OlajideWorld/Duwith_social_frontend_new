@@ -119,17 +119,21 @@ class SocketService extends GetxService {
   }
 
   getUserData2(String userData) async {
+    debugPrint("Getting user data with userEmail : $userData");
     _socket.emit('get-user-email', userData);
 
     _socket.on('user-gotten', (data) {
-      if (data != null && data["email"] != null) {
-        authController.userdata.value = User.fromJson(data);
-        isloading.value = false;
-        // getErrorSnackBar(
-        //     "Unable to get your details, check internet Connection");
-      } else {
-        homeController.homeloading.value = true;
-      }
+      // if (data != null && data["email"] != null) {
+      authController.userdata.value = User.fromJson(data);
+      //   isloading.value = false;
+      //   // getErrorSnackBar(
+      //   //     "Unable to get your details, check internet Connection");
+
+      debugPrint(
+          "User Data Email in function: ${authController.userdata.value.email}");
+      // } else {
+      //   homeController.homeloading.value = true;
+      // }
     });
   }
 
@@ -161,7 +165,7 @@ class SocketService extends GetxService {
     });
   }
 
-  void followUser(String userId, String targetUserId) {
+  followUser(String userId, String targetUserId) {
     _socket
         .emit('followUser', {'userId': userId, 'targetUserId': targetUserId});
     //
@@ -171,7 +175,7 @@ class SocketService extends GetxService {
     });
   }
 
-  void unfollowUser(String userId, String targetUserId) {
+  unfollowUser(String userId, String targetUserId) {
     _socket
         .emit('unfollowUser', {'userId': userId, 'targetUserId': targetUserId});
     //

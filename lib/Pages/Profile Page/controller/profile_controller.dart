@@ -17,6 +17,11 @@ class ProfileController extends GetxController {
   RxBool profileLoading = false.obs;
   RxBool thumbnailLoading = false.obs;
 
+  // show only images
+  RxList imagesPost = [].obs;
+
+  RxInt viewBarOption = 0.obs;
+
   var timeUntilReset = Duration(days: 30).obs;
   Timer? timer;
 

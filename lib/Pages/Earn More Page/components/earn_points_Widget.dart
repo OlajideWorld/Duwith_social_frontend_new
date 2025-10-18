@@ -2,6 +2,7 @@ import 'package:duwith_social/Pages/Earn%20More%20Page/controller/earn_controlle
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/utils/color.dart';
 import 'package:duwith_social/utils/sizes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +20,7 @@ earnButtonContainer(BuildContext context, double width, double pct,
         bottom: heightSize(10)),
     width: width,
     decoration: BoxDecoration(
-        border: Border.all(color: const Color.fromARGB(255, 60, 60, 60)),
+        border: Border.all(color: Color.fromARGB(255, 197, 194, 194)),
         borderRadius: BorderRadius.all(Radius.circular(widthSize(15))),
         color: Colors.transparent),
     child: Column(
@@ -27,7 +28,7 @@ earnButtonContainer(BuildContext context, double width, double pct,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "${earnController.ratePerSec} \$ PTS / Per Second",
+          "+${earnController.ratePerSec} \$ PTS / Per Sec",
           style: GoogleFonts.poppins(
             fontSize: widthSize(20),
             fontWeight: FontWeight.w500,
@@ -74,12 +75,13 @@ showEarnedBottomSheet(
     backgroundColor: Colors.transparent,
     builder: (context) {
       return Container(
-        height: heightSize(410),
+        height: heightSize(400),
         width: width,
         padding: EdgeInsets.only(
             left: widthSize(30), right: widthSize(30), bottom: heightSize(20)),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 30, 30, 30),
+          color: const Color(0xFF151B2E),
+          border: const Border(top: BorderSide(color: Color(0xFF32406B))),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(widthSize(20)),
             topRight: Radius.circular(widthSize(20)),
@@ -99,59 +101,125 @@ showEarnedBottomSheet(
             ),
             SizedBox(height: heightSize(40)),
             Text(
-              'Woohoo',
+              'Woohoo!',
               style: GoogleFonts.podkova(
-                fontSize: widthSize(20),
+                fontSize: widthSize(25),
                 fontWeight: FontWeight.w400,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: heightSize(40)),
-            Container(
-              height: heightSize(129),
-              padding: EdgeInsets.symmetric(
-                  vertical: heightSize(20), horizontal: widthSize(20)),
+            SizedBox(
+              height: heightSize(190),
               width: width,
-              decoration: BoxDecoration(
-                color: Color(0xFF1f2437),
-                borderRadius: BorderRadius.circular(widthSize(15)),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '$earned',
-                      style: GoogleFonts.podkova(
-                        fontSize: widthSize(23),
-                        fontWeight: FontWeight.w400,
-                        color: textColor,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: heightSize(50)),
+                    child: Container(
+                      height: heightSize(150),
+                      padding: EdgeInsets.only(
+                        top: heightSize(35),
+                        left: widthSize(20),
+                        right: widthSize(20),
+                        bottom: heightSize(25),
+                      ),
+                      width: width,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(21, 217, 217, 217),
+                        borderRadius: BorderRadius.circular(widthSize(15)),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: width,
+                              child: Center(
+                                child: Stack(
+                                  children: [
+                                    // Border (stroke)
+                                    Text(
+                                      "$earned",
+                                      style: GoogleFonts.podkova(
+                                        fontSize: fontSize(30),
+                                        foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 4
+                                          ..color =
+                                              Color(0xFF038E92), // border color
+                                      ),
+                                    ),
+                                    // Fill (inside color)
+                                    Text(
+                                      "$earned",
+                                      style: GoogleFonts.podkova(
+                                        fontSize: fontSize(30),
+                                        color: Colors.white, // text fill color
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "You've successfully earned points from your loyal dog! 🎉",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.podkova(
+                                fontSize: widthSize(14),
+                                fontWeight: FontWeight.w400,
+                                color: textColor,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Text(
-                      "You've successfully earned points from your loyal dog! 🎉",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.podkova(
-                        fontSize: widthSize(14),
-                        fontWeight: FontWeight.w400,
-                        color: textColor,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: heightSize(70),
+                        left: widthSize(110),
+                        right: widthSize(110)),
+                    child: Stack(alignment: Alignment.center, children: [
+                      ClipOval(
+                        child: Container(
+                          width: widthSize(90),
+                          height: heightSize(60),
+                          color: const Color(0xFF151B2E), // Background color
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      Image.asset(
+                        "assets/images/Earn/bentCoin.png",
+                        height: heightSize(90),
+                        width: widthSize(130),
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ]),
+                  )
+                ],
               ),
             ),
             SizedBox(height: heightSize(40)),
-            buttonsWidget(
-                context,
-                heightSize(40),
-                width,
-                "Procced to claim reward",
-                Color(0xFF252DE5),
-                14,
-                onpressed!,
-                false,
-                textColor)
+            GestureDetector(
+              onTap: onpressed!,
+              child: Container(
+                height: heightSize(50),
+                width: widthSize(265),
+                decoration: BoxDecoration(
+                    color: const Color(0xFF252DE5),
+                    borderRadius: BorderRadius.circular(widthSize(25))),
+                child: Center(
+                  child: Text(
+                    "Procced to claim reward",
+                    style: GoogleFonts.poppins(
+                      fontSize: widthSize(14),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       );

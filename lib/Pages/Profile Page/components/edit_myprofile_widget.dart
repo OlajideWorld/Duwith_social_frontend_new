@@ -10,7 +10,9 @@ import "package:duwith_social/common/button-widget.dart";
 import "package:duwith_social/utils/color.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:flutter/widgets.dart";
 import "package:get/get.dart";
+import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
 
 import "../../../common/custom-text.dart";
@@ -168,33 +170,50 @@ class _PickDateWidgetState extends State<PickDateWidget> {
           profileController.dateTime.value = newdate;
         });
       },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: widthSize(20)),
-        child: Container(
-          height: heightSize(60),
-          width: widget.width,
-          padding: EdgeInsets.symmetric(horizontal: widthSize(23)),
-          decoration: ShapeDecoration(
-            color: buttonColor2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+      child: Container(
+        height: heightSize(80),
+        padding: EdgeInsets.symmetric(
+            vertical: heightSize(10), horizontal: widthSize(10)),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: textColor),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Date of Birth",
+                style: GoogleFonts.poppins(
+                  fontSize: widthSize(13),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
             ),
-          ),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(
-              "${profileController.dateTime.value.year} / ${profileController.dateTime.value.month} / ${profileController.dateTime.value.day}",
-              style: TextStyle(
-                  color: const Color(0xFFB4B4B4),
-                  fontSize: fontSize(15),
-                  fontWeight: FontWeight.w600),
+            SizedBox(
+              height: heightSize(40),
+              width: widget.width,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${profileController.dateTime.value.year} / ${profileController.dateTime.value.month} / ${profileController.dateTime.value.day}",
+                      style: TextStyle(
+                          color: const Color(0xFFB4B4B4),
+                          fontSize: fontSize(15),
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Icon(
+                      Icons.calendar_today,
+                      size: heightSize(20),
+                      color: textColor3,
+                    )
+                  ]),
             ),
-            Icon(
-              Icons.calendar_today,
-              size: heightSize(20),
-              color: textColor3,
-            )
-          ]),
+          ],
         ),
       ),
     );

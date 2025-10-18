@@ -1,14 +1,15 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:duwith_social/models/post-data.dart";
 import "package:duwith_social/utils/sizes.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
 
 import "../../../common/custom-text.dart";
 import "../../../utils/color.dart";
 import "../../Auth Page/services/socket_sevice.dart";
-import "../../Home Page/components/home_for_you.dart";
 import "../../Home Page/controllers/home_controller.dart";
 import "../../View Profile Page/screens/view_profile_screen.dart";
 
@@ -24,8 +25,6 @@ foryouBottomContent(BuildContext context, PostForYou post, double width) {
       mainAxisSize: MainAxisSize.min, // <–– shrink‐wrap to its children
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        forYouUserDetails(post.user.id, width, post.user.username,
-            post.user.profileImage, context, true),
         SizedBox(height: heightSize(15)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
@@ -34,14 +33,13 @@ foryouBottomContent(BuildContext context, PostForYou post, double width) {
               text: post.caption,
               size: 10,
               color: const Color(0xFFD7D7D7),
-              fontFamily: UsedFonts.poppins,
               fontWeight: FontWeight.w400),
         ),
         SizedBox(height: heightSize(15)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: widthSize(10)),
           child: SizedBox(
-            height: heightSize(60),
+            height: heightSize(70),
             width: width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,94 +53,47 @@ foryouBottomContent(BuildContext context, PostForYou post, double width) {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                SizedBox(height: heightSize(7)),
+                Divider(
+                    height: heightSize(3),
+                    thickness: 1,
+                    color: Color(0xFF2A2D3C)),
+                SizedBox(height: heightSize(7)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
+                    Container(
                       height: heightSize(30),
                       width: widthSize(150),
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            height: heightSize(30),
-                            width: widthSize(150),
-                            child: LinearProgressIndicator(
-                              backgroundColor: const Color(0xFF292C37),
-                              value: 0.3,
-                              valueColor: const AlwaysStoppedAnimation(
-                                  Color(0xFF1C202B)),
-                              borderRadius:
-                                  BorderRadius.circular(widthSize(20)),
-                              minHeight: heightSize(30),
-                            ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(widthSize(20)),
+                          color: Color(0xFF1C202B)),
+                      child: Center(
+                        child: Text(
+                          'Amazing',
+                          style: GoogleFonts.podkova(
+                            fontSize: widthSize(20),
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
                           ),
-                          SizedBox(
-                              height: heightSize(30),
-                              width: widthSize(150),
-                              child: Padding(
-                                padding: EdgeInsets.all(widthSize(10)),
-                                child: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CText(
-                                      text: "Amazing",
-                                      color: textColor,
-                                      size: 12,
-                                    ),
-                                    CText(
-                                      text: "30%",
-                                      color: textColor,
-                                      size: 12,
-                                    ),
-                                  ],
-                                ),
-                              ))
-                        ],
+                        ),
                       ),
                     ),
-                    SizedBox(
+                    Container(
                       height: heightSize(30),
                       width: widthSize(150),
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            height: heightSize(30),
-                            width: widthSize(150),
-                            child: LinearProgressIndicator(
-                              backgroundColor: const Color(0xFF1C202B),
-                              value: 0.5,
-                              valueColor: const AlwaysStoppedAnimation(
-                                  Color(0xFF292C37)),
-                              borderRadius:
-                                  BorderRadius.circular(widthSize(20)),
-                              minHeight: heightSize(30),
-                            ),
-                          ),
-                          SizedBox(
-                              height: heightSize(30),
-                              width: widthSize(150),
-                              child: Padding(
-                                padding: EdgeInsets.all(widthSize(10)),
-                                child: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CText(
-                                      text: "50%",
-                                      color: textColor,
-                                      size: 12,
-                                    ),
-                                    CText(
-                                      text: "Good",
-                                      color: textColor,
-                                      size: 12,
-                                    ),
-                                  ],
-                                ),
-                              ))
-                        ],
-                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(widthSize(20)),
+                          color: Color(0xFF1C202B)),
+                      child: Center(
+                          child: Text(
+                        'Good',
+                        style: GoogleFonts.podkova(
+                          fontSize: widthSize(20),
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      )),
                     ),
                   ],
                 ),
@@ -185,6 +136,7 @@ forYouUserDetails(String userId, double width, String name, String image,
                         height: heightSize(50),
                         width: widthSize(50),
                         decoration: BoxDecoration(
+                            color: Colors.black,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(20)),
                             image: DecorationImage(
@@ -202,8 +154,8 @@ forYouUserDetails(String userId, double width, String name, String image,
                       name,
                       style: GoogleFonts.poppins(
                         color: textColor,
-                        fontSize: fontSize(15),
-                        fontWeight: FontWeight.w500,
+                        fontSize: fontSize(18),
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     SizedBox(height: heightSize(3)),
@@ -238,11 +190,6 @@ forYouUserDetails(String userId, double width, String name, String image,
           //         ),
           //       )
           //     : const SizedBox(),
-          Icon(
-            Icons.more_vert,
-            size: heightSize(20),
-            color: textColor,
-          )
         ],
       ),
     ),

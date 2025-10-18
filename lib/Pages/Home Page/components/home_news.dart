@@ -102,7 +102,6 @@ class _NewsPostDesignState extends State<NewsPostDesign> {
                 text: widget.newsPost.caption,
                 size: 10,
                 color: const Color(0xFFD7D7D7),
-                fontFamily: UsedFonts.poppins,
                 fontWeight: FontWeight.w400),
             SizedBox(height: heightSize(8)),
             widget.newsPost.media.single.type == "image"

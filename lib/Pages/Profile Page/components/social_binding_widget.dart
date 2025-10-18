@@ -1,7 +1,10 @@
 import 'package:duwith_social/common/button-widget.dart';
 import 'package:duwith_social/utils/sizes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common/custom-text.dart';
 import '../../../utils/color.dart';
@@ -12,30 +15,13 @@ socialBindingAppBar() {
       children: [
         backbutton(onTap: () => Get.back()),
         SizedBox(width: widthSize(122)),
-        const CText(
-          text: "Socials",
-          size: 13,
-          color: textColor,
-          fontFamily: UsedFonts.poppins,
-          fontWeight: FontWeight.w600,
-        ),
-      ],
-    ),
-  );
-}
-
-referralAppBar() {
-  return SizedBox(
-    child: Row(
-      children: [
-        backbutton(onTap: () => Get.back()),
-        SizedBox(width: widthSize(122)),
-        const CText(
-          text: "Referral",
-          size: 13,
-          color: textColor,
-          fontFamily: UsedFonts.poppins,
-          fontWeight: FontWeight.w600,
+        Text(
+          "Socials",
+          style: GoogleFonts.podkova(
+            fontSize: widthSize(18),
+            fontWeight: FontWeight.w700,
+            color: textColor,
+          ),
         ),
       ],
     ),
@@ -132,51 +118,148 @@ logoutDetails(BuildContext context, String headings, String subtext,
       builder: (context) {
         return Padding(
           padding: EdgeInsets.symmetric(
-              vertical: heightSize(200), horizontal: widthSize(34)),
+              vertical: heightSize(280), horizontal: widthSize(34)),
           child: Container(
-            height: heightSize(300),
+            height: heightSize(100),
             width: width,
             padding: EdgeInsets.symmetric(
-                vertical: heightSize(54), horizontal: widthSize(30)),
+                vertical: heightSize(15), horizontal: widthSize(30)),
             decoration: BoxDecoration(
-              color: const Color(0xFF151B2E),
+              color: const Color(0xFF121726),
               borderRadius: BorderRadius.all(Radius.circular(widthSize(10))),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CText(
-                  text: headings,
-                  color: Colors.white,
-                  size: 19,
-                  textAlign: TextAlign.center,
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w600,
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Icon(Icons.cancel_outlined,
+                      color: textColor, size: heightSize(20)),
                 ),
-                CText(
-                  text: subtext,
-                  color: const Color(0xFF979DAD),
-                  size: 14,
-                  textAlign: TextAlign.center,
-                  fontFamily: UsedFonts.poppins,
-                  fontWeight: FontWeight.w400,
+                Text(
+                  headings,
+                  style: GoogleFonts.poppins(
+                    fontSize: widthSize(20),
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
-                buttonsWidget(
-                    context,
-                    heightSize(40),
-                    width,
-                    "Cancel",
-                    const Color(0xFF2A2A49),
-                    12,
-                    () => Get.back(),
-                    false,
-                    textColor),
-                buttonsWidget(context, heightSize(40), width, "Confirm",
-                    const Color(0xFFFF381D), 12, ontap, false, textColor)
+                Text(
+                  subtext,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: widthSize(15),
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF979DAD),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: Container(
+                      height: heightSize(50),
+                      width: width,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2A2A49),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(widthSize(16))),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Cancel",
+                          style: GoogleFonts.poppins(
+                            fontSize: widthSize(12),
+                            fontWeight: FontWeight.w400,
+                            color: textColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )),
+                ),
+                GestureDetector(
+                  onTap: ontap,
+                  child: Container(
+                    height: heightSize(50),
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF381D),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(widthSize(16))),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Confirm",
+                        style: GoogleFonts.poppins(
+                          fontSize: widthSize(12),
+                          fontWeight: FontWeight.w400,
+                          color: textColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
         );
       });
+}
+
+referralTopWidget(BuildContext context, double width) {
+  return Container(
+    height: heightSize(150),
+    width: width,
+    padding: EdgeInsets.symmetric(
+        vertical: heightSize(20), horizontal: widthSize(20)),
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color(0xFFBE6D00),
+          Color(0xFF741A9E),
+          Color(0xFF360E51),
+        ],
+      ),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: widthSize(250),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Invite Your Friends to Join the Fun!',
+                style: GoogleFonts.poppins(
+                  fontSize: widthSize(13),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: heightSize(10)),
+              SizedBox(
+                width: widthSize(150),
+                child: Text(
+                  'Earn rewards for every friend who signs up and joins our community..',
+                  style: GoogleFonts.poppins(
+                    fontSize: widthSize(13),
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Image.asset(
+          "assets/images/Earn/gift.png",
+          height: heightSize(60),
+          width: widthSize(60),
+        )
+      ],
+    ),
+  );
 }

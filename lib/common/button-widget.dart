@@ -22,14 +22,10 @@ buttonsWidget(
       height: height,
       width: width,
       clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
+      decoration: BoxDecoration(
         color: colorused,
-        shape: RoundedRectangleBorder(
-          side: showBorderColor
-              ? const BorderSide(color: textColor3)
-              : BorderSide(color: colorused),
-          borderRadius: BorderRadius.circular(30),
-        ),
+        borderRadius: BorderRadius.circular(widthSize(10)),
+        border: Border.all(color: showBorderColor ? textColor3 : colorused),
       ),
       child: Center(
         child: Text(

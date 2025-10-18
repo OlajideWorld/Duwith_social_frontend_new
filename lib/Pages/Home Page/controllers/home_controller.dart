@@ -38,10 +38,11 @@ class HomeController extends GetxController {
   var startAppSdk = StartAppSdk();
 
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
     super.onInit();
     startAppSdk.setTestAdsEnabled(true);
+    await fetchPosts();
     UnityAds.init(
       gameId: AdManager.gameId,
       testMode: true,
@@ -60,7 +61,6 @@ class HomeController extends GetxController {
     super.onReady();
     await StartAppAdsClass().loadBannerAds();
     await AdmobAdsClass().loadBannerAd(100, 100);
-    await fetchPosts();
   }
 
   @override
@@ -168,6 +168,7 @@ class HomeController extends GetxController {
   StartAppRewardedVideoAd? startRewardedVideoAd;
 
 // Admob
+  final List<BannerAd> _ads = [];
   BannerAd? bannerAd;
   InterstitialAd? interstitialAd;
   RewardedAd? rewardedAd;
@@ -267,6 +268,9 @@ class HomeController extends GetxController {
 
   fetchPosts() async {
     homeloading.value = true;
+    debugPrint(authController.userId.value);
+    debugPrint(authController.userdata.value.email);
+
     var data = {
       'userId': authController.userId.value,
       'following': authController.userdata.value.following, // Add relevant data
@@ -297,8 +301,18 @@ class HomeController extends GetxController {
       'limit': limit.value,
     };
     await socket.getPost(data);
-    await Future.delayed(const Duration(seconds: 2), () {});
-    homeloading.value = false;
+    await Future.delayed(const Duration(seconds: 5), () {
+      if (authController.userdata.value.email == "") {
+        homeloading.value = true;
+        getErrorSnackBar(
+            "Unable to get your details, check internet Connection");
+        return;
+      } else {
+        homeloading.value = false;
+        getSuccessSnackBar("Posts loaded successfully");
+      }
+    });
+
     // page.value++;
   }
 

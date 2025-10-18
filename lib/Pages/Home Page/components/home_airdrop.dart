@@ -259,7 +259,6 @@ class AirdropDesign extends StatelessWidget {
                             text: airdropDetails.title,
                             size: 10,
                             color: const Color(0xFFD7D7D7),
-                            fontFamily: UsedFonts.poppins,
                             fontWeight: FontWeight.w400),
                       ],
                     )),

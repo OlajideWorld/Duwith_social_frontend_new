@@ -121,7 +121,7 @@ class _InputTextFieldState extends State<InputTextField> {
                 )
               : null,
           contentPadding:
-              EdgeInsets.only(left: widthSize(5), top: heightSize(4)),
+              EdgeInsets.only(left: widthSize(10), top: heightSize(4)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25),
             borderSide: BorderSide(color: widget.innerColor),

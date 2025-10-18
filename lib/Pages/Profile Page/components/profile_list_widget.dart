@@ -13,6 +13,7 @@ import "../../../common/custom-text.dart";
 import "../../../common/stream_video.dart";
 import "../../../utils/color.dart";
 import "../../../utils/sizes.dart";
+import "../../Home Page/components/home_for_you.dart";
 import "../screens/my_post_List.dart";
 
 ProfileController profileController = ProfileController.instance;
@@ -42,10 +43,10 @@ myProfileViewPosts(BuildContext context, double width, int type) {
                 childAspectRatio:
                     1.0, // Aspect ratio of each item (width / height)
               ),
-              itemCount: profileController.userPostList.value.length,
+              itemCount: profileController.imagesPost.length,
               itemBuilder: (context, index) {
                 return MyProfileViewPostWidget(
-                  postsData: profileController.userPostList.value[index],
+                  postsData: profileController.imagesPost.value[index],
                   type: type,
                   width: width,
                 );
@@ -147,51 +148,52 @@ class _MyProfileViewPostWidgetState extends State<MyProfileViewPostWidget> {
                         },
                       ),
                     )
-                  : GestureDetector(
-                      onTap: () {
-                        if (widget.type == 1) {
-                          Get.to(() => VideoStreamPage(
-                                url: widget.postsData.media.single.url,
-                              ));
-                        } else {
-                          Get.to(() => MyProfilePostList(
-                                postdata: profileController.userPostList.value,
-                              ));
-                        }
-                      },
-                      child: SizedBox(
-                        height: heightSize(88),
-                        child: Stack(children: [
-                          if (thumbnailPath.value != "")
-                            Container(
-                              height: heightSize(88),
-                              width: widget.width,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(widthSize(20))),
-                                  image: DecorationImage(
-                                      image:
-                                          FileImage(File(thumbnailPath.value)),
-                                      fit: BoxFit.cover)),
-                            )
-                          else
-                            const Center(child: CircularProgressIndicator()),
-                          // Padding(
-                          //   padding: EdgeInsets.symmetric(
-                          //       horizontal: widthSize(170),
-                          //       vertical: heightSize(170)),
-                          //   child: SizedBox(
-                          //       height: heightSize(52),
-                          //       width: widthSize(52),
-                          //       child: Image.asset(
-                          //         "assets/images/playsymbols.png",
-                          //         fit: BoxFit.contain,
-                          //       )),
-                          // )
-                        ]),
-                      ),
-                    )
-              : const SizedBox(),
+                  // : GestureDetector(
+                  //     onTap: () {
+                  //       if (widget.type == 1) {
+                  //         Get.to(() => VideoStreamPage(
+                  //               url: widget.postsData.media.single.url,
+                  //             ));
+                  //       } else {
+                  //         Get.to(() => MyProfilePostList(
+                  //               postdata: profileController.userPostList.value,
+                  //             ));
+                  //       }
+                  //     },
+                  //     child: SizedBox(
+                  //       height: heightSize(88),
+                  //       child: Stack(children: [
+                  //         if (thumbnailPath.value != "")
+                  //           Container(
+                  //             height: heightSize(88),
+                  //             width: widget.width,
+                  //             decoration: BoxDecoration(
+                  //                 borderRadius: BorderRadius.all(
+                  //                     Radius.circular(widthSize(20))),
+                  //                 image: DecorationImage(
+                  //                     image:
+                  //                         FileImage(File(thumbnailPath.value)),
+                  //                     fit: BoxFit.cover)),
+                  //           )
+                  //         else
+                  //           const Center(child: CircularProgressIndicator()),
+                  //         // Padding(
+                  //         //   padding: EdgeInsets.symmetric(
+                  //         //       horizontal: widthSize(170),
+                  //         //       vertical: heightSize(170)),
+                  //         //   child: SizedBox(
+                  //         //       height: heightSize(52),
+                  //         //       width: widthSize(52),
+                  //         //       child: Image.asset(
+                  //         //         "assets/images/playsymbols.png",
+                  //         //         fit: BoxFit.contain,
+                  //         //       )),
+                  //         // )
+                  //       ]),
+                  //     ),
+                  //   )
+                  : const SizedBox()
+              : SizedBox(),
           SizedBox(height: heightSize(15)),
           SizedBox(
             height: heightSize(12),
@@ -241,7 +243,7 @@ myProfileViewVideos(BuildContext context, double width, int type) {
                 ),
                 Center(
                   child: Image.asset(
-                    "assets/images/playsymbol.png",
+                    "assets/images/playsymbols.png",
                     fit: BoxFit.contain,
                   ),
                 )
@@ -340,4 +342,40 @@ class _MyProfileViewVideoWidgetState extends State<MyProfileViewVideoWidget> {
           )
         : const Center(child: CircularProgressIndicator());
   }
+}
+
+viewUserPostList(BuildContext context, double width) {
+  return profileController.userPostList.value.isEmpty ||
+          profileController.userPostList.value == null
+      ? const Align(
+          alignment: Alignment.center,
+          child: Center(
+            child: CText(
+              text:
+                  "Not able to fetch data, Check internet connection and try again",
+              size: 18,
+              color: textColor,
+              fontFamily: UsedFonts.poppins,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        )
+      : Expanded(
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: profileController.userPostList.value.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    PostWidget(
+                      postsData: profileController.userPostList.value[index],
+                      width: width,
+                    ),
+                    SizedBox(
+                      height: heightSize(10),
+                    ),
+                  ],
+                );
+              }),
+        );
 }
