@@ -23,6 +23,9 @@ class NewProfileScreenPage extends StatelessWidget {
 
   ProfileController profileController = ProfileController.instance;
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
